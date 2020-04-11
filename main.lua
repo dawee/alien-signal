@@ -7,6 +7,10 @@ local Object = require("classic")
 local Sampler = require("aliensignal.sampler")
 local Slot = require("aliensignal.slot")
 local Output = require("aliensignal.output")
+local DownLeftShoulder = require("aliensignal.downleftshoulder")
+local DownRightShoulder = require("aliensignal.downrightshoulder")
+local UpLeftShoulder = require("aliensignal.upleftshoulder")
+local UpRightShoulder = require("aliensignal.uprightshoulder")
 
 local wave = {
   top = 0,
@@ -54,15 +58,21 @@ function love.update(dt)
 
     state.modules = {}
     state.modules[1] = {}
-    state.modules[1][3] = Generator({x = 1, y = 3}, state.modules)
     state.modules[2] = {}
-    state.modules[2][3] = Sampler({x = 2, y = 3}, state.modules)
     state.modules[3] = {}
-    state.modules[3][3] = Booster({x = 3, y = 3}, state.modules)
     state.modules[4] = {}
-    state.modules[4][3] = Booster({x = 4, y = 3}, state.modules)
     state.modules[6] = {}
+
+    state.modules[1][3] = Generator({x = 1, y = 3}, state.modules)
+    state.modules[2][3] = Sampler({x = 2, y = 3}, state.modules)
+    state.modules[3][3] = Booster({x = 3, y = 3}, state.modules)
+    state.modules[4][3] = Booster({x = 4, y = 3}, state.modules)
     state.modules[6][3] = Output({x = 6, y = 3}, state.modules)
+
+    state.modules[1][6] = UpLeftShoulder({x = 1, y = 6}, state.modules)
+    state.modules[2][6] = UpRightShoulder({x = 2, y = 6}, state.modules)
+    state.modules[3][6] = DownLeftShoulder({x = 3, y = 6}, state.modules)
+    state.modules[4][6] = DownRightShoulder({x = 4, y = 6}, state.modules)
 
     state.ready = true
   elseif state.ready then
@@ -142,8 +152,6 @@ function love.mousereleased(x, y, button, istouch)
     state.movingModule.slot = newSlot
     state.movingModule:updatePosition()
     state.movingModule = nil
-
-    print(state.transform:getMatrix())
   end
 end
 
