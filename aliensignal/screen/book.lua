@@ -7,11 +7,21 @@ local AndComparison = require("aliensignal.module.andcomparison")
 local Sampler = require("aliensignal.module.sampler")
 local Navigator = require("navigator")
 
+local DownLeftShoulder = require("aliensignal.module.downleftshoulder")
+local DownRightShoulder = require("aliensignal.module.downrightshoulder")
+local UpLeftShoulder = require("aliensignal.module.upleftshoulder")
+local UpRightShoulder = require("aliensignal.module.uprightshoulder")
+
 local Book = Navigator.Screen:extend()
 
 Book.ItemPosition = {
   x = 664,
   y = 136
+}
+
+Book.ButtonPosition = {
+  x = 600,
+  y = 434
 }
 
 Book.LeftCursorBox = {
@@ -27,6 +37,7 @@ Book.RightCursorBox = {
 function Book.createArrowCursor(name)
   local sprite = peachy.new(bank.arrow.spritesheet, bank.arrow.image, name)
   local canvas = love.graphics.newCanvas(sprite:getWidth(), sprite:getHeight())
+
   love.graphics.setCanvas(canvas)
   sprite:draw()
   love.graphics.setCanvas()
@@ -44,11 +55,16 @@ function Book:new()
     Sampler(),
     Coupler(),
     AndComparison(),
-    Booster()
+    Booster(),
+    DownLeftShoulder(),
+    DownRightShoulder(),
+    UpLeftShoulder(),
+    UpRightShoulder()
   }
 
   self.sprites = {
-    book = peachy.new(bank.book.spritesheet, bank.book.image, "opened")
+    book = peachy.new(bank.book.spritesheet, bank.book.image, "opened"),
+    button = peachy.new(bank.build.spritesheet, bank.build.image, "enabled")
   }
 end
 
@@ -109,11 +125,13 @@ end
 
 function Book:update(dt)
   self.sprites.book:update(dt)
+  self.sprites.button:update(dt)
   self:section():update(dt)
 end
 
 function Book:draw()
   self.sprites.book:draw()
+  self.sprites.button:draw(Book.ButtonPosition.x, Book.ButtonPosition.y)
   self:section():draw()
 end
 

@@ -19,7 +19,7 @@ end
 
 function love.update(dt)
   if not bank:isLoaded() and bank:update() then
-    state.navigator:navigate("book")
+    state.navigator:navigate("machine")
     state.ready = true
   elseif state.ready then
     state.navigator:update(dt)
