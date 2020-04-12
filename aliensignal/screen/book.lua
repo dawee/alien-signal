@@ -1,8 +1,8 @@
 local bank = require("aliensignal.bank")
 local peachy = require("peachy")
-local Object = require("classic")
+local Navigator = require("navigator")
 
-local Book = Object:extend()
+local Book = Navigator.Screen:extend()
 
 function Book:new()
   self.sprite = peachy.new(bank.book.spritesheet, bank.book.image, "opened")

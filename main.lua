@@ -1,10 +1,12 @@
 local bank = require("aliensignal.bank")
+local BookScreen = require("aliensignal.screen.book")
 local MachineScreen = require("aliensignal.screen.machine")
 local Navigator = require("navigator")
 
 local state = {
   navigator = Navigator(
     {
+      book = BookScreen,
       machine = MachineScreen
     }
   ),
@@ -17,7 +19,7 @@ end
 
 function love.update(dt)
   if not bank:isLoaded() and bank:update() then
-    state.navigator:navigate("machine")
+    state.navigator:navigate("book")
     state.ready = true
   elseif state.ready then
     state.navigator:update(dt)
