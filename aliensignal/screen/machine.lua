@@ -28,8 +28,8 @@ MachineScreen.Wave = {
 
 local pixelcode =
   [[
-    #define COLOR1 vec4(202 / 256.0, 217 / 256.0, 237 / 256.0, 1)
-    #define COLOR2 vec4(1, 1, 1, 1)
+    #define COLOR1 vec4(153 / 256.0, 229 / 256.0, 80 / 256.0, 1)
+    #define COLOR2 vec4(205 / 256.0, 244 / 256.0, 102 / 256.0, 1)
 
     vec4 effect( vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords )
     {
@@ -172,12 +172,12 @@ function MachineScreen:mousereleased(x, y, button, istouch)
 end
 
 function MachineScreen:draw()
-  love.graphics.setShader(MachineScreen.Shader)
-  love.graphics.rectangle("fill", 0, 0, 1024, 768)
-  love.graphics.setShader()
-
   love.graphics.push()
   love.graphics.applyTransform(self.transform)
+
+  love.graphics.setShader(MachineScreen.Shader)
+  love.graphics.rectangle("fill", 0, 0, 1024 * 100, 768 * 100)
+  love.graphics.setShader()
 
   for x, module_col in pairs(self.modules) do
     for y, mod in pairs(module_col) do
