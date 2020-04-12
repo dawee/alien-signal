@@ -4,10 +4,17 @@ local Navigator = Object:extend()
 
 function Navigator:new(screens)
   self.screens = screens
+  self.loaded = {}
 end
 
 function Navigator:navigate(name, props)
-  self.currentScreen = self.screens[name](self)
+  local Screen = self.screens[name]
+
+  if Screen.Load and not self.loaded[name] then
+    Screen.Load()
+  end
+
+  self.currentScreen = Screen(self)
   self.currentScreen:open(props)
 end
 

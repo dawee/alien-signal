@@ -6,9 +6,12 @@ local Module = Object:extend()
 
 function Module:new(name, slot, modules)
   self.sprite = peachy.new(bank[name].spritesheet, bank[name].image, "active")
-  self.modules = modules
-  self.slot = slot
-  self:updatePosition()
+
+  if slot and modules then
+    self.modules = modules
+    self.slot = slot
+    self:updatePosition()
+  end
 end
 
 function Module:updatePosition()
