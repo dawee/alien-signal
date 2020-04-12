@@ -7,7 +7,6 @@ local InventoryBag = require("aliensignal.inventorybag")
 local Generator = require("aliensignal.module.generator")
 local Navigator = require("navigator")
 local Sampler = require("aliensignal.module.sampler")
-local Slot = require("aliensignal.slot")
 local Output = require("aliensignal.module.output")
 local DownLeftShoulder = require("aliensignal.module.downleftshoulder")
 local DownRightShoulder = require("aliensignal.module.downrightshoulder")
@@ -15,6 +14,8 @@ local UpLeftShoulder = require("aliensignal.module.upleftshoulder")
 local UpRightShoulder = require("aliensignal.module.uprightshoulder")
 
 local MachineScreen = Navigator.Screen:extend()
+
+MachineScreen.Size = 20
 
 MachineScreen.Wave = {
   Top = 0,
@@ -25,17 +26,33 @@ MachineScreen.Wave = {
   Duration = 8
 }
 
+local pixelcode =
+  [[
+    #define COLOR1 vec4(202 / 256.0, 217 / 256.0, 237 / 256.0, 1)
+    #define COLOR2 vec4(1, 1, 1, 1)
+
+    vec4 effect( vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords )
+    {
+      return mix(COLOR1, COLOR2, 1 - abs(mod(floor(screen_coords.x / 128), 2) - mod(floor(screen_coords.y / 128), 2)));
+    }
+]]
+
+local vertexcode =
+  [[
+    vec4 position( mat4 transform_projection, vec4 vertex_position )
+    {
+        return transform_projection * vertex_position;
+    }
+]]
+
+function MachineScreen.Load()
+  MachineScreen.Shader = love.graphics.newShader(pixelcode, vertexcode)
+end
+
 function MachineScreen:new(...)
   Navigator.Screen.new(self, ...)
 
   self.transform = love.math.newTransform()
-  self.slots = {}
-
-  for xi = 0, 20, 1 do
-    for yi = 0, 10, 1 do
-      table.insert(self.slots, Slot({x = xi * 124, y = yi * 124}))
-    end
-  end
 
   self.modules = {}
   self.modules[1] = {}
@@ -97,10 +114,6 @@ function MachineScreen:update(dt)
     end
   end
 
-  for index, slot in pairs(self.slots) do
-    slot:update(dt)
-  end
-
   for x, module_col in pairs(self.modules) do
     for y, mod in pairs(module_col) do
       mod:update(dt)
@@ -159,12 +172,12 @@ function MachineScreen:mousereleased(x, y, button, istouch)
 end
 
 function MachineScreen:draw()
+  love.graphics.setShader(MachineScreen.Shader)
+  love.graphics.rectangle("fill", 0, 0, 1024, 768)
+  love.graphics.setShader()
+
   love.graphics.push()
   love.graphics.applyTransform(self.transform)
-
-  for index, slot in pairs(self.slots) do
-    slot:draw()
-  end
 
   for x, module_col in pairs(self.modules) do
     for y, mod in pairs(module_col) do
