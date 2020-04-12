@@ -5,46 +5,62 @@ local Navigator = Object:extend()
 function Navigator:new(screens)
   self.screens = screens
   self.loaded = {}
+  self.stack = {}
 end
 
 function Navigator:navigate(name, props)
+  self.stack = {}
+  self:push(name)
+end
+
+function Navigator:topScreen()
+  return table.getn(self.stack) > 0 and self.stack[table.getn(self.stack)] or nil
+end
+
+function Navigator:update(dt)
+  if self:topScreen() then
+    self:topScreen():update(dt)
+  end
+end
+
+function Navigator:push(name)
   local Screen = self.screens[name]
 
   if Screen.Load and not self.loaded[name] then
     Screen.Load()
   end
 
-  self.currentScreen = Screen(self)
-  self.currentScreen:open(props)
+  local pushedScreen = Screen(self)
+
+  table.insert(self.stack, pushedScreen)
+  pushedScreen:open(props)
 end
 
-function Navigator:update(dt)
-  if self.currentScreen then
-    self.currentScreen:update(dt)
-  end
+function Navigator:pop()
+  table.remove(self.stack, table.getn(self.stack))
 end
 
 function Navigator:draw()
-  if self.currentScreen then
-    self.currentScreen:draw()
+  for index, screen in pairs(self.stack) do
+    screen:draw()
   end
 end
 
 function Navigator:mousemoved(x, y, dx, dy)
-  if self.currentScreen and self.currentScreen.mousemoved then
-    self.currentScreen:mousemoved(x, y, dx, dy)
+  if self:topScreen() and self:topScreen().mousemoved then
+    self:topScreen():mousemoved(x, y, dx, dy)
   end
 end
 
 function Navigator:mousepressed(x, y, button, istouch)
-  if self.currentScreen and self.currentScreen.mousepressed then
-    self.currentScreen:mousepressed(x, y, button, istouch)
+  if self:topScreen() and self:topScreen().mousepressed then
+    self:topScreen():mousepressed(x, y, button, istouch)
   end
 end
 
 function Navigator:mousereleased(x, y, button, istouch)
-  if self.currentScreen and self.currentScreen.mousereleased then
-    self.currentScreen:mousereleased(x, y, button, istouch)
+  if self:topScreen() and self:topScreen().mousereleased then
+    self:topScreen():mousereleased(x, y, button, istouch)
   end
 end
 

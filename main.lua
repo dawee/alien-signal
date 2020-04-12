@@ -1,5 +1,6 @@
 local bank = require("aliensignal.bank")
 local BookScreen = require("aliensignal.screen.book")
+local InventoryScreen = require("aliensignal.screen.inventory")
 local MachineScreen = require("aliensignal.screen.machine")
 local Navigator = require("navigator")
 
@@ -7,6 +8,7 @@ local state = {
   navigator = Navigator(
     {
       book = BookScreen,
+      inventory = InventoryScreen,
       machine = MachineScreen
     }
   ),

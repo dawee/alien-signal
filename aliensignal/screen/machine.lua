@@ -3,8 +3,9 @@ local AndComparison = require("aliensignal.module.andcomparison")
 local Booster = require("aliensignal.module.booster")
 local Color = require("aliensignal.color")
 local Coupler = require("aliensignal.module.coupler")
-local Navigator = require("navigator")
+local InventoryBag = require("aliensignal.inventorybag")
 local Generator = require("aliensignal.module.generator")
+local Navigator = require("navigator")
 local Sampler = require("aliensignal.module.sampler")
 local Slot = require("aliensignal.slot")
 local Output = require("aliensignal.module.output")
@@ -24,9 +25,10 @@ MachineScreen.Wave = {
   Duration = 8
 }
 
-function MachineScreen:new()
-  self.transform = love.math.newTransform()
+function MachineScreen:new(...)
+  Navigator.Screen.new(self, ...)
 
+  self.transform = love.math.newTransform()
   self.slots = {}
 
   for xi = 0, 20, 1 do
@@ -63,6 +65,8 @@ function MachineScreen:new()
   self.modules[4][6] = DownRightShoulder({x = 4, y = 6}, self.modules)
   self.modules[5][6] = AndComparison({x = 5, y = 6}, self.modules)
   self.modules[6][6] = Coupler({x = 6, y = 6}, self.modules)
+
+  self.inventoryBag = InventoryBag(self.navigator)
 end
 
 function MachineScreen:update(dt)
@@ -102,6 +106,8 @@ function MachineScreen:update(dt)
       mod:update(dt)
     end
   end
+
+  self.inventoryBag:update(dt)
 end
 
 function MachineScreen:mousemoved(x, y, dx, dy)
@@ -114,6 +120,10 @@ function MachineScreen:mousemoved(x, y, dx, dy)
 end
 
 function MachineScreen:mousepressed(x, y, button, istouch)
+  if self.inventoryBag:mousepressed(x, y, button, istouch) then
+    return
+  end
+
   if button == 2 then
     self.sliding = true
   elseif button == 1 then
@@ -180,6 +190,8 @@ function MachineScreen:draw()
   end
 
   Color.White:use()
+
+  self.inventoryBag:draw()
 end
 
 return MachineScreen

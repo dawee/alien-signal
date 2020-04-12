@@ -9,6 +9,7 @@ local spritesheets = {
   "downleftshoulder",
   "downrightshoulder",
   "input",
+  "inventorybag",
   "output",
   "sampler",
   "slot",
