@@ -1,0 +1,28 @@
+{ "frames": [
+   {
+    "filename": "book.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 1024, "h": 768 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 1024, "h": 768 },
+    "sourceSize": { "w": 1024, "h": 768 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.17-x64",
+  "image": "book.png",
+  "format": "RGBA8888",
+  "size": { "w": 1024, "h": 768 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "opened", "from": 0, "to": 0, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Book", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

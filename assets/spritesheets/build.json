@@ -1,0 +1,28 @@
+{ "frames": [
+   {
+    "filename": "build.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 273, "h": 143 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 273, "h": 143 },
+    "sourceSize": { "w": 273, "h": 143 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.17-x64",
+  "image": "build.png",
+  "format": "RGBA8888",
+  "size": { "w": 273, "h": 143 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "enabled", "from": 0, "to": 0, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

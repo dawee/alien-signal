@@ -2,6 +2,9 @@ local Bank = require("bank")
 
 local spritesheets = {
   "andcomparison",
+  "arrow",
+  "book",
+  "build",
   "coupler",
   "downleftshoulder",
   "downrightshoulder",
