@@ -1,9 +1,9 @@
 local bank = require("aliensignal.bank")
-local peachy = require("peachy")
+local AndComparison = require("aliensignal.andcomparison")
 local Booster = require("aliensignal.booster")
 local Color = require("color")
+local Coupler = require("aliensignal.coupler")
 local Generator = require("aliensignal.generator")
-local Object = require("classic")
 local Sampler = require("aliensignal.sampler")
 local Slot = require("aliensignal.slot")
 local Output = require("aliensignal.output")
@@ -20,20 +20,6 @@ local wave = {
   padding = 20,
   duration = 8
 }
-
--- local AndComparison = Module:extend()
-
--- function AndComparison:new(input1, input2)
---   self.input1 = input1
---   self.input2 = input2
--- end
-
--- function AndComparison:computeRightOutput(time)
---   local y1 = self.input1:computeRightOutput(time)
---   local y2 = self.input2:computeRightOutput(time)
-
---   return y1 == 1 and y2 == 1 and 1 or 0
--- end
 
 local state = {
   ready = false,
@@ -61,18 +47,29 @@ function love.update(dt)
     state.modules[2] = {}
     state.modules[3] = {}
     state.modules[4] = {}
+    state.modules[5] = {}
     state.modules[6] = {}
+    state.modules[7] = {}
 
-    state.modules[1][3] = Generator({x = 1, y = 3}, state.modules)
-    state.modules[2][3] = Sampler({x = 2, y = 3}, state.modules)
-    state.modules[3][3] = Booster({x = 3, y = 3}, state.modules)
-    state.modules[4][3] = Booster({x = 4, y = 3}, state.modules)
-    state.modules[6][3] = Output({x = 6, y = 3}, state.modules)
+    state.modules[1][4] = Generator({x = 1, y = 4}, state.modules)
+    state.modules[2][4] = Sampler({x = 2, y = 4}, state.modules)
+    state.modules[3][4] = Booster({x = 3, y = 4}, state.modules)
+    state.modules[4][4] = Booster({x = 4, y = 4}, state.modules)
+    state.modules[6][4] = Output({x = 6, y = 4}, state.modules)
+
+    state.modules[1][5] = UpLeftShoulder({x = 1, y = 5}, state.modules)
+    state.modules[2][5] = UpRightShoulder({x = 2, y = 5}, state.modules)
+    state.modules[3][5] = DownLeftShoulder({x = 3, y = 5}, state.modules)
+    state.modules[4][5] = DownRightShoulder({x = 4, y = 5}, state.modules)
+    state.modules[5][5] = AndComparison({x = 5, y = 5}, state.modules)
+    state.modules[6][5] = Coupler({x = 6, y = 5}, state.modules)
 
     state.modules[1][6] = UpLeftShoulder({x = 1, y = 6}, state.modules)
     state.modules[2][6] = UpRightShoulder({x = 2, y = 6}, state.modules)
     state.modules[3][6] = DownLeftShoulder({x = 3, y = 6}, state.modules)
     state.modules[4][6] = DownRightShoulder({x = 4, y = 6}, state.modules)
+    state.modules[5][6] = AndComparison({x = 5, y = 6}, state.modules)
+    state.modules[6][6] = Coupler({x = 6, y = 6}, state.modules)
 
     state.ready = true
   elseif state.ready then
