@@ -5,7 +5,7 @@ local Object = require("classic")
 local Module = Object:extend()
 
 function Module:new(name, slot, modules)
-  self.sprite = peachy.new(bank[name].spritesheet, bank[name].image, "active")
+  self.sprite = peachy.new(bank.modules.spritesheet, bank.modules.image, name)
 
   if slot and modules then
     self.modules = modules
@@ -26,7 +26,7 @@ function Module:update(dt)
 end
 
 function Module:draw()
-  self.sprite:draw(self.position.x, self.position.y)
+  self.sprite:draw(self.position.x, self.position.y, 0, 4, 4)
 end
 
 function Module:getInput(dx, dy)

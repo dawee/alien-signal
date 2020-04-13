@@ -16,5 +16,6 @@ end
 Color.White = Color(255, 255, 255)
 Color.River = Color(52, 152, 219)
 Color.Clouds = Color(236, 240, 241)
+Color.Signal = Color(106, 190, 48)
 
 return Color

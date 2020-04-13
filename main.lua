@@ -17,6 +17,7 @@ local state = {
 
 function love.load()
   bank:load()
+  love.graphics.setDefaultFilter("nearest", "nearest")
 end
 
 function love.update(dt)

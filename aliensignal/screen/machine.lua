@@ -1,4 +1,5 @@
 local bank = require("aliensignal.bank")
+local peachy = require("peachy")
 local AndComparison = require("aliensignal.module.andcomparison")
 local Booster = require("aliensignal.module.booster")
 local Color = require("aliensignal.color")
@@ -19,10 +20,11 @@ MachineScreen.Size = 20
 
 MachineScreen.Wave = {
   Top = 0,
-  Left = 1024 - 800,
+  Left = 32,
   Length = 800,
-  Height = 50,
-  Padding = 20,
+  Height = 24,
+  LeftPadding = 40,
+  TopPadding = 3,
   Duration = 8
 }
 
@@ -65,25 +67,30 @@ function MachineScreen:new(...)
 
   self.modules[1][4] = Generator({x = 1, y = 4}, self.modules)
   self.modules[2][4] = Sampler({x = 2, y = 4}, self.modules)
-  self.modules[3][4] = Booster({x = 3, y = 4}, self.modules)
-  self.modules[4][4] = Booster({x = 4, y = 4}, self.modules)
+  -- self.modules[3][4] = Booster({x = 3, y = 4}, self.modules)
+  -- self.modules[4][4] = Booster({x = 4, y = 4}, self.modules)
   self.modules[6][4] = Output({x = 6, y = 4}, self.modules)
 
   self.modules[1][5] = UpLeftShoulder({x = 1, y = 5}, self.modules)
   self.modules[2][5] = UpRightShoulder({x = 2, y = 5}, self.modules)
   self.modules[3][5] = DownLeftShoulder({x = 3, y = 5}, self.modules)
   self.modules[4][5] = DownRightShoulder({x = 4, y = 5}, self.modules)
-  self.modules[5][5] = AndComparison({x = 5, y = 5}, self.modules)
+  -- self.modules[5][5] = AndComparison({x = 5, y = 5}, self.modules)
   self.modules[6][5] = Coupler({x = 6, y = 5}, self.modules)
 
   self.modules[1][6] = UpLeftShoulder({x = 1, y = 6}, self.modules)
   self.modules[2][6] = UpRightShoulder({x = 2, y = 6}, self.modules)
   self.modules[3][6] = DownLeftShoulder({x = 3, y = 6}, self.modules)
   self.modules[4][6] = DownRightShoulder({x = 4, y = 6}, self.modules)
-  self.modules[5][6] = AndComparison({x = 5, y = 6}, self.modules)
+  -- self.modules[5][6] = AndComparison({x = 5, y = 6}, self.modules)
   self.modules[6][6] = Coupler({x = 6, y = 6}, self.modules)
 
   self.inventoryBag = InventoryBag(self.navigator)
+  self.sprites = {
+    signalScreenLeft = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "left"),
+    signalScreenRight = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "right"),
+    signalScreenMiddle = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "middle")
+  }
 end
 
 function MachineScreen:update(dt)
@@ -101,14 +108,14 @@ function MachineScreen:update(dt)
   end
 
   if output then
-    for i = 0, MachineScreen.Wave.Length, 1 do
+    for i = 0, MachineScreen.Wave.Length + MachineScreen.Wave.LeftPadding, 1 do
       local time = i * MachineScreen.Wave.Duration / MachineScreen.Wave.Length
       local y = output:computeRightOutput(time)
 
-      table.insert(self.points, MachineScreen.Wave.Left + i)
+      table.insert(self.points, MachineScreen.Wave.Left + i + MachineScreen.Wave.LeftPadding)
       table.insert(
         self.points,
-        MachineScreen.Wave.Top + MachineScreen.Wave.Padding + MachineScreen.Wave.Height / 2 -
+        MachineScreen.Wave.Top + MachineScreen.Wave.TopPadding + self.sprites.signalScreenMiddle:getHeight() * 2 -
           y * MachineScreen.Wave.Height / 2
       )
     end
@@ -121,6 +128,10 @@ function MachineScreen:update(dt)
   end
 
   self.inventoryBag:update(dt)
+
+  for index, sprite in pairs(self.sprites) do
+    sprite:update(dt)
+  end
 end
 
 function MachineScreen:mousemoved(x, y, dx, dy)
@@ -187,16 +198,23 @@ function MachineScreen:draw()
 
   love.graphics.pop()
 
-  Color.Clouds:use()
-  love.graphics.rectangle(
-    "fill",
-    MachineScreen.Wave.Left,
+  self.sprites.signalScreenLeft:draw(MachineScreen.Wave.Left, MachineScreen.Wave.Top, 0, 4, 4)
+  self.sprites.signalScreenMiddle:draw(
+    MachineScreen.Wave.Left + self.sprites.signalScreenLeft:getWidth() * 4,
     MachineScreen.Wave.Top,
-    MachineScreen.Wave.Length,
-    MachineScreen.Wave.Height + 2 * MachineScreen.Wave.Padding
+    0,
+    MachineScreen.Wave.Length / self.sprites.signalScreenMiddle:getWidth(),
+    4
   )
-  Color.River:use()
-  love.graphics.setColor(52 / 256, 152 / 256, 219 / 256, 1)
+  self.sprites.signalScreenRight:draw(
+    MachineScreen.Wave.Left + self.sprites.signalScreenLeft:getWidth() * 4 + MachineScreen.Wave.Length,
+    MachineScreen.Wave.Top,
+    0,
+    4,
+    4
+  )
+
+  Color.Signal:use()
 
   if self.points and table.getn(self.points) > 1 then
     love.graphics.line(unpack(self.points))
@@ -204,7 +222,7 @@ function MachineScreen:draw()
 
   Color.White:use()
 
-  self.inventoryBag:draw()
+  -- self.inventoryBag:draw()
 end
 
 return MachineScreen

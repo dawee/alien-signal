@@ -3,7 +3,7 @@ local Module = require("aliensignal.module")
 local Output = Module:extend()
 
 function Output:new(slot, modules)
-  Module.new(self, "output", slot, modules)
+  Module.new(self, "emitter", slot, modules)
 end
 
 function Output:computeRightOutput(time)

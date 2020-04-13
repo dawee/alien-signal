@@ -1,21 +1,12 @@
 local Bank = require("bank")
 
 local spritesheets = {
-  "andcomparison",
   "arrow",
   "book",
   "build",
-  "coupler",
-  "downleftshoulder",
-  "downrightshoulder",
-  "input",
   "inventorybag",
-  "output",
-  "sampler",
-  "slot",
-  "upleftshoulder",
-  "uprightshoulder",
-  "x2booster"
+  "modules",
+  "signalscreen"
 }
 
 local spec = {}

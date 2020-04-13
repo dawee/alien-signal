@@ -1,0 +1,48 @@
+{ "frames": [
+   {
+    "filename": "signalscreen 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 20, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 20 },
+    "sourceSize": { "w": 20, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "signalscreen 1.aseprite",
+    "frame": { "x": 20, "y": 0, "w": 20, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 20 },
+    "sourceSize": { "w": 20, "h": 20 },
+    "duration": 100
+   },
+   {
+    "filename": "signalscreen 2.aseprite",
+    "frame": { "x": 40, "y": 0, "w": 20, "h": 20 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 20, "h": 20 },
+    "sourceSize": { "w": 20, "h": 20 },
+    "duration": 100
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.17-x64",
+  "image": "signalscreen.png",
+  "format": "RGBA8888",
+  "size": { "w": 60, "h": 20 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "left", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "right", "from": 1, "to": 1, "direction": "forward" },
+   { "name": "middle", "from": 2, "to": 2, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
