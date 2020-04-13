@@ -1,13 +1,16 @@
 local bank = require("aliensignal.bank")
 local peachy = require("peachy")
-local AndComparison = require("aliensignal.module.andcomparison")
+local AndGate = require("aliensignal.module.andgate")
+local OrGate = require("aliensignal.module.orgate")
 local Booster = require("aliensignal.module.booster")
+local Decreaser = require("aliensignal.module.decreaser")
 local Color = require("aliensignal.color")
 local Coupler = require("aliensignal.module.coupler")
 local InventoryBag = require("aliensignal.inventorybag")
 local Generator = require("aliensignal.module.generator")
 local Navigator = require("navigator")
 local Sampler = require("aliensignal.module.sampler")
+local Wire = require("aliensignal.module.wire")
 local Output = require("aliensignal.module.output")
 local DownLeftShoulder = require("aliensignal.module.downleftshoulder")
 local DownRightShoulder = require("aliensignal.module.downrightshoulder")
@@ -57,33 +60,25 @@ function MachineScreen:new(...)
   self.transform = love.math.newTransform()
 
   self.modules = {}
-  self.modules[1] = {}
-  self.modules[2] = {}
-  self.modules[3] = {}
-  self.modules[4] = {}
-  self.modules[5] = {}
-  self.modules[6] = {}
-  self.modules[7] = {}
 
-  self.modules[1][4] = Generator({x = 1, y = 4}, self.modules)
-  self.modules[2][4] = Sampler({x = 2, y = 4}, self.modules)
-  -- self.modules[3][4] = Booster({x = 3, y = 4}, self.modules)
-  -- self.modules[4][4] = Booster({x = 4, y = 4}, self.modules)
-  self.modules[6][4] = Output({x = 6, y = 4}, self.modules)
-
-  self.modules[1][5] = UpLeftShoulder({x = 1, y = 5}, self.modules)
-  self.modules[2][5] = UpRightShoulder({x = 2, y = 5}, self.modules)
-  self.modules[3][5] = DownLeftShoulder({x = 3, y = 5}, self.modules)
-  self.modules[4][5] = DownRightShoulder({x = 4, y = 5}, self.modules)
-  -- self.modules[5][5] = AndComparison({x = 5, y = 5}, self.modules)
-  self.modules[6][5] = Coupler({x = 6, y = 5}, self.modules)
-
-  self.modules[1][6] = UpLeftShoulder({x = 1, y = 6}, self.modules)
-  self.modules[2][6] = UpRightShoulder({x = 2, y = 6}, self.modules)
-  self.modules[3][6] = DownLeftShoulder({x = 3, y = 6}, self.modules)
-  self.modules[4][6] = DownRightShoulder({x = 4, y = 6}, self.modules)
-  -- self.modules[5][6] = AndComparison({x = 5, y = 6}, self.modules)
-  self.modules[6][6] = Coupler({x = 6, y = 6}, self.modules)
+  self:addModule({x = 1, y = 4}, Generator)
+  self:addModule({x = 2, y = 4}, Sampler)
+  self:addModule({x = 3, y = 4}, Booster)
+  self:addModule({x = 4, y = 4}, Booster)
+  self:addModule({x = 6, y = 4}, Output)
+  self:addModule({x = 1, y = 5}, UpLeftShoulder)
+  self:addModule({x = 2, y = 5}, UpRightShoulder)
+  self:addModule({x = 3, y = 5}, DownLeftShoulder)
+  self:addModule({x = 4, y = 5}, DownRightShoulder)
+  self:addModule({x = 5, y = 5}, AndGate)
+  self:addModule({x = 6, y = 5}, Coupler)
+  self:addModule({x = 1, y = 6}, UpLeftShoulder)
+  self:addModule({x = 2, y = 6}, UpRightShoulder)
+  self:addModule({x = 3, y = 6}, DownLeftShoulder)
+  self:addModule({x = 4, y = 6}, Decreaser)
+  self:addModule({x = 5, y = 6}, OrGate)
+  self:addModule({x = 6, y = 6}, Coupler)
+  self:addModule({x = 7, y = 6}, Wire)
 
   self.inventoryBag = InventoryBag(self.navigator)
   self.sprites = {
@@ -91,6 +86,14 @@ function MachineScreen:new(...)
     signalScreenRight = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "right"),
     signalScreenMiddle = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "middle")
   }
+end
+
+function MachineScreen:addModule(slot, ModuleType)
+  if not self.modules[slot.x] then
+    self.modules[slot.x] = {}
+  end
+
+  self.modules[slot.x][slot.y] = ModuleType(slot, self.modules)
 end
 
 function MachineScreen:update(dt)

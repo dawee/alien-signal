@@ -1,12 +1,12 @@
 local Module = require("aliensignal.module")
 
-local AndComparison = Module:extend()
+local AndGate = Module:extend()
 
-function AndComparison:new(slot, modules)
-  Module.new(self, "andcomparison", slot, modules)
+function AndGate:new(slot, modules)
+  Module.new(self, "andgate", slot, modules)
 end
 
-function AndComparison:computeRightOutput(time)
+function AndGate:computeRightOutput(time)
   local leftInput = self:leftInput()
   local upInput = self:upInput()
 
@@ -15,4 +15,4 @@ function AndComparison:computeRightOutput(time)
     0
 end
 
-return AndComparison
+return AndGate

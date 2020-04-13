@@ -3,7 +3,7 @@ local Module = require("aliensignal.module")
 local Booster = Module:extend()
 
 function Booster:new(slot, modules)
-  Module.new(self, "x2booster", slot, modules)
+  Module.new(self, "booster", slot, modules)
 end
 
 function Booster:computeRightOutput(time)

@@ -3,7 +3,7 @@ local peachy = require("peachy")
 
 local Booster = require("aliensignal.module.booster")
 local Coupler = require("aliensignal.module.coupler")
-local AndComparison = require("aliensignal.module.andcomparison")
+local AndGate = require("aliensignal.module.andgate")
 local Sampler = require("aliensignal.module.sampler")
 local Navigator = require("navigator")
 
@@ -54,7 +54,7 @@ function Book:new()
   self.sections = {
     Sampler(),
     Coupler(),
-    AndComparison(),
+    AndGate(),
     Booster(),
     DownLeftShoulder(),
     DownRightShoulder(),
