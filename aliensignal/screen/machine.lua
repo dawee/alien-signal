@@ -1,21 +1,10 @@
 local bank = require("aliensignal.bank")
 local peachy = require("peachy")
-local AndGate = require("aliensignal.module.andgate")
-local OrGate = require("aliensignal.module.orgate")
-local Booster = require("aliensignal.module.booster")
-local Decreaser = require("aliensignal.module.decreaser")
 local Color = require("aliensignal.color")
-local Coupler = require("aliensignal.module.coupler")
 local InventoryBag = require("aliensignal.inventorybag")
 local Generator = require("aliensignal.module.generator")
 local Navigator = require("navigator")
-local Sampler = require("aliensignal.module.sampler")
-local Wire = require("aliensignal.module.wire")
 local Output = require("aliensignal.module.output")
-local DownLeftShoulder = require("aliensignal.module.downleftshoulder")
-local DownRightShoulder = require("aliensignal.module.downrightshoulder")
-local UpLeftShoulder = require("aliensignal.module.upleftshoulder")
-local UpRightShoulder = require("aliensignal.module.uprightshoulder")
 
 local MachineScreen = Navigator.Screen:extend()
 
@@ -63,23 +52,7 @@ function MachineScreen:new(...)
   self.modules = {}
 
   self:addModule({x = 1, y = 4}, Generator)
-  self:addModule({x = 2, y = 4}, Sampler)
-  self:addModule({x = 3, y = 4}, Booster)
-  self:addModule({x = 4, y = 4}, Booster)
   self:addModule({x = 6, y = 4}, Output)
-  self:addModule({x = 1, y = 5}, UpLeftShoulder)
-  self:addModule({x = 2, y = 5}, UpRightShoulder)
-  self:addModule({x = 3, y = 5}, DownLeftShoulder)
-  self:addModule({x = 4, y = 5}, DownRightShoulder)
-  self:addModule({x = 5, y = 5}, AndGate)
-  self:addModule({x = 6, y = 5}, Coupler)
-  self:addModule({x = 1, y = 6}, UpLeftShoulder)
-  self:addModule({x = 2, y = 6}, UpRightShoulder)
-  self:addModule({x = 3, y = 6}, DownLeftShoulder)
-  self:addModule({x = 4, y = 6}, Decreaser)
-  self:addModule({x = 5, y = 6}, OrGate)
-  self:addModule({x = 6, y = 6}, Coupler)
-  self:addModule({x = 7, y = 6}, Wire)
 
   self.inventoryBag = InventoryBag(self.navigator)
   self.sprites = {
@@ -87,6 +60,10 @@ function MachineScreen:new(...)
     signalScreenRight = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "right"),
     signalScreenMiddle = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "middle")
   }
+end
+
+function MachineScreen:open(props)
+  self.inventoryBag:fill(props.inventory)
 end
 
 function MachineScreen:addModule(slot, ModuleType)

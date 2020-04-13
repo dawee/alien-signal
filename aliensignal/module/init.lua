@@ -5,6 +5,7 @@ local Object = require("classic")
 local Module = Object:extend()
 
 function Module:new(name, slot, modules)
+  self.name = name
   self.sprite = peachy.new(bank.modules.spritesheet, bank.modules.image, name)
 
   if slot and modules then

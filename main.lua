@@ -3,6 +3,18 @@ local BookScreen = require("aliensignal.screen.book")
 local MachineScreen = require("aliensignal.screen.machine")
 local Navigator = require("navigator")
 
+local AndGate = require("aliensignal.module.andgate")
+local OrGate = require("aliensignal.module.orgate")
+local Booster = require("aliensignal.module.booster")
+local Decreaser = require("aliensignal.module.decreaser")
+local Coupler = require("aliensignal.module.coupler")
+local Sampler = require("aliensignal.module.sampler")
+local Wire = require("aliensignal.module.wire")
+local DownLeftShoulder = require("aliensignal.module.downleftshoulder")
+local DownRightShoulder = require("aliensignal.module.downrightshoulder")
+local UpLeftShoulder = require("aliensignal.module.upleftshoulder")
+local UpRightShoulder = require("aliensignal.module.uprightshoulder")
+
 local state = {
   navigator = Navigator(
     {
@@ -10,6 +22,7 @@ local state = {
       machine = MachineScreen
     }
   ),
+  inventory = {},
   ready = false
 }
 
@@ -20,7 +33,20 @@ end
 
 function love.update(dt)
   if not bank:isLoaded() and bank:update() then
-    state.navigator:navigate("machine")
+    table.insert(state.inventory, Sampler())
+    table.insert(state.inventory, Sampler())
+    table.insert(state.inventory, Booster())
+    table.insert(state.inventory, Wire())
+    table.insert(state.inventory, Sampler())
+    table.insert(state.inventory, Sampler())
+    table.insert(state.inventory, Sampler())
+    table.insert(state.inventory, Sampler())
+    table.insert(state.inventory, Sampler())
+    table.insert(state.inventory, Sampler())
+    table.insert(state.inventory, Sampler())
+    table.insert(state.inventory, Sampler())
+
+    state.navigator:navigate("machine", {inventory = state.inventory})
     state.ready = true
   elseif state.ready then
     state.navigator:update(dt)

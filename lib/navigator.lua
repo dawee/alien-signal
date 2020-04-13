@@ -10,7 +10,7 @@ end
 
 function Navigator:navigate(name, props)
   self.stack = {}
-  self:push(name)
+  self:push(name, props)
 end
 
 function Navigator:topScreen()
@@ -23,7 +23,7 @@ function Navigator:update(dt)
   end
 end
 
-function Navigator:push(name)
+function Navigator:push(name, props)
   local Screen = self.screens[name]
 
   if Screen.Load and not self.loaded[name] then
