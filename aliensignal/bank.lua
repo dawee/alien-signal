@@ -4,7 +4,7 @@ local spritesheets = {
   "arrow",
   "book",
   "build",
-  "inventorybag",
+  "misc",
   "modules",
   "signalscreen"
 }

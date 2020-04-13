@@ -36,7 +36,7 @@ local pixelcode =
     #define COLOR1 vec4(153 / 256.0, 229 / 256.0, 80 / 256.0, 1)
     #define COLOR2 vec4(205 / 256.0, 244 / 256.0, 102 / 256.0, 1)
 
-    vec4 effect( vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords )
+    vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords)
     {
       return mix(COLOR1, COLOR2, 1 - abs(mod(floor(screen_coords.x / 128), 2) - mod(floor(screen_coords.y / 128), 2)));
     }
@@ -44,7 +44,7 @@ local pixelcode =
 
 local vertexcode =
   [[
-    vec4 position( mat4 transform_projection, vec4 vertex_position )
+    vec4 position(mat4 transform_projection, vec4 vertex_position)
     {
         return transform_projection * vertex_position;
     }
@@ -52,6 +52,7 @@ local vertexcode =
 
 function MachineScreen.Load()
   MachineScreen.Shader = love.graphics.newShader(pixelcode, vertexcode)
+  InventoryBag.Load()
 end
 
 function MachineScreen:new(...)
@@ -225,7 +226,7 @@ function MachineScreen:draw()
 
   Color.White:use()
 
-  -- self.inventoryBag:draw()
+  self.inventoryBag:draw()
 end
 
 return MachineScreen
