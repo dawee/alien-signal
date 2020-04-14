@@ -1,6 +1,7 @@
 local bank = require("aliensignal.bank")
 local peachy = require("peachy")
 local Color = require("aliensignal.color")
+local Event = require("event")
 local Object = require("classic")
 
 local InventoryBag = Object:extend()
@@ -15,26 +16,31 @@ InventoryBag.ItemSize = 128
 InventoryBag.Slot = Object:extend()
 
 function InventoryBag.Slot:new(item, index)
+  self.index = index
   self.name = item.name
-  self.sprite = item.sprite
   self.items = {item}
   self.text = love.graphics.newText(InventoryBag.Font, "1")
   self.countTransform = love.math.newTransform()
+  self.onDrop = Event()
 
-  local col = index % InventoryBag.ColsCount
-  local row = math.floor((index - 1) / InventoryBag.ColsCount)
+  self:initItemPosition(item)
+  self.countTransform:translate(item.position.x + 127, item.position.y + 127)
+end
 
-  self.position = {
+function InventoryBag.Slot:initItemPosition(item)
+  local col = self.index % InventoryBag.ColsCount
+  local row = math.floor((self.index - 1) / InventoryBag.ColsCount)
+
+  item.position = {
     x = col * InventoryBag.ItemSize,
     y = 768 + row * InventoryBag.ItemSize
   }
-
-  self.countTransform:translate(self.position.x + 127, self.position.y + 127)
 end
 
 function InventoryBag.Slot:add(item)
   if item.name == self.name then
     table.insert(self.items, item)
+    self:initItemPosition(item)
     return true
   end
 
@@ -42,12 +48,54 @@ function InventoryBag.Slot:add(item)
 end
 
 function InventoryBag.Slot:update(dt)
-  self.sprite:update(dt)
+  for index, item in pairs(self.items) do
+    item:update(dt)
+  end
+
+  if self.movingItem then
+    self.movingItem:update(dt)
+  end
+
   self.text:set(tostring(table.getn(self.items)))
 end
 
+function InventoryBag.Slot:mousemoved(x, y, dx, dy)
+  if self.movingItem then
+    self.movingItem.position.x = self.movingItem.position.x + dx
+    self.movingItem.position.y = self.movingItem.position.y + dy
+  end
+end
+
+function InventoryBag.Slot:mousereleased(x, y, button, istouch)
+  if self.movingItem then
+    -- self:add(self.movingItem)
+    self.onDrop:trigger({item = self.movingItem, x = x, y = y})
+    self.movingItem = nil
+  end
+end
+
+function InventoryBag.Slot:mousepressed(x, y, button)
+  local item = self.items[table.getn(self.items)]
+
+  if
+    item and x > item.position.x and x < item.position.x + InventoryBag.ItemSize and
+      y > item.position.y - InventoryBag.Height and
+      y < item.position.y - InventoryBag.Height + InventoryBag.ItemSize
+   then
+    self.movingItem = table.remove(self.items, table.getn(self.items))
+    return true
+  end
+end
+
 function InventoryBag.Slot:draw()
-  self.sprite:draw(self.position.x, self.position.y, 0, 4, 4)
+  for index, item in pairs(self.items) do
+    item:draw()
+  end
+
+  if self.movingItem then
+    self.movingItem:draw()
+  end
+
   love.graphics.push()
   love.graphics.applyTransform(self.countTransform)
   love.graphics.polygon("fill", -8, -4, -40, -4, -44, -8, -44, -16, -40, -20, -8, -20, -4, -16, -4, -8)
@@ -86,6 +134,7 @@ function InventoryBag:new(navigator)
   self.navigator = navigator
   self.transform = love.math.newTransform()
   self.opened = false
+  self.onDrop = Event()
   self.slots = {}
   self.inventory = {}
   self.position = {
@@ -114,7 +163,33 @@ function InventoryBag:prepareSlots()
     if not itemAdded then
       local newSlot = InventoryBag.Slot(item, table.getn(self.slots) + 1)
 
+      newSlot.onDrop:subscribe(
+        function(data)
+          self.onDrop:trigger(data)
+        end
+      )
+
       table.insert(self.slots, newSlot)
+    end
+  end
+end
+
+function InventoryBag:pop(itemToPop)
+  local newInventory = {}
+
+  for index, item in pairs(self.inventory) do
+    if not (item == itemToPop) then
+      table.insert(newInventory, item)
+    end
+  end
+
+  self.inventory = newInventory
+end
+
+function InventoryBag:store(item)
+  for index, slot in pairs(self.slots) do
+    if slot:add(item) then
+      break
     end
   end
 end
@@ -134,6 +209,14 @@ function InventoryBag:close()
   end
 end
 
+function InventoryBag:mousemoved(x, y, dx, dy)
+  if self.opened then
+    for index, slot in pairs(self.slots) do
+      slot:mousemoved(x, y, dx, dy)
+    end
+  end
+end
+
 function InventoryBag:mousepressed(x, y, button)
   if
     button == 1 and x >= self.position.x + InventoryBag.Margin and x <= self.position.x + self.sprite:getWidth() * 4 and
@@ -148,6 +231,22 @@ function InventoryBag:mousepressed(x, y, button)
       y < 768 - InventoryBag.Height
    then
     self:close()
+  elseif self.opened then
+    for index, slot in pairs(self.slots) do
+      if slot:mousepressed(x, y, button) then
+        break
+      end
+    end
+
+    return true
+  end
+end
+
+function InventoryBag:mousereleased(x, y, button, istouch)
+  if self.opened then
+    for index, slot in pairs(self.slots) do
+      slot:mousereleased(x, y, button, istouch)
+    end
   end
 end
 

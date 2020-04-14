@@ -55,6 +55,33 @@ function MachineScreen:new(...)
   self:addModule({x = 6, y = 4}, Output)
 
   self.inventoryBag = InventoryBag(self.navigator)
+
+  self.inventoryBag.onDrop:subscribe(
+    function(props)
+      local x = props.x
+      local y = props.y
+
+      local newSlot = {
+        x = math.floor(x / 128) + 1,
+        y = math.floor(y / 128) + 1
+      }
+
+      if not self.modules[newSlot.x] then
+        self.modules[newSlot.x] = {}
+      end
+
+      if not self.modules[newSlot.x][newSlot.y] then
+        self.modules[newSlot.x][newSlot.y] = props.item
+        props.item.slot = newSlot
+        props.item:updatePosition()
+        self.inventoryBag:pop(props.item)
+        self.inventoryBag:close()
+      else
+        self.inventoryBag:store(props.item)
+      end
+    end
+  )
+
   self.sprites = {
     signalScreenLeft = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "left"),
     signalScreenRight = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "right"),
@@ -116,6 +143,10 @@ function MachineScreen:update(dt)
 end
 
 function MachineScreen:mousemoved(x, y, dx, dy)
+  if self.inventoryBag:mousemoved(x, y, dx, dy) then
+    return
+  end
+
   if self.sliding then
     self.transform:translate(dx, dy)
   elseif self.movingModule then
@@ -138,6 +169,10 @@ function MachineScreen:mousepressed(x, y, button, istouch)
 end
 
 function MachineScreen:mousereleased(x, y, button, istouch)
+  if self.inventoryBag:mousereleased(x, y, button, istouch) then
+    return
+  end
+
   if button == 2 then
     self.sliding = false
   elseif self.movingModule and button == 1 then

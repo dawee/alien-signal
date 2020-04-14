@@ -1,5 +1,6 @@
 local bank = require("aliensignal.bank")
 local BookScreen = require("aliensignal.screen.book")
+local Event = require("event")
 local MachineScreen = require("aliensignal.screen.machine")
 local Navigator = require("navigator")
 
@@ -50,6 +51,7 @@ function love.update(dt)
     state.ready = true
   elseif state.ready then
     state.navigator:update(dt)
+    Event.scheduler:update()
   end
 end
 
