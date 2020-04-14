@@ -25,30 +25,36 @@ local pixelcode =
     #define COLOR1 vec4(153 / 256.0, 229 / 256.0, 80 / 256.0, 1)
     #define COLOR2 vec4(205 / 256.0, 244 / 256.0, 102 / 256.0, 1)
 
+    uniform vec2 drag;
+
     vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords)
     {
-      return mix(COLOR1, COLOR2, 1 - abs(mod(floor(screen_coords.x / 128), 2) - mod(floor(screen_coords.y / 128), 2)));
+      vec2 coords = drag + screen_coords;
+
+      return mix(COLOR1, COLOR2, 1 - abs(mod(floor(coords.x / 128), 2) - mod(floor(coords.y / 128), 2)));
     }
 ]]
 
 local vertexcode =
   [[
+
     vec4 position(mat4 transform_projection, vec4 vertex_position)
     {
-        return transform_projection * vertex_position;
+      return transform_projection * vertex_position;
     }
 ]]
 
 function MachineScreen.Load()
-  MachineScreen.Shader = love.graphics.newShader(pixelcode, vertexcode)
   InventoryBag.Load()
 end
 
 function MachineScreen:new(...)
   Navigator.Screen.new(self, ...)
 
-  self.transform = love.math.newTransform()
+  self.shader = love.graphics.newShader(pixelcode, vertexcode)
+  self.drag = {dx = 0, dy = 0}
 
+  self.transform = love.math.newTransform()
   self.modules = {}
 
   self:addModule({x = 1, y = 4}, Generator)
@@ -148,7 +154,14 @@ function MachineScreen:mousemoved(x, y, dx, dy)
   end
 
   if self.sliding then
-    self.transform:translate(dx, dy)
+    local normalizedDrag = {
+      dx = math.min(math.max(0, self.drag.dx - dx), 1024 * 100),
+      dy = math.min(math.max(0, self.drag.dy - dy), 768 * 100)
+    }
+
+    self.transform:translate(self.drag.dx - normalizedDrag.dx, self.drag.dy - normalizedDrag.dy)
+    self.drag = normalizedDrag
+    self.shader:send("drag", {self.drag.dx, self.drag.dy})
   elseif self.movingModule then
     self.movingModule.position.x = self.movingModule.position.x + dx
     self.movingModule.position.y = self.movingModule.position.y + dy
@@ -202,7 +215,7 @@ function MachineScreen:draw()
   love.graphics.push()
   love.graphics.applyTransform(self.transform)
 
-  love.graphics.setShader(MachineScreen.Shader)
+  love.graphics.setShader(self.shader)
   love.graphics.rectangle("fill", 0, 0, 1024 * 100, 768 * 100)
   love.graphics.setShader()
 
