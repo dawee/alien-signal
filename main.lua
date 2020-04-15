@@ -1,4 +1,5 @@
 local bank = require("aliensignal.bank")
+local input = require("aliensignal.input")
 local BookScreen = require("aliensignal.screen.book")
 local Event = require("event")
 local MachineScreen = require("aliensignal.screen.machine")
@@ -33,6 +34,8 @@ function love.load()
 end
 
 function love.update(dt)
+  input:update(dt)
+
   if not bank:isLoaded() and bank:update() then
     local moduleTypes = {
       AndGate,

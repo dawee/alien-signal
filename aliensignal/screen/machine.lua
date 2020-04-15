@@ -1,10 +1,15 @@
 local bank = require("aliensignal.bank")
+local input = require("aliensignal.input")
 local peachy = require("peachy")
 local Color = require("aliensignal.color")
 local InventoryBag = require("aliensignal.inventorybag")
 local Generator = require("aliensignal.module.generator")
 local Navigator = require("navigator")
 local Output = require("aliensignal.module.output")
+
+local waves = {
+  sine = require("aliensignal.wave.sine")
+}
 
 local MachineScreen = Navigator.Screen:extend()
 
@@ -85,6 +90,29 @@ function MachineScreen:new(...)
     signalScreenRight = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "right"),
     signalScreenMiddle = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "middle")
   }
+
+  self.targetPoints = self:transformWavePoints(waves.sine)
+end
+
+function MachineScreen:transformWavePoints(wave)
+  local points = {}
+
+  for index, pointData in pairs(wave) do
+    local point = self:computeWavePoint(pointData.i, pointData.y)
+
+    table.insert(points, point.x)
+    table.insert(points, point.y)
+  end
+
+  return points
+end
+
+function MachineScreen:computeWavePoint(i, y)
+  return {
+    x = MachineScreen.Wave.Left + i + MachineScreen.Wave.LeftPadding,
+    y = MachineScreen.Wave.Top + MachineScreen.Wave.TopPadding + self.sprites.signalScreenMiddle:getHeight() * 2 -
+      y * MachineScreen.Wave.Height / 2
+  }
 end
 
 function MachineScreen:open(props)
@@ -108,6 +136,11 @@ function MachineScreen:update(dt)
 
   local output = nil
 
+  if input:down("save_hold") and input:pressed("save_trigger") then
+    self.saveWave = true
+    self.wave = "return {"
+  end
+
   for x, module_col in pairs(self.modules) do
     for y, mod in pairs(module_col) do
       if mod:is(Output) then
@@ -123,13 +156,14 @@ function MachineScreen:update(dt)
     for i = 0, MachineScreen.Wave.Length + MachineScreen.Wave.LeftPadding, 1 do
       local time = self:computeTime(i)
       local y = output:computeRightOutput(time, increment)
+      local point = self:computeWavePoint(i, y)
 
-      table.insert(self.points, MachineScreen.Wave.Left + i + MachineScreen.Wave.LeftPadding)
-      table.insert(
-        self.points,
-        MachineScreen.Wave.Top + MachineScreen.Wave.TopPadding + self.sprites.signalScreenMiddle:getHeight() * 2 -
-          y * MachineScreen.Wave.Height / 2
-      )
+      if self.saveWave then
+        self.wave = self.wave .. "\n  { i = " .. i .. ", y = " .. y .. " },"
+      end
+
+      table.insert(self.points, point.x)
+      table.insert(self.points, point.y)
     end
   end
 
@@ -143,6 +177,14 @@ function MachineScreen:update(dt)
 
   for index, sprite in pairs(self.sprites) do
     sprite:update(dt)
+  end
+
+  if self.saveWave then
+    self.wave = self.wave .. "\n}"
+    love.filesystem.write("wave.lua", self.wave)
+
+    print("wave saved in", love.filesystem.getSaveDirectory())
+    self.saveWave = false
   end
 end
 
@@ -248,11 +290,19 @@ function MachineScreen:draw()
     4
   )
 
+  Color.TargetSignal:use()
+
+  if self.targetPoints and table.getn(self.targetPoints) > 1 then
+    love.graphics.line(unpack(self.targetPoints))
+  end
+
   Color.Signal:use()
 
+  love.graphics.setLineWidth(5)
   if self.points and table.getn(self.points) > 1 then
     love.graphics.line(unpack(self.points))
   end
+  love.graphics.setLineWidth(1)
 
   Color.White:use()
 
