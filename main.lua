@@ -34,18 +34,25 @@ end
 
 function love.update(dt)
   if not bank:isLoaded() and bank:update() then
-    table.insert(state.inventory, Sampler())
-    table.insert(state.inventory, Sampler())
-    table.insert(state.inventory, Booster())
-    table.insert(state.inventory, Wire())
-    table.insert(state.inventory, Sampler())
-    table.insert(state.inventory, Sampler())
-    table.insert(state.inventory, Sampler())
-    table.insert(state.inventory, Sampler())
-    table.insert(state.inventory, Sampler())
-    table.insert(state.inventory, Sampler())
-    table.insert(state.inventory, Sampler())
-    table.insert(state.inventory, Sampler())
+    local moduleTypes = {
+      AndGate,
+      OrGate,
+      Booster,
+      Decreaser,
+      Coupler,
+      Sampler,
+      Wire,
+      DownLeftShoulder,
+      DownRightShoulder,
+      UpLeftShoulder,
+      UpRightShoulder
+    }
+
+    for index, moduleType in pairs(moduleTypes) do
+      for i = 1, 100, 1 do
+        table.insert(state.inventory, moduleType())
+      end
+    end
 
     state.navigator:navigate("machine", {inventory = state.inventory})
     state.ready = true

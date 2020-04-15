@@ -13,15 +13,23 @@ MachineScreen.Size = 20
 MachineScreen.Wave = {
   Top = 0,
   Left = 32,
-  Length = 800,
+  Length = 760,
   Height = 24,
   LeftPadding = 40,
   TopPadding = 3,
   Duration = 8
 }
 
-local pixelcode =
-  [[
+function MachineScreen.Load()
+  InventoryBag.Load()
+end
+
+function MachineScreen:new(...)
+  Navigator.Screen.new(self, ...)
+
+  self.shader =
+    love.graphics.newShader(
+    [[
     #define COLOR1 vec4(153 / 256.0, 229 / 256.0, 80 / 256.0, 1)
     #define COLOR2 vec4(205 / 256.0, 244 / 256.0, 102 / 256.0, 1)
 
@@ -33,25 +41,9 @@ local pixelcode =
 
       return mix(COLOR1, COLOR2, 1 - abs(mod(floor(coords.x / 128), 2) - mod(floor(coords.y / 128), 2)));
     }
-]]
+  ]]
+  )
 
-local vertexcode =
-  [[
-
-    vec4 position(mat4 transform_projection, vec4 vertex_position)
-    {
-      return transform_projection * vertex_position;
-    }
-]]
-
-function MachineScreen.Load()
-  InventoryBag.Load()
-end
-
-function MachineScreen:new(...)
-  Navigator.Screen.new(self, ...)
-
-  self.shader = love.graphics.newShader(pixelcode, vertexcode)
   self.drag = {dx = 0, dy = 0}
 
   self.transform = love.math.newTransform()
@@ -64,8 +56,8 @@ function MachineScreen:new(...)
 
   self.inventoryBag.onDrop:subscribe(
     function(props)
-      local x = props.x
-      local y = props.y
+      local x = props.x + self.drag.dx
+      local y = props.y + self.drag.dy
 
       local newSlot = {
         x = math.floor(x / 128) + 1,
@@ -79,6 +71,7 @@ function MachineScreen:new(...)
       if not self.modules[newSlot.x][newSlot.y] then
         self.modules[newSlot.x][newSlot.y] = props.item
         props.item.slot = newSlot
+        props.item.modules = self.modules
         props.item:updatePosition()
         self.inventoryBag:pop(props.item)
         self.inventoryBag:close()
@@ -107,6 +100,10 @@ function MachineScreen:addModule(slot, ModuleType)
   self.modules[slot.x][slot.y] = ModuleType(slot, self.modules)
 end
 
+function MachineScreen:computeTime(i)
+  return i * MachineScreen.Wave.Duration / (MachineScreen.Wave.Length + MachineScreen.Wave.LeftPadding)
+end
+
 function MachineScreen:update(dt)
   self.points = {}
 
@@ -123,8 +120,15 @@ function MachineScreen:update(dt)
 
   if output then
     for i = 0, MachineScreen.Wave.Length + MachineScreen.Wave.LeftPadding, 1 do
-      local time = i * MachineScreen.Wave.Duration / MachineScreen.Wave.Length
+      local time = self:computeTime(i)
       local y = output:computeRightOutput(time)
+
+      if
+        output:computeRightOutput(self:computeTime(i + 1)) == 1 and
+          output:computeRightOutput(self:computeTime(i - 1)) == 1
+       then
+        y = 1
+      end
 
       table.insert(self.points, MachineScreen.Wave.Left + i + MachineScreen.Wave.LeftPadding)
       table.insert(
@@ -176,8 +180,12 @@ function MachineScreen:mousepressed(x, y, button, istouch)
   if button == 2 then
     self.sliding = true
   elseif button == 1 then
+    local draggedx = x + self.drag.dx
+    local draggedy = y + self.drag.dy
+
     self.movingModule =
-      self.modules[math.floor(x / 128) + 1] and self.modules[math.floor(x / 128) + 1][math.floor(y / 128) + 1]
+      self.modules[math.floor(draggedx / 128) + 1] and
+      self.modules[math.floor(draggedx / 128) + 1][math.floor(draggedy / 128) + 1]
   end
 end
 
@@ -189,9 +197,12 @@ function MachineScreen:mousereleased(x, y, button, istouch)
   if button == 2 then
     self.sliding = false
   elseif self.movingModule and button == 1 then
+    local draggedx = x + self.drag.dx
+    local draggedy = y + self.drag.dy
+
     local newSlot = {
-      x = math.floor(x / 128) + 1,
-      y = math.floor(y / 128) + 1
+      x = math.floor(draggedx / 128) + 1,
+      y = math.floor(draggedy / 128) + 1
     }
 
     if not self.modules[newSlot.x] then

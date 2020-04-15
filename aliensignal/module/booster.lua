@@ -9,7 +9,7 @@ end
 function Booster:computeRightOutput(time)
   local input = self:leftInput()
 
-  return input and input:computeRightOutput(time * 2)
+  return input and input:computeRightOutput((time + 8 / 800) * 2)
 end
 
 return Booster

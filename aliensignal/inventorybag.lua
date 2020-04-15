@@ -28,7 +28,7 @@ function InventoryBag.Slot:new(item, index)
 end
 
 function InventoryBag.Slot:initItemPosition(item)
-  local col = self.index % InventoryBag.ColsCount
+  local col = (self.index - 1) % InventoryBag.ColsCount + 1
   local row = math.floor((self.index - 1) / InventoryBag.ColsCount)
 
   item.position = {
@@ -68,7 +68,6 @@ end
 
 function InventoryBag.Slot:mousereleased(x, y, button, istouch)
   if self.movingItem then
-    -- self:add(self.movingItem)
     self.onDrop:trigger({item = self.movingItem, x = x, y = y})
     self.movingItem = nil
   end
@@ -101,12 +100,24 @@ function InventoryBag.Slot:draw()
   love.graphics.polygon("fill", -8, -4, -40, -4, -44, -8, -44, -16, -40, -20, -8, -20, -4, -16, -4, -8)
   Color.Black:use()
   love.graphics.draw(self.text, -44 + (36 - self.text:getWidth()) / 2, -20)
+  love.graphics.setColor(1, 1, 1, 0.5)
+
+  love.graphics.rectangle(
+    "line",
+    -InventoryBag.ItemSize + 1,
+    -InventoryBag.ItemSize + 1,
+    InventoryBag.ItemSize,
+    InventoryBag.ItemSize
+  )
+
   Color.White:use()
   love.graphics.pop()
 end
 
-local pixelcode =
-  [[
+function InventoryBag.Load()
+  InventoryBag.Shader =
+    love.graphics.newShader(
+    [[
     #define COLOR1 vec4(217.0 / 256.0, 160.0 / 256.0, 102.0 / 256.0, 1)
     #define COLOR2 vec4(238.0 / 256.0, 195.0 / 256.0, 154.0 / 256.0, 1)
 
@@ -114,18 +125,9 @@ local pixelcode =
     {
       return mix(COLOR1, COLOR2, 1 - abs(mod(floor(screen_coords.x / 128), 2) - mod(floor(screen_coords.y / 128), 2)));
     }
-]]
+  ]]
+  )
 
-local vertexcode =
-  [[
-    vec4 position(mat4 transform_projection, vec4 vertex_position)
-    {
-        return transform_projection * vertex_position;
-    }
-]]
-
-function InventoryBag.Load()
-  InventoryBag.Shader = love.graphics.newShader(pixelcode, vertexcode)
   InventoryBag.Font = love.graphics.newFont("assets/fonts/emulogic.ttf", 12)
 end
 
@@ -219,13 +221,6 @@ end
 
 function InventoryBag:mousepressed(x, y, button)
   if
-    button == 1 and x >= self.position.x + InventoryBag.Margin and x <= self.position.x + self.sprite:getWidth() * 4 and
-      y >= self.position.y + InventoryBag.Margin and
-      y <= self.position.y + self.sprite:getHeight() * 4
-   then
-    self:open()
-    return true
-  elseif
     self.opened and x < InventoryBag.Margin or
       x > self.position.x + InventoryBag.Margin + 1024 - InventoryBag.Margin * 2 or
       y < 768 - InventoryBag.Height
@@ -238,6 +233,13 @@ function InventoryBag:mousepressed(x, y, button)
       end
     end
 
+    return true
+  elseif
+    button == 1 and x >= self.position.x + InventoryBag.Margin and x <= self.position.x + self.sprite:getWidth() * 4 and
+      y >= self.position.y + InventoryBag.Margin and
+      y <= self.position.y + self.sprite:getHeight() * 4
+   then
+    self:open()
     return true
   end
 end
