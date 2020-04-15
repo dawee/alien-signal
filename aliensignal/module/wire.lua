@@ -6,16 +6,16 @@ function Wire:new(slot, modules)
   Module.new(self, "wire", slot, modules)
 end
 
-function Wire:computeRightOutput(time)
+function Wire:computeRightOutput(time, increment)
   local input = self:leftInput()
 
-  return input and input:computeRightOutput(time)
+  return input and input:computeRightOutput(time, increment)
 end
 
-function Wire:computeLeftOutput(time)
+function Wire:computeLeftOutput(time, increment)
   local input = self:rightInput()
 
-  return input and input:computeLeftOutput(time)
+  return input and input:computeLeftOutput(time, increment)
 end
 
 return Wire

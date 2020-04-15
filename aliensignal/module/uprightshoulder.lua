@@ -6,16 +6,16 @@ function UpRightShoulder:new(slot, modules)
   Module.new(self, "uprightshoulder", slot, modules)
 end
 
-function UpRightShoulder:computeUpOutput(time)
+function UpRightShoulder:computeUpOutput(time, increment)
   local input = self:rightInput()
 
-  return input and input:computeLeftOutput(time)
+  return input and input:computeLeftOutput(time, increment)
 end
 
-function UpRightShoulder:computeRightOutput(time)
+function UpRightShoulder:computeRightOutput(time, increment)
   local input = self:upInput()
 
-  return input and input:computeDownOutput(time)
+  return input and input:computeDownOutput(time, increment)
 end
 
 return UpRightShoulder

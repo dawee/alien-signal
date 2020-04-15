@@ -6,16 +6,16 @@ function Coupler:new(slot, modules)
   Module.new(self, "coupler", slot, modules)
 end
 
-function Coupler:computeDownOutput(time)
+function Coupler:computeDownOutput(time, increment)
   local input = self:leftInput()
 
-  return input and input:computeRightOutput(time)
+  return input and input:computeRightOutput(time, increment)
 end
 
-function Coupler:computeUpOutput(time)
+function Coupler:computeUpOutput(time, increment)
   local input = self:leftInput()
 
-  return input and input:computeRightOutput(time)
+  return input and input:computeRightOutput(time, increment)
 end
 
 return Coupler

@@ -74,7 +74,6 @@ function MachineScreen:new(...)
         props.item.modules = self.modules
         props.item:updatePosition()
         self.inventoryBag:pop(props.item)
-        self.inventoryBag:close()
       else
         self.inventoryBag:store(props.item)
       end
@@ -119,16 +118,11 @@ function MachineScreen:update(dt)
   end
 
   if output then
+    local increment = self:computeTime(1) - self:computeTime(0)
+
     for i = 0, MachineScreen.Wave.Length + MachineScreen.Wave.LeftPadding, 1 do
       local time = self:computeTime(i)
-      local y = output:computeRightOutput(time)
-
-      if
-        output:computeRightOutput(self:computeTime(i + 1)) == 1 and
-          output:computeRightOutput(self:computeTime(i - 1)) == 1
-       then
-        y = 1
-      end
+      local y = output:computeRightOutput(time, increment)
 
       table.insert(self.points, MachineScreen.Wave.Left + i + MachineScreen.Wave.LeftPadding)
       table.insert(

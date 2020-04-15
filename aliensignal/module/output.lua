@@ -6,10 +6,10 @@ function Output:new(slot, modules)
   Module.new(self, "emitter", slot, modules)
 end
 
-function Output:computeRightOutput(time)
+function Output:computeRightOutput(time, increment)
   local input = self:leftInput()
 
-  return input and input:computeRightOutput(time) or 0
+  return input and input:computeRightOutput(time, increment) or 0
 end
 
 return Output

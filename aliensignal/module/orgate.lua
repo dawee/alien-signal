@@ -6,11 +6,12 @@ function OrGate:new(slot, modules)
   Module.new(self, "orgate", slot, modules)
 end
 
-function OrGate:computeRightOutput(time)
+function OrGate:computeRightOutput(time, increment)
   local leftInput = self:leftInput()
   local upInput = self:upInput()
 
-  return leftInput and upInput and (leftInput:computeRightOutput(time) == 1 or upInput:computeDownOutput(time) == 1) and
+  return leftInput and upInput and
+    (leftInput:computeRightOutput(time, increment) == 1 or upInput:computeDownOutput(time, increment) == 1) and
     1 or
     0
 end

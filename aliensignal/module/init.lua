@@ -50,19 +50,19 @@ function Module:downInput()
   return self:getInput(0, 1)
 end
 
-function Module:computeRightOutput(time)
+function Module:computeRightOutput(time, increment)
   return 0
 end
 
-function Module:computeLeftOutput(time)
+function Module:computeLeftOutput(time, increment)
   return 0
 end
 
-function Module:computeUpOutput(time)
+function Module:computeUpOutput(time, increment)
   return 0
 end
 
-function Module:computeDownOutput(time)
+function Module:computeDownOutput(time, increment)
   return 0
 end
 

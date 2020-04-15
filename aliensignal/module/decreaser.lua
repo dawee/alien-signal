@@ -6,7 +6,7 @@ function Decreaser:new(slot, modules)
   Module.new(self, "decreaser", slot, modules)
 end
 
-function Decreaser:computeRightOutput(time)
+function Decreaser:computeRightOutput(time, increment)
   local input = self:leftInput()
 
   return input and input:computeRightOutput(time / 2)

@@ -6,10 +6,10 @@ function Booster:new(slot, modules)
   Module.new(self, "booster", slot, modules)
 end
 
-function Booster:computeRightOutput(time)
+function Booster:computeRightOutput(time, increment)
   local input = self:leftInput()
 
-  return input and input:computeRightOutput((time + 8 / 800) * 2)
+  return input and input:computeRightOutput(time * 2, increment)
 end
 
 return Booster

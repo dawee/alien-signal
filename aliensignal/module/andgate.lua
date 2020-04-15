@@ -6,11 +6,12 @@ function AndGate:new(slot, modules)
   Module.new(self, "andgate", slot, modules)
 end
 
-function AndGate:computeRightOutput(time)
+function AndGate:computeRightOutput(time, increment)
   local leftInput = self:leftInput()
   local upInput = self:upInput()
 
-  return leftInput and upInput and leftInput:computeRightOutput(time) == 1 and upInput:computeDownOutput(time) == 1 and
+  return leftInput and upInput and leftInput:computeRightOutput(time, increment) == 1 and
+    upInput:computeDownOutput(time, increment) == 1 and
     1 or
     0
 end
