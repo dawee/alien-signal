@@ -8,7 +8,8 @@ local Navigator = require("navigator")
 local Output = require("aliensignal.module.output")
 
 local waves = {
-  sine = require("aliensignal.wave.sine")
+  sine = require("aliensignal.wave.sine"),
+  width3gate = require("aliensignal.wave.width3gate")
 }
 
 local MachineScreen = Navigator.Screen:extend()
@@ -22,7 +23,9 @@ MachineScreen.Wave = {
   Height = 24,
   LeftPadding = 40,
   TopPadding = 3,
-  Duration = 8
+  Duration = 8,
+  GuidePeriod = 0.25,
+  GuideHeight = 40
 }
 
 function MachineScreen.Load()
@@ -91,7 +94,7 @@ function MachineScreen:new(...)
     signalScreenMiddle = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "middle")
   }
 
-  self.targetPoints = self:transformWavePoints(waves.sine)
+  self.targetPoints = self:transformWavePoints(waves.width3gate)
 end
 
 function MachineScreen:transformWavePoints(wave)
@@ -133,6 +136,7 @@ end
 
 function MachineScreen:update(dt)
   self.points = {}
+  self.guides = {}
 
   local output = nil
 
@@ -157,6 +161,20 @@ function MachineScreen:update(dt)
       local time = self:computeTime(i)
       local y = output:computeRightOutput(time, increment)
       local point = self:computeWavePoint(i, y)
+
+      if time % MachineScreen.Wave.GuidePeriod == 0 then
+        local centeredPoint = self:computeWavePoint(i, 0)
+
+        table.insert(
+          self.guides,
+          {
+            x1 = centeredPoint.x,
+            y1 = centeredPoint.y - MachineScreen.Wave.GuideHeight / 2,
+            x2 = centeredPoint.x,
+            y2 = centeredPoint.y + MachineScreen.Wave.GuideHeight / 2
+          }
+        )
+      end
 
       if self.saveWave then
         self.wave = self.wave .. "\n  { i = " .. i .. ", y = " .. y .. " },"
@@ -289,6 +307,14 @@ function MachineScreen:draw()
     4,
     4
   )
+
+  Color.Guide:use()
+
+  if self.guides then
+    for index, line in pairs(self.guides) do
+      love.graphics.line(line.x1, line.y1, line.x2, line.y2)
+    end
+  end
 
   Color.TargetSignal:use()
 

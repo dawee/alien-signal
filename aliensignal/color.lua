@@ -18,6 +18,8 @@ Color.White = Color(255, 255, 255)
 Color.River = Color(52, 152, 219)
 Color.Clouds = Color(236, 240, 241)
 
+Color.Guide = Color(255, 255, 255, 0.3)
+
 Color.TargetSignal = Color(200, 200, 200, 0.8)
 Color.Signal = Color(106, 190, 48)
 Color.InventoryBorder = Color(143, 86, 59)
