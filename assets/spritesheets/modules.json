@@ -151,6 +151,24 @@
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
     "sourceSize": { "w": 32, "h": 32 },
     "duration": 100
+   },
+   {
+    "filename": "modules 17.aseprite",
+    "frame": { "x": 64, "y": 96, "w": 32, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 100
+   },
+   {
+    "filename": "modules 18.aseprite",
+    "frame": { "x": 96, "y": 96, "w": 32, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 100
    }
  ],
  "meta": {
@@ -177,7 +195,9 @@
    { "name": "downplug", "from": 13, "to": 13, "direction": "forward" },
    { "name": "leftplug", "from": 14, "to": 14, "direction": "forward" },
    { "name": "upplug", "from": 15, "to": 15, "direction": "forward" },
-   { "name": "wire", "from": 16, "to": 16, "direction": "forward" }
+   { "name": "wire", "from": 16, "to": 16, "direction": "forward" },
+   { "name": "notgate", "from": 17, "to": 17, "direction": "forward" },
+   { "name": "phaser", "from": 18, "to": 18, "direction": "forward" }
   ],
   "layers": [
    { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }

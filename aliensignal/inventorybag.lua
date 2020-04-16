@@ -340,6 +340,13 @@ function InventoryBag:drawInventoryPanel(slots)
 end
 
 function InventoryBag:drawCraftPanel()
+  local fullWidth = 1024 - InventoryBag.Margin * 2
+  local fullHeight = InventoryBag.Heights[self.activeTab]
+  local leftWidth = math.floor(fullWidth / 3)
+  local rightWidth = fullWidth - leftWidth
+  local topHeight = math.floor(fullHeight / 3)
+  local downHeight = fullHeight - topHeight
+
   love.graphics.rectangle(
     "fill",
     self.position.x,
@@ -347,6 +354,33 @@ function InventoryBag:drawCraftPanel()
     1024 - InventoryBag.Margin * 2,
     768
   )
+
+  Color.Black:use()
+
+  love.graphics.rectangle(
+    "fill",
+    self.position.x,
+    self.position.y + self.sprites.tabs.modules:getHeight() * 4,
+    leftWidth,
+    768
+  )
+
+  love.graphics.rectangle(
+    "fill",
+    self.position.x + leftWidth,
+    self.position.y + self.sprites.tabs.modules:getHeight() * 4,
+    rightWidth,
+    topHeight
+  )
+
+  love.graphics.rectangle(
+    "fill",
+    self.position.x + leftWidth,
+    self.position.y + self.sprites.tabs.modules:getHeight() * 4 + topHeight,
+    rightWidth,
+    downHeight
+  )
+  Color.White:use()
 end
 
 function InventoryBag:draw()
