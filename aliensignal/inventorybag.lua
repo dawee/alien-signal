@@ -12,6 +12,12 @@ InventoryBag.Border = 4
 InventoryBag.ColsCount = 6
 InventoryBag.ColsMargin = 64
 InventoryBag.ItemSize = 128
+InventoryBag.TabsIndexes = {
+  inventorybag = 1,
+  junk = 2,
+  build = 3,
+  signal = 4
+}
 
 InventoryBag.Slot = Object:extend()
 
@@ -132,7 +138,16 @@ function InventoryBag.Load()
 end
 
 function InventoryBag:new(navigator)
-  self.sprite = peachy.new(bank.tabs.spritesheet, bank.tabs.image, "inventorybag")
+  self.sprites = {
+    tabs = {
+      modules = peachy.new(bank.tabs.spritesheet, bank.tabs.image, "inventorybag"),
+      junk = peachy.new(bank.tabs.spritesheet, bank.tabs.image, "junk"),
+      build = peachy.new(bank.tabs.spritesheet, bank.tabs.image, "build"),
+      signal = peachy.new(bank.tabs.spritesheet, bank.tabs.image, "signal")
+    }
+  }
+
+  self.activeTab = "modules"
   self.navigator = navigator
   self.transform = love.math.newTransform()
   self.opened = false
@@ -141,7 +156,7 @@ function InventoryBag:new(navigator)
   self.inventory = {}
   self.position = {
     x = InventoryBag.Margin,
-    y = 768 - self.sprite:getHeight() * 4 + InventoryBag.Border
+    y = 768 - self.sprites.tabs.modules:getHeight() * 4 + InventoryBag.Border
   }
 end
 
@@ -235,8 +250,9 @@ function InventoryBag:mousepressed(x, y, button)
 
     return true
   elseif
-    button == 1 and x >= self.position.x and x <= self.position.x + self.sprite:getWidth() * 4 and y >= self.position.y and
-      y <= self.position.y + self.sprite:getHeight() * 4
+    button == 1 and x >= self.position.x and x <= self.position.x + self.sprites.tabs.modules:getWidth() * 4 and
+      y >= self.position.y and
+      y <= self.position.y + self.sprites.tabs.modules:getHeight() * 4
    then
     self:open()
     return true
@@ -252,7 +268,9 @@ function InventoryBag:mousereleased(x, y, button, istouch)
 end
 
 function InventoryBag:update(dt)
-  self.sprite:update(dt)
+  for index, sprite in pairs(self.sprites.tabs) do
+    sprite:update(dt)
+  end
 
   for index, slot in pairs(self.slots) do
     slot:update(dt)
@@ -263,12 +281,24 @@ function InventoryBag:draw()
   love.graphics.push()
   love.graphics.applyTransform(self.transform)
 
+  for name, sprite in pairs(self.sprites.tabs) do
+    if not (self.activeTab == name) then
+      sprite:draw(
+        self.position.x + (InventoryBag.TabsIndexes[name] - 1) * (sprite:getWidth() + 1) * 4,
+        self.position.y,
+        0,
+        4,
+        4
+      )
+    end
+  end
+
   Color.White:use()
   love.graphics.setShader(InventoryBag.Shader)
   love.graphics.rectangle(
     "fill",
     self.position.x + InventoryBag.Border,
-    self.position.y + self.sprite:getHeight() * 4,
+    self.position.y + self.sprites.tabs.modules:getHeight() * 4,
     1024 - InventoryBag.Margin * 2 - InventoryBag.Border * 2,
     768
   )
@@ -284,7 +314,7 @@ function InventoryBag:draw()
   love.graphics.rectangle(
     "line",
     self.position.x + InventoryBag.Border / 2,
-    self.position.y + self.sprite:getHeight() * 4 - InventoryBag.Border / 2,
+    self.position.y + self.sprites.tabs.modules:getHeight() * 4 - InventoryBag.Border / 2,
     1024 - InventoryBag.Margin * 2 - InventoryBag.Border,
     768
   )
@@ -292,7 +322,7 @@ function InventoryBag:draw()
 
   Color.White:use()
 
-  self.sprite:draw(self.position.x, self.position.y, 0, 4, 4)
+  self.sprites.tabs.modules:draw(self.position.x, self.position.y, 0, 4, 4)
   love.graphics.pop()
 end
 
