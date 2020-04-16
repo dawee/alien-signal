@@ -6,7 +6,6 @@ local Object = require("classic")
 
 local InventoryBag = Object:extend()
 
-InventoryBag.Height = 256
 InventoryBag.Margin = 32
 InventoryBag.Border = 4
 InventoryBag.ColsCount = 6
@@ -17,6 +16,13 @@ InventoryBag.TabsIndexes = {
   junk = 2,
   build = 3,
   signal = 4
+}
+
+InventoryBag.Heights = {
+  modules = 256,
+  junk = 256,
+  build = 640,
+  signal = 640
 }
 
 InventoryBag.InventoryIndexes = {
@@ -35,7 +41,8 @@ InventoryBag.CraftIndexes = {
 
 InventoryBag.Slot = Object:extend()
 
-function InventoryBag.Slot:new(item, index)
+function InventoryBag.Slot:new(item, index, bag)
+  self.bag = bag
   self.index = index
   self.name = item.name
   self.items = {item}
@@ -98,8 +105,8 @@ function InventoryBag.Slot:mousepressed(x, y, button)
 
   if
     item and x > item.position.x and x < item.position.x + InventoryBag.ItemSize and
-      y > item.position.y - InventoryBag.Height and
-      y < item.position.y - InventoryBag.Height + InventoryBag.ItemSize
+      y > item.position.y - InventoryBag.Heights[self.bag.activeTab] and
+      y < item.position.y - InventoryBag.Heights[self.bag.activeTab] + InventoryBag.ItemSize
    then
     self.movingItem = table.remove(self.items, table.getn(self.items))
     return true
@@ -196,7 +203,7 @@ function InventoryBag:prepareSlots()
     end
 
     if not itemAdded then
-      local newSlot = InventoryBag.Slot(item, table.getn(self.slots.modules) + 1)
+      local newSlot = InventoryBag.Slot(item, table.getn(self.slots.modules) + 1, self)
 
       newSlot.onDrop:subscribe(
         function(data)
@@ -230,16 +237,18 @@ function InventoryBag:store(item)
 end
 
 function InventoryBag:open()
+  self.transform:reset()
+  self.transform:translate(0, -InventoryBag.Heights[self.activeTab])
+
   if not self.opened then
     self:prepareSlots()
-    self.transform:translate(0, -InventoryBag.Height)
     self.opened = true
   end
 end
 
 function InventoryBag:close()
   if self.opened then
-    self.transform:translate(0, InventoryBag.Height)
+    self.transform:translate(0, InventoryBag.Heights[self.activeTab])
     self.opened = false
   end
 end
@@ -254,7 +263,7 @@ end
 
 function InventoryBag:tabPressed(x, y, button, name)
   local xOffset = (InventoryBag.TabsIndexes[name] - 1) * (self.sprites.tabs.modules:getWidth() + 1) * 4
-  local yOffset = self.opened and -InventoryBag.Height or 0
+  local yOffset = self.opened and -InventoryBag.Heights[self.activeTab] or 0
 
   return button == 1 and x >= self.position.x + xOffset and
     x <= self.position.x + self.sprites.tabs.modules:getWidth() * 4 + xOffset and
@@ -282,10 +291,10 @@ function InventoryBag:mousepressed(x, y, button)
   elseif
     self.opened and x < InventoryBag.Margin or
       x > self.position.x + InventoryBag.Margin + 1024 - InventoryBag.Margin * 2 or
-      y < 768 - InventoryBag.Height
+      y < 768 - InventoryBag.Heights[self.activeTab]
    then
     self:close()
-  elseif self.opened then
+  elseif self.opened and self.activeTab == "modules" then
     for index, slot in pairs(self.slots.modules) do
       if slot:mousepressed(x, y, button) then
         break
@@ -330,6 +339,16 @@ function InventoryBag:drawInventoryPanel(slots)
   end
 end
 
+function InventoryBag:drawCraftPanel()
+  love.graphics.rectangle(
+    "fill",
+    self.position.x,
+    self.position.y + self.sprites.tabs.modules:getHeight() * 4,
+    1024 - InventoryBag.Margin * 2,
+    768
+  )
+end
+
 function InventoryBag:draw()
   love.graphics.push()
   love.graphics.applyTransform(self.transform)
@@ -348,6 +367,8 @@ function InventoryBag:draw()
 
   if InventoryBag.InventoryIndexes[self.activeTab] then
     self:drawInventoryPanel(self.slots[self.activeTab])
+  elseif InventoryBag.CraftIndexes[self.activeTab] then
+    self:drawCraftPanel(self.slots[self.activeTab])
   end
 
   Color.InventoryBorder:use()
