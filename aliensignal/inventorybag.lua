@@ -19,6 +19,20 @@ InventoryBag.TabsIndexes = {
   signal = 4
 }
 
+InventoryBag.InventoryIndexes = {
+  modules = true,
+  junk = true,
+  build = false,
+  signal = false
+}
+
+InventoryBag.CraftIndexes = {
+  modules = false,
+  junk = false,
+  build = true,
+  signal = true
+}
+
 InventoryBag.Slot = Object:extend()
 
 function InventoryBag.Slot:new(item, index)
@@ -152,7 +166,11 @@ function InventoryBag:new(navigator)
   self.transform = love.math.newTransform()
   self.opened = false
   self.onDrop = Event()
-  self.slots = {}
+  self.slots = {
+    modules = {},
+    junk = {}
+  }
+
   self.inventory = {}
   self.position = {
     x = InventoryBag.Margin,
@@ -165,12 +183,12 @@ function InventoryBag:fill(inventory)
 end
 
 function InventoryBag:prepareSlots()
-  self.slots = {}
+  self.slots.modules = {}
 
   for index, item in ipairs(self.inventory) do
     local itemAdded = false
 
-    for slotIndex, slot in ipairs(self.slots) do
+    for slotIndex, slot in ipairs(self.slots.modules) do
       if slot:add(item) then
         itemAdded = true
         break
@@ -178,7 +196,7 @@ function InventoryBag:prepareSlots()
     end
 
     if not itemAdded then
-      local newSlot = InventoryBag.Slot(item, table.getn(self.slots) + 1)
+      local newSlot = InventoryBag.Slot(item, table.getn(self.slots.modules) + 1)
 
       newSlot.onDrop:subscribe(
         function(data)
@@ -186,7 +204,7 @@ function InventoryBag:prepareSlots()
         end
       )
 
-      table.insert(self.slots, newSlot)
+      table.insert(self.slots.modules, newSlot)
     end
   end
 end
@@ -204,7 +222,7 @@ function InventoryBag:pop(itemToPop)
 end
 
 function InventoryBag:store(item)
-  for index, slot in pairs(self.slots) do
+  for index, slot in pairs(self.slots.modules) do
     if slot:add(item) then
       break
     end
@@ -228,7 +246,7 @@ end
 
 function InventoryBag:mousemoved(x, y, dx, dy)
   if self.opened then
-    for index, slot in pairs(self.slots) do
+    for index, slot in pairs(self.slots.modules) do
       slot:mousemoved(x, y, dx, dy)
     end
   end
@@ -268,7 +286,7 @@ function InventoryBag:mousepressed(x, y, button)
    then
     self:close()
   elseif self.opened then
-    for index, slot in pairs(self.slots) do
+    for index, slot in pairs(self.slots.modules) do
       if slot:mousepressed(x, y, button) then
         break
       end
@@ -279,7 +297,7 @@ end
 
 function InventoryBag:mousereleased(x, y, button, istouch)
   if self.opened then
-    for index, slot in pairs(self.slots) do
+    for index, slot in pairs(self.slots.modules) do
       slot:mousereleased(x, y, button, istouch)
     end
   end
@@ -290,8 +308,25 @@ function InventoryBag:update(dt)
     sprite:update(dt)
   end
 
-  for index, slot in pairs(self.slots) do
+  for index, slot in pairs(self.slots.modules) do
     slot:update(dt)
+  end
+end
+
+function InventoryBag:drawInventoryPanel(slots)
+  Color.White:use()
+  love.graphics.setShader(InventoryBag.Shader)
+  love.graphics.rectangle(
+    "fill",
+    self.position.x + InventoryBag.Border,
+    self.position.y + self.sprites.tabs.modules:getHeight() * 4,
+    1024 - InventoryBag.Margin * 2 - InventoryBag.Border * 2,
+    768
+  )
+  love.graphics.setShader()
+
+  for index, slot in pairs(slots) do
+    slot:draw()
   end
 end
 
@@ -311,19 +346,8 @@ function InventoryBag:draw()
     end
   end
 
-  Color.White:use()
-  love.graphics.setShader(InventoryBag.Shader)
-  love.graphics.rectangle(
-    "fill",
-    self.position.x + InventoryBag.Border,
-    self.position.y + self.sprites.tabs.modules:getHeight() * 4,
-    1024 - InventoryBag.Margin * 2 - InventoryBag.Border * 2,
-    768
-  )
-  love.graphics.setShader()
-
-  for index, slot in pairs(self.slots) do
-    slot:draw()
+  if InventoryBag.InventoryIndexes[self.activeTab] then
+    self:drawInventoryPanel(self.slots[self.activeTab])
   end
 
   Color.InventoryBorder:use()
