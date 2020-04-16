@@ -132,7 +132,7 @@ function InventoryBag.Load()
 end
 
 function InventoryBag:new(navigator)
-  self.sprite = peachy.new(bank.misc.spritesheet, bank.misc.image, "inventorybag")
+  self.sprite = peachy.new(bank.tabs.spritesheet, bank.tabs.image, "inventorybag")
   self.navigator = navigator
   self.transform = love.math.newTransform()
   self.opened = false
@@ -140,8 +140,8 @@ function InventoryBag:new(navigator)
   self.slots = {}
   self.inventory = {}
   self.position = {
-    x = 0,
-    y = 768 - self.sprite:getHeight() * 4
+    x = InventoryBag.Margin,
+    y = 768 - self.sprite:getHeight() * 4 + InventoryBag.Border
   }
 end
 
@@ -235,8 +235,7 @@ function InventoryBag:mousepressed(x, y, button)
 
     return true
   elseif
-    button == 1 and x >= self.position.x + InventoryBag.Margin and x <= self.position.x + self.sprite:getWidth() * 4 and
-      y >= self.position.y + InventoryBag.Margin and
+    button == 1 and x >= self.position.x and x <= self.position.x + self.sprite:getWidth() * 4 and y >= self.position.y and
       y <= self.position.y + self.sprite:getHeight() * 4
    then
     self:open()
@@ -261,32 +260,40 @@ function InventoryBag:update(dt)
 end
 
 function InventoryBag:draw()
+  love.graphics.push()
   love.graphics.applyTransform(self.transform)
-  Color.InventoryBorder:use()
-  love.graphics.rectangle(
-    "fill",
-    self.position.x + InventoryBag.Margin,
-    self.position.y + 128 - InventoryBag.Border,
-    1024 - InventoryBag.Margin * 2,
-    768
-  )
-  Color.White:use()
 
+  Color.White:use()
   love.graphics.setShader(InventoryBag.Shader)
   love.graphics.rectangle(
     "fill",
-    self.position.x + InventoryBag.Margin + InventoryBag.Border,
-    self.position.y + 128,
+    self.position.x + InventoryBag.Border,
+    self.position.y + self.sprite:getHeight() * 4,
     1024 - InventoryBag.Margin * 2 - InventoryBag.Border * 2,
     768
   )
   love.graphics.setShader()
 
-  self.sprite:draw(self.position.x, self.position.y, 0, 4, 4)
-
   for index, slot in pairs(self.slots) do
     slot:draw()
   end
+
+  Color.InventoryBorder:use()
+
+  love.graphics.setLineWidth(InventoryBag.Border)
+  love.graphics.rectangle(
+    "line",
+    self.position.x + InventoryBag.Border / 2,
+    self.position.y + self.sprite:getHeight() * 4 - InventoryBag.Border / 2,
+    1024 - InventoryBag.Margin * 2 - InventoryBag.Border,
+    768
+  )
+  love.graphics.setLineWidth(1)
+
+  Color.White:use()
+
+  self.sprite:draw(self.position.x, self.position.y, 0, 4, 4)
+  love.graphics.pop()
 end
 
 return InventoryBag

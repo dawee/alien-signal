@@ -4,9 +4,9 @@ local spritesheets = {
   "arrow",
   "book",
   "build",
-  "misc",
   "modules",
-  "signalscreen"
+  "signalscreen",
+  "tabs"
 }
 
 local spec = {}
