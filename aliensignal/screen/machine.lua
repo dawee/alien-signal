@@ -24,7 +24,8 @@ MachineScreen.Wave = {
   LeftPadding = 40,
   TopPadding = 3,
   Duration = 8,
-  GuidePeriod = 0.25,
+  GuidePeriod = 0.125,
+  Precision = 0.0125,
   GuideHeight = 40
 }
 
@@ -156,13 +157,14 @@ function MachineScreen:update(dt)
 
   if output then
     local increment = self:computeTime(1) - self:computeTime(0)
+    local previous = {}
 
     for i = 0, MachineScreen.Wave.Length + MachineScreen.Wave.LeftPadding, 1 do
       local time = self:computeTime(i)
       local y = output:computeRightOutput(time, increment)
       local point = self:computeWavePoint(i, y)
 
-      if time % MachineScreen.Wave.GuidePeriod == 0 then
+      if time % MachineScreen.Wave.GuidePeriod <= MachineScreen.Wave.Precision then
         local centeredPoint = self:computeWavePoint(i, 0)
 
         table.insert(
@@ -180,8 +182,23 @@ function MachineScreen:update(dt)
         self.wave = self.wave .. "\n  { i = " .. i .. ", y = " .. y .. " },"
       end
 
+      if previous.y == 0 and y == 1 then
+        local additionalPoint = self:computeWavePoint(i, 0)
+
+        table.insert(self.points, additionalPoint.x)
+        table.insert(self.points, additionalPoint.y)
+      elseif previous.y == 1 and y == 0 then
+        local additionalPoint = self:computeWavePoint(i, 1)
+
+        table.insert(self.points, additionalPoint.x)
+        table.insert(self.points, additionalPoint.y)
+      end
+
       table.insert(self.points, point.x)
       table.insert(self.points, point.y)
+
+      previous.y = y
+      previous.point = point
     end
   end
 
