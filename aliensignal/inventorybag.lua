@@ -13,7 +13,7 @@ InventoryBag.ColsCount = 6
 InventoryBag.ColsMargin = 64
 InventoryBag.ItemSize = 128
 InventoryBag.TabsIndexes = {
-  inventorybag = 1,
+  modules = 1,
   junk = 2,
   build = 3,
   signal = 4
@@ -234,8 +234,34 @@ function InventoryBag:mousemoved(x, y, dx, dy)
   end
 end
 
+function InventoryBag:tabPressed(x, y, button, name)
+  local xOffset = (InventoryBag.TabsIndexes[name] - 1) * (self.sprites.tabs.modules:getWidth() + 1) * 4
+  local yOffset = self.opened and -InventoryBag.Height or 0
+
+  return button == 1 and x >= self.position.x + xOffset and
+    x <= self.position.x + self.sprites.tabs.modules:getWidth() * 4 + xOffset and
+    y >= self.position.y + yOffset and
+    y <= self.position.y + yOffset + self.sprites.tabs.modules:getHeight() * 4
+end
+
 function InventoryBag:mousepressed(x, y, button)
-  if
+  if self:tabPressed(x, y, button, "modules") then
+    self.activeTab = "modules"
+    self:open()
+    return true
+  elseif self:tabPressed(x, y, button, "junk") then
+    self.activeTab = "junk"
+    self:open()
+    return true
+  elseif self:tabPressed(x, y, button, "build") then
+    self.activeTab = "build"
+    self:open()
+    return true
+  elseif self:tabPressed(x, y, button, "signal") then
+    self.activeTab = "signal"
+    self:open()
+    return true
+  elseif
     self.opened and x < InventoryBag.Margin or
       x > self.position.x + InventoryBag.Margin + 1024 - InventoryBag.Margin * 2 or
       y < 768 - InventoryBag.Height
@@ -247,14 +273,6 @@ function InventoryBag:mousepressed(x, y, button)
         break
       end
     end
-
-    return true
-  elseif
-    button == 1 and x >= self.position.x and x <= self.position.x + self.sprites.tabs.modules:getWidth() * 4 and
-      y >= self.position.y and
-      y <= self.position.y + self.sprites.tabs.modules:getHeight() * 4
-   then
-    self:open()
     return true
   end
 end
@@ -322,7 +340,13 @@ function InventoryBag:draw()
 
   Color.White:use()
 
-  self.sprites.tabs.modules:draw(self.position.x, self.position.y, 0, 4, 4)
+  self.sprites.tabs[self.activeTab]:draw(
+    self.position.x + (InventoryBag.TabsIndexes[self.activeTab] - 1) * (self.sprites.tabs.modules:getWidth() + 1) * 4,
+    self.position.y,
+    0,
+    4,
+    4
+  )
   love.graphics.pop()
 end
 
