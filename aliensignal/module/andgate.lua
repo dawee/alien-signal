@@ -4,6 +4,8 @@ local AndGate = Module:extend()
 
 function AndGate:new(slot, modules)
   Module.new(self, "andgate", slot, modules)
+
+  self.displayableName = "AND Gate"
 end
 
 function AndGate:computeRightOutput(time, increment)

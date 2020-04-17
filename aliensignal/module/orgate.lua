@@ -4,6 +4,8 @@ local OrGate = Module:extend()
 
 function OrGate:new(slot, modules)
   Module.new(self, "orgate", slot, modules)
+
+  self.displayableName = "OR Gate"
 end
 
 function OrGate:computeRightOutput(time, increment)

@@ -6,6 +6,8 @@ Sampler.Edge = 1 / 8
 
 function Sampler:new(slot, modules)
   Module.new(self, "sampler", slot, modules)
+
+  self.displayableName = "Sampler"
 end
 
 function Sampler:computeRightOutput(time, increment)

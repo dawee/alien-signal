@@ -4,6 +4,8 @@ local Wire = Module:extend()
 
 function Wire:new(slot, modules)
   Module.new(self, "wire", slot, modules)
+
+  self.displayableName = "Wire"
 end
 
 function Wire:computeRightOutput(time, increment)

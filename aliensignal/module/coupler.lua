@@ -4,6 +4,8 @@ local Coupler = Module:extend()
 
 function Coupler:new(slot, modules)
   Module.new(self, "coupler", slot, modules)
+
+  self.displayableName = "Coupler"
 end
 
 function Coupler:computeDownOutput(time, increment)

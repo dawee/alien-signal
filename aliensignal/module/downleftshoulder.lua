@@ -4,6 +4,8 @@ local DownLeftShoulder = Module:extend()
 
 function DownLeftShoulder:new(slot, modules)
   Module.new(self, "downleftshoulder", slot, modules)
+
+  self.displayableName = "Down Left Shoulder"
 end
 
 function DownLeftShoulder:computeDownOutput(time, increment)

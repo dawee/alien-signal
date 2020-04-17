@@ -4,6 +4,8 @@ local NotGate = Module:extend()
 
 function NotGate:new(slot, modules)
   Module.new(self, "notgate", slot, modules)
+
+  self.displayableName = "NOT Gate"
 end
 
 function NotGate:computeRightOutput(time, increment)

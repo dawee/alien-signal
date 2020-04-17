@@ -6,6 +6,8 @@ Phaser.GuidePeriod = 0.125
 
 function Phaser:new(slot, modules)
   Module.new(self, "phaser", slot, modules)
+
+  self.displayableName = "Phaser"
 end
 
 function Phaser:computeRightOutput(time, increment)

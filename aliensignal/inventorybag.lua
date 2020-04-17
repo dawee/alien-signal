@@ -5,6 +5,19 @@ local Event = require("event")
 local Object = require("classic")
 local Module = require("aliensignal.module")
 
+local AndGate = require("aliensignal.module.andgate")
+local OrGate = require("aliensignal.module.orgate")
+local Booster = require("aliensignal.module.booster")
+local Decreaser = require("aliensignal.module.decreaser")
+local Coupler = require("aliensignal.module.coupler")
+local NotGate = require("aliensignal.module.notgate")
+local Phaser = require("aliensignal.module.phaser")
+local Wire = require("aliensignal.module.wire")
+local DownLeftShoulder = require("aliensignal.module.downleftshoulder")
+local DownRightShoulder = require("aliensignal.module.downrightshoulder")
+local UpLeftShoulder = require("aliensignal.module.upleftshoulder")
+local UpRightShoulder = require("aliensignal.module.uprightshoulder")
+
 local InventoryBag = Object:extend()
 
 InventoryBag.Margin = 32
@@ -179,10 +192,29 @@ function InventoryBag:new(navigator)
     junk = {}
   }
 
+  self.craftables = {
+    build = {
+      AndGate(),
+      OrGate(),
+      Booster(),
+      Decreaser(),
+      Coupler(),
+      NotGate(),
+      Phaser(),
+      Wire(),
+      DownLeftShoulder(),
+      DownRightShoulder(),
+      UpLeftShoulder(),
+      UpRightShoulder()
+    },
+    signal = {}
+  }
+
   self.inventory = {
     modules = {},
     junk = {}
   }
+
   self.position = {
     x = InventoryBag.Margin,
     y = 768 - self.sprites.tabs.modules:getHeight() * 4 + InventoryBag.Border
@@ -194,8 +226,41 @@ function InventoryBag:fill(inventory)
 end
 
 function InventoryBag:prepareSlots()
-  self:prepareStorageSlots("junk")
   self:prepareStorageSlots("modules")
+  self:prepareStorageSlots("junk")
+  self:prepareCraftables("build")
+  self:prepareCraftables("signal")
+end
+
+function InventoryBag:prepareCraftables(tab)
+  local fullWidth = 1024 - InventoryBag.Margin * 2
+  local fullHeight = InventoryBag.Heights[tab]
+  local leftWidth = math.floor(fullWidth / 3)
+  local rightWidth = fullWidth - leftWidth
+  local topHeight = math.floor(fullHeight / 3)
+  local downHeight = fullHeight - topHeight
+
+  local verticalMargin = math.floor(((InventoryBag.Heights[tab] / 12) - InventoryBag.ItemSize / 4) / 2)
+  local horizontalMargin = 16
+
+  for index, craftable in ipairs(self.craftables[tab]) do
+    local y = 768 + verticalMargin + (index - 1) * (verticalMargin * 2 + InventoryBag.ItemSize / 4)
+
+    craftable.position = {
+      x = self.position.x + horizontalMargin,
+      y = y
+    }
+    craftable.scale = 1
+
+    craftable:renderDisplayableName(
+      InventoryBag.Font,
+      Color.White,
+      {
+        x = math.floor(craftable.position.x + InventoryBag.ItemSize / 4 + horizontalMargin),
+        y = math.floor(y + InventoryBag.ItemSize / 2) - 55
+      }
+    )
+  end
 end
 
 function InventoryBag:prepareStorageSlots(storage)
@@ -332,6 +397,12 @@ function InventoryBag:update(dt)
       slot:update(dt)
     end
   end
+
+  if InventoryBag.CraftIndexes[self.activeTab] then
+    for index, craftable in ipairs(self.craftables[self.activeTab]) do
+      craftable:update(dt)
+    end
+  end
 end
 
 function InventoryBag:drawInventoryPanel(slots)
@@ -351,13 +422,14 @@ function InventoryBag:drawInventoryPanel(slots)
   end
 end
 
-function InventoryBag:drawCraftPanel()
+function InventoryBag:drawCraftPanel(craftables)
   local fullWidth = 1024 - InventoryBag.Margin * 2
   local fullHeight = InventoryBag.Heights[self.activeTab]
   local leftWidth = math.floor(fullWidth / 3)
   local rightWidth = fullWidth - leftWidth
   local topHeight = math.floor(fullHeight / 3)
   local downHeight = fullHeight - topHeight
+  local verticalMargin = math.floor(((InventoryBag.Heights.build / 12) - InventoryBag.ItemSize / 4) / 2)
 
   love.graphics.rectangle(
     "fill",
@@ -393,6 +465,23 @@ function InventoryBag:drawCraftPanel()
     downHeight
   )
   Color.White:use()
+
+  for index, craftable in ipairs(craftables) do
+    local color = (index - 1) % 2 == 0 and Color.CraftListItemEven or Color.CraftListItemOdd
+
+    color:use()
+
+    love.graphics.rectangle(
+      "fill",
+      craftable.position.x - 16,
+      craftable.position.y - verticalMargin,
+      leftWidth,
+      2 * verticalMargin + InventoryBag.ItemSize / 4
+    )
+
+    Color.White:use()
+    craftable:draw()
+  end
 end
 
 function InventoryBag:draw()
@@ -414,7 +503,7 @@ function InventoryBag:draw()
   if InventoryBag.InventoryIndexes[self.activeTab] then
     self:drawInventoryPanel(self.slots[self.activeTab])
   elseif InventoryBag.CraftIndexes[self.activeTab] then
-    self:drawCraftPanel(self.slots[self.activeTab])
+    self:drawCraftPanel(self.craftables[self.activeTab])
   end
 
   Color.InventoryBorder:use()

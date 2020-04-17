@@ -4,6 +4,8 @@ local Booster = Module:extend()
 
 function Booster:new(slot, modules)
   Module.new(self, "booster", slot, modules)
+
+  self.displayableName = "Booster"
 end
 
 function Booster:computeRightOutput(time, increment)

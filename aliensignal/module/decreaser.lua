@@ -4,6 +4,8 @@ local Decreaser = Module:extend()
 
 function Decreaser:new(slot, modules)
   Module.new(self, "decreaser", slot, modules)
+
+  self.displayableName = "Decreaser"
 end
 
 function Decreaser:computeRightOutput(time, increment)

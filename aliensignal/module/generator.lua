@@ -4,6 +4,8 @@ local Generator = Module:extend()
 
 function Generator:new(slot, modules)
   Module.new(self, "generator", slot, modules)
+
+  self.displayableName = "Generator"
 end
 
 function Generator:computeRightOutput(time, increment)

@@ -4,6 +4,8 @@ local Output = Module:extend()
 
 function Output:new(slot, modules)
   Module.new(self, "emitter", slot, modules)
+
+  self.displayableName = "Output"
 end
 
 function Output:computeRightOutput(time, increment)

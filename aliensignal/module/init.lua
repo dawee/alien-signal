@@ -1,11 +1,12 @@
 local bank = require("aliensignal.bank")
 local peachy = require("peachy")
-local Object = require("classic")
+local Craftable = require("aliensignal.craftable")
 
-local Module = Object:extend()
+local Module = Craftable:extend()
 
 function Module:new(name, slot, modules)
   self.name = name
+  self.scale = 4
   self.sprite = peachy.new(bank.modules.spritesheet, bank.modules.image, name)
 
   if slot and modules then
@@ -27,7 +28,8 @@ function Module:update(dt)
 end
 
 function Module:draw()
-  self.sprite:draw(self.position.x, self.position.y, 0, 4, 4)
+  Craftable.draw(self)
+  self.sprite:draw(self.position.x, self.position.y, 0, self.scale, self.scale)
 end
 
 function Module:getInput(dx, dy)
@@ -48,6 +50,9 @@ end
 
 function Module:downInput()
   return self:getInput(0, 1)
+end
+
+function Module:renderText()
 end
 
 function Module:computeRightOutput(time, increment)
