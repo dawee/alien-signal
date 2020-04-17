@@ -35,8 +35,8 @@ InventoryBag.TabsIndexes = {
 InventoryBag.Heights = {
   modules = 256,
   junk = 256,
-  build = 640,
-  signal = 640
+  build = 648,
+  signal = 648
 }
 
 InventoryBag.InventoryIndexes = {
@@ -192,6 +192,11 @@ function InventoryBag:new(navigator)
     junk = {}
   }
 
+  self.craftableSelected = {
+    build = 1,
+    signal = 1
+  }
+
   self.craftables = {
     build = {
       AndGate(),
@@ -240,7 +245,7 @@ function InventoryBag:prepareCraftables(tab)
   local topHeight = math.floor(fullHeight / 3)
   local downHeight = fullHeight - topHeight
 
-  local verticalMargin = math.floor(((InventoryBag.Heights[tab] / 12) - InventoryBag.ItemSize / 4) / 2)
+  local verticalMargin = math.ceil(((InventoryBag.Heights[tab] / 12) - InventoryBag.ItemSize / 4) / 2)
   local horizontalMargin = 16
 
   for index, craftable in ipairs(self.craftables[tab]) do
@@ -422,14 +427,14 @@ function InventoryBag:drawInventoryPanel(slots)
   end
 end
 
-function InventoryBag:drawCraftPanel(craftables)
+function InventoryBag:drawCraftPanel()
   local fullWidth = 1024 - InventoryBag.Margin * 2
   local fullHeight = InventoryBag.Heights[self.activeTab]
   local leftWidth = math.floor(fullWidth / 3)
   local rightWidth = fullWidth - leftWidth
   local topHeight = math.floor(fullHeight / 3)
   local downHeight = fullHeight - topHeight
-  local verticalMargin = math.floor(((InventoryBag.Heights.build / 12) - InventoryBag.ItemSize / 4) / 2)
+  local verticalMargin = math.ceil(((InventoryBag.Heights.build / 12) - InventoryBag.ItemSize / 4) / 2)
 
   love.graphics.rectangle(
     "fill",
@@ -439,35 +444,10 @@ function InventoryBag:drawCraftPanel(craftables)
     768
   )
 
-  Color.Black:use()
-
-  love.graphics.rectangle(
-    "fill",
-    self.position.x,
-    self.position.y + self.sprites.tabs.modules:getHeight() * 4,
-    leftWidth,
-    768
-  )
-
-  love.graphics.rectangle(
-    "fill",
-    self.position.x + leftWidth,
-    self.position.y + self.sprites.tabs.modules:getHeight() * 4,
-    rightWidth,
-    topHeight
-  )
-
-  love.graphics.rectangle(
-    "fill",
-    self.position.x + leftWidth,
-    self.position.y + self.sprites.tabs.modules:getHeight() * 4 + topHeight,
-    rightWidth,
-    downHeight
-  )
-  Color.White:use()
-
-  for index, craftable in ipairs(craftables) do
-    local color = (index - 1) % 2 == 0 and Color.CraftListItemEven or Color.CraftListItemOdd
+  for index, craftable in ipairs(self.craftables[self.activeTab]) do
+    local color =
+      self.craftableSelected[self.activeTab] == index and Color.CraftListItemSelected or
+      ((index - 1) % 2 == 0 and Color.CraftListItemEven or Color.CraftListItemOdd)
 
     color:use()
 

@@ -13,6 +13,7 @@ function Color:use()
   love.graphics.setColor(self.r / 256, self.g / 256, self.b / 256, self.a)
 end
 
+Color.CraftListItemSelected = Color(143, 86, 59)
 Color.CraftListItemEven = Color(238, 195, 154)
 Color.CraftListItemOdd = Color(217, 160, 102)
 
