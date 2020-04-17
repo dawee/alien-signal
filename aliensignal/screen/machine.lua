@@ -4,6 +4,7 @@ local peachy = require("peachy")
 local Color = require("aliensignal.color")
 local InventoryBag = require("aliensignal.inventorybag")
 local Generator = require("aliensignal.module.generator")
+local Sampler = require("aliensignal.module.sampler")
 local Navigator = require("navigator")
 local Output = require("aliensignal.module.output")
 
@@ -59,6 +60,7 @@ function MachineScreen:new(...)
   self.modules = {}
 
   self:addModule({x = 1, y = 4}, Generator)
+  self:addModule({x = 2, y = 3}, Sampler)
   self:addModule({x = 6, y = 4}, Output)
 
   self.inventoryBag = InventoryBag(self.navigator)

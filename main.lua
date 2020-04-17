@@ -10,7 +10,8 @@ local OrGate = require("aliensignal.module.orgate")
 local Booster = require("aliensignal.module.booster")
 local Decreaser = require("aliensignal.module.decreaser")
 local Coupler = require("aliensignal.module.coupler")
-local Sampler = require("aliensignal.module.sampler")
+local NotGate = require("aliensignal.module.notgate")
+local Phaser = require("aliensignal.module.phaser")
 local Wire = require("aliensignal.module.wire")
 local DownLeftShoulder = require("aliensignal.module.downleftshoulder")
 local DownRightShoulder = require("aliensignal.module.downrightshoulder")
@@ -43,12 +44,13 @@ function love.update(dt)
       Booster,
       Decreaser,
       Coupler,
-      Sampler,
       Wire,
       DownLeftShoulder,
       DownRightShoulder,
       UpLeftShoulder,
-      UpRightShoulder
+      UpRightShoulder,
+      NotGate,
+      Phaser
     }
 
     for index, moduleType in pairs(moduleTypes) do
