@@ -3,6 +3,7 @@ local peachy = require("peachy")
 local Color = require("aliensignal.color")
 local Event = require("event")
 local Object = require("classic")
+local Module = require("aliensignal.module")
 
 local InventoryBag = Object:extend()
 
@@ -178,7 +179,10 @@ function InventoryBag:new(navigator)
     junk = {}
   }
 
-  self.inventory = {}
+  self.inventory = {
+    modules = {},
+    junk = {}
+  }
   self.position = {
     x = InventoryBag.Margin,
     y = 768 - self.sprites.tabs.modules:getHeight() * 4 + InventoryBag.Border
@@ -190,12 +194,17 @@ function InventoryBag:fill(inventory)
 end
 
 function InventoryBag:prepareSlots()
-  self.slots.modules = {}
+  self:prepareStorageSlots("junk")
+  self:prepareStorageSlots("modules")
+end
 
-  for index, item in ipairs(self.inventory) do
+function InventoryBag:prepareStorageSlots(storage)
+  self.slots[storage] = {}
+
+  for index, item in ipairs(self.inventory[storage]) do
     local itemAdded = false
 
-    for slotIndex, slot in ipairs(self.slots.modules) do
+    for slotIndex, slot in ipairs(self.slots[storage]) do
       if slot:add(item) then
         itemAdded = true
         break
@@ -203,7 +212,7 @@ function InventoryBag:prepareSlots()
     end
 
     if not itemAdded then
-      local newSlot = InventoryBag.Slot(item, table.getn(self.slots.modules) + 1, self)
+      local newSlot = InventoryBag.Slot(item, table.getn(self.slots[storage]) + 1, self)
 
       newSlot.onDrop:subscribe(
         function(data)
@@ -211,21 +220,22 @@ function InventoryBag:prepareSlots()
         end
       )
 
-      table.insert(self.slots.modules, newSlot)
+      table.insert(self.slots[storage], newSlot)
     end
   end
 end
 
 function InventoryBag:pop(itemToPop)
   local newInventory = {}
+  local storage = itemToPop:is(Module) and "modules" or "junk"
 
-  for index, item in pairs(self.inventory) do
+  for index, item in pairs(self.inventory[storage]) do
     if not (item == itemToPop) then
       table.insert(newInventory, item)
     end
   end
 
-  self.inventory = newInventory
+  self.inventory[storage] = newInventory
 end
 
 function InventoryBag:store(item)
@@ -317,8 +327,10 @@ function InventoryBag:update(dt)
     sprite:update(dt)
   end
 
-  for index, slot in pairs(self.slots.modules) do
-    slot:update(dt)
+  if InventoryBag.InventoryIndexes[self.activeTab] then
+    for index, slot in pairs(self.slots[self.activeTab]) do
+      slot:update(dt)
+    end
   end
 end
 

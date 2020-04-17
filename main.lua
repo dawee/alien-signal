@@ -18,6 +18,8 @@ local DownRightShoulder = require("aliensignal.module.downrightshoulder")
 local UpLeftShoulder = require("aliensignal.module.upleftshoulder")
 local UpRightShoulder = require("aliensignal.module.uprightshoulder")
 
+local Junk = require("aliensignal.junk")
+
 local state = {
   navigator = Navigator(
     {
@@ -25,7 +27,10 @@ local state = {
       machine = MachineScreen
     }
   ),
-  inventory = {},
+  inventory = {
+    junk = {Junk.Headset(), Junk.LightBulb(), Junk.Headset()},
+    modules = {}
+  },
   ready = false
 }
 
@@ -55,7 +60,7 @@ function love.update(dt)
 
     for index, moduleType in pairs(moduleTypes) do
       for i = 1, 100, 1 do
-        table.insert(state.inventory, moduleType())
+        table.insert(state.inventory.modules, moduleType())
       end
     end
 
