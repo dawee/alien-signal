@@ -1,5 +1,9 @@
 local Craftable = require("aliensignal.craftable")
 
+local waves = {
+  sine = require("aliensignal.wave.sine")
+}
+
 local Junk = Craftable:extend()
 
 function Junk:new(name, position)
@@ -28,6 +32,7 @@ Junk.MappleSirupCan = Junk:extend()
 function Junk.MappleSirupCan:new(...)
   Junk.new(self, "mapplesirup", ...)
   self.displayableName = "Mapple Sirup Can"
+  self.signal = waves.sine
 end
 
 function Junk.MappleSirupCan:draw()
@@ -40,6 +45,7 @@ Junk.WateringCan = Junk:extend()
 function Junk.WateringCan:new(...)
   Junk.new(self, "wateringcan", ...)
   self.displayableName = "Watering Can"
+  self.signal = waves.sine
 end
 
 function Junk.WateringCan:draw()
@@ -53,6 +59,7 @@ Junk.LightBulb = Junk:extend()
 function Junk.LightBulb:new(...)
   Junk.new(self, "lightbulb", ...)
   self.displayableName = "Light Bulb"
+  self.signal = waves.sine
 end
 
 function Junk.LightBulb:draw()
@@ -65,6 +72,7 @@ Junk.Headset = Junk:extend()
 function Junk.Headset:new(...)
   Junk.new(self, "headset", ...)
   self.displayableName = "Headset"
+  self.signal = waves.sine
 end
 
 function Junk.Headset:draw()
@@ -77,6 +85,7 @@ Junk.GameBoy = Junk:extend()
 function Junk.GameBoy:new(...)
   Junk.new(self, "gameboy", ...)
   self.displayableName = "GameBoy"
+  self.signal = waves.sine
 end
 
 function Junk.GameBoy:draw()
@@ -89,6 +98,7 @@ Junk.LlamaChampionshipMedal = Junk:extend()
 function Junk.LlamaChampionshipMedal:new(...)
   Junk.new(self, "llamachampionshipMedal", ...)
   self.displayableName = "Llama Medal"
+  self.signal = waves.sine
 end
 
 function Junk.LlamaChampionshipMedal:draw()
@@ -101,6 +111,7 @@ Junk.BatteryCells = Junk:extend()
 function Junk.BatteryCells:new(...)
   Junk.new(self, "batterycells", ...)
   self.displayableName = "Battery Cells"
+  self.signal = waves.sine
 end
 
 function Junk.BatteryCells:draw()
@@ -113,6 +124,7 @@ Junk.Fork = Junk:extend()
 function Junk.Fork:new(...)
   Junk.new(self, "fork", ...)
   self.displayableName = "Fork"
+  self.signal = waves.sine
 end
 
 function Junk.Fork:draw()
@@ -125,6 +137,7 @@ Junk.Coin = Junk:extend()
 function Junk.Coin:new(...)
   Junk.new(self, "coin", ...)
   self.displayableName = "Coin"
+  self.signal = waves.sine
 end
 
 function Junk.Coin:draw()
@@ -137,6 +150,7 @@ Junk.Hanger = Junk:extend()
 function Junk.Hanger:new(...)
   Junk.new(self, "hanger", ...)
   self.displayableName = "Hanger"
+  self.signal = waves.sine
 end
 
 function Junk.Hanger:draw()
@@ -149,6 +163,7 @@ Junk.Boombox = Junk:extend()
 function Junk.Boombox:new(...)
   Junk.new(self, "boombox", ...)
   self.displayableName = "Boombox"
+  self.signal = waves.sine
 end
 
 function Junk.Boombox:draw()
@@ -161,6 +176,7 @@ Junk.Keys = Junk:extend()
 function Junk.Keys:new(...)
   Junk.new(self, "Keys", ...)
   self.displayableName = "Keys"
+  self.signal = waves.sine
 end
 
 function Junk.Keys:draw()

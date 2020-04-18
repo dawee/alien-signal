@@ -64,11 +64,17 @@ function InventoryBag.SignalScreen:new(inventoryBag, ...)
   SignalScreen.new(self, ...)
 
   self.inventoryBag = inventoryBag
-  self.precision = self.precision * 4
+  -- self.precision = self.precision * 4
   self.show = {
     guides = false,
     mainSignal = false
   }
+end
+
+function InventoryBag.SignalScreen:computeSignalAtTime(time, name)
+  local junkItem = self.inventoryBag.craftables.signal[self.inventoryBag.craftableSelected.signal]
+
+  return junkItem.signal[math.floor(time * self.exportTimeCoef)]
 end
 
 function InventoryBag.Slot:new(item, index, bag)

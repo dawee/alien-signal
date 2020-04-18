@@ -1,4 +1,5 @@
 local bank = require("aliensignal.bank")
+local input = require("aliensignal.input")
 local peachy = require("peachy")
 local Color = require("aliensignal.color")
 local Object = require("classic")
@@ -10,7 +11,8 @@ SignalScreen.Wave = {
   GuidePeriod = 0.125,
   Precision = 0.0125,
   Height = 7,
-  GuideHeight = 9
+  GuideHeight = 9,
+  ExportTimeCoef = 10000
 }
 
 function SignalScreen:new(position, width)
@@ -21,6 +23,7 @@ function SignalScreen:new(position, width)
   }
 
   self.scale = 4
+  self.exportTimeCoef = SignalScreen.Wave.ExportTimeCoef
   self.show = {
     guides = true,
     mainSignal = true
@@ -72,6 +75,11 @@ function SignalScreen:insertPointsAtTime(time, signalName, signalAtTime, lastSig
 end
 
 function SignalScreen:update(dt)
+  if self.show.mainSignal and input:down("save_hold") and input:pressed("save_trigger") then
+    self.saveWave = true
+    self.wave = "return {"
+  end
+
   self.points = {
     main = {},
     target = {}
@@ -90,16 +98,24 @@ function SignalScreen:update(dt)
       target = self:computeSignalAtTime(time, "target")
     }
 
-    if self.show.mainSignal then
+    if self.show.mainSignal and not (signalAtTime.main == nil) then
       self:insertPointsAtTime(time, "main", signalAtTime.main, lastSignalAtTime.main)
+
+      if self.saveWave then
+        self.wave =
+          self.wave ..
+          "\n  [" ..
+            tostring(math.floor(time * SignalScreen.Wave.ExportTimeCoef)) ..
+              "] = " .. tostring(signalAtTime.main) .. ","
+      end
+
+      lastSignalAtTime.main = signalAtTime.main
     end
 
-    self:insertPointsAtTime(time, "target", signalAtTime.target, lastSignalAtTime.target)
-
-    lastSignalAtTime = {
-      main = signalAtTime.main,
-      target = signalAtTime.target
-    }
+    if not (signalAtTime.target == nil) then
+      self:insertPointsAtTime(time, "target", signalAtTime.target, lastSignalAtTime.target)
+      lastSignalAtTime.target = signalAtTime.target
+    end
 
     if self.show.guides and time % SignalScreen.Wave.GuidePeriod <= self.precision then
       local x = self:computeXForTime(time)
@@ -118,6 +134,14 @@ function SignalScreen:update(dt)
 
   for name, sprite in pairs(self.sprites) do
     sprite:update(dt)
+  end
+
+  if self.saveWave then
+    self.saveWave = false
+    self.wave = self.wave .. "\n}"
+
+    love.filesystem.write("wave.lua", self.wave)
+    print("Signal saved in " .. love.filesystem.getSaveDirectory())
   end
 end
 

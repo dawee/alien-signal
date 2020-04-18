@@ -43,11 +43,6 @@ function MachineScreen.SignalScreen:new(machine, ...)
 end
 
 function MachineScreen.SignalScreen:computeSignalAtTime(time, signalName)
-  -- if input:down("save_hold") and input:pressed("save_trigger") then
-  --   self.saveWave = true
-  --   self.wave = "return {"
-  -- end
-
   if signalName == "target" then
     return 0
   end
