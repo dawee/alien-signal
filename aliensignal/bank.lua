@@ -1,15 +1,18 @@
 local Bank = require("bank")
 
 local spritesheets = {
-  "arrow",
-  "book",
+  "antenna",
   "build",
+  "foxen",
   "modules",
   "signalscreen",
+  "spacegun",
   "tabs"
 }
 
-local spec = {}
+local spec = {
+  background = Bank.Asset.Image("assets/images/background.png")
+}
 
 for index, name in ipairs(spritesheets) do
   spec[name] = {

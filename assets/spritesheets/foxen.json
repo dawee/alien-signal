@@ -1,0 +1,167 @@
+{ "frames": [
+   {
+    "filename": "foxen 0.aseprite",
+    "frame": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 300
+   },
+   {
+    "filename": "foxen 1.aseprite",
+    "frame": { "x": 36, "y": 0, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 300
+   },
+   {
+    "filename": "foxen 2.aseprite",
+    "frame": { "x": 72, "y": 0, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "foxen 3.aseprite",
+    "frame": { "x": 108, "y": 0, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "foxen 4.aseprite",
+    "frame": { "x": 0, "y": 49, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "foxen 5.aseprite",
+    "frame": { "x": 36, "y": 49, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "foxen 6.aseprite",
+    "frame": { "x": 36, "y": 0, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "foxen 7.aseprite",
+    "frame": { "x": 36, "y": 0, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "foxen 8.aseprite",
+    "frame": { "x": 72, "y": 49, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "foxen 9.aseprite",
+    "frame": { "x": 108, "y": 49, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "foxen 10.aseprite",
+    "frame": { "x": 0, "y": 98, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "foxen 11.aseprite",
+    "frame": { "x": 36, "y": 98, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 100
+   },
+   {
+    "filename": "foxen 12.aseprite",
+    "frame": { "x": 72, "y": 98, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 200
+   },
+   {
+    "filename": "foxen 13.aseprite",
+    "frame": { "x": 108, "y": 98, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 200
+   },
+   {
+    "filename": "foxen 14.aseprite",
+    "frame": { "x": 0, "y": 147, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 200
+   },
+   {
+    "filename": "foxen 15.aseprite",
+    "frame": { "x": 36, "y": 147, "w": 36, "h": 49 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 36, "h": 49 },
+    "sourceSize": { "w": 36, "h": 49 },
+    "duration": 200
+   }
+ ],
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.16.3-x64",
+  "image": "foxen.png",
+  "format": "RGBA8888",
+  "size": { "w": 144, "h": 196 },
+  "scale": "1",
+  "frameTags": [
+   { "name": "idle", "from": 0, "to": 1, "direction": "forward" },
+   { "name": "idle_signal", "from": 2, "to": 7, "direction": "forward" },
+   { "name": "walk", "from": 8, "to": 11, "direction": "forward" },
+   { "name": "talk", "from": 12, "to": 15, "direction": "forward" }
+  ],
+  "layers": [
+   { "name": "character", "opacity": 255, "blendMode": "normal" },
+   { "name": "signal", "opacity": 124, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}

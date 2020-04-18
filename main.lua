@@ -1,8 +1,8 @@
 local bank = require("aliensignal.bank")
 local input = require("aliensignal.input")
-local BookScreen = require("aliensignal.screen.book")
 local Event = require("event")
 local MachineScreen = require("aliensignal.screen.machine")
+local MainScreen = require("aliensignal.screen.main")
 local Navigator = require("navigator")
 
 local AndGate = require("aliensignal.module.andgate")
@@ -23,7 +23,7 @@ local Junk = require("aliensignal.junk")
 local state = {
   navigator = Navigator(
     {
-      book = BookScreen,
+      main = MainScreen,
       machine = MachineScreen
     }
   ),
@@ -77,7 +77,7 @@ function love.update(dt)
       end
     end
 
-    state.navigator:navigate("machine", {inventory = state.inventory})
+    state.navigator:navigate("main", {inventory = state.inventory})
     state.ready = true
   elseif state.ready then
     state.navigator:update(dt)
