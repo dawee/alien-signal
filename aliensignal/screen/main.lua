@@ -1,5 +1,6 @@
 local bank = require("aliensignal.bank")
 local peachy = require("peachy")
+local Animation = require("animation")
 local Navigator = require("navigator")
 
 local MainScreen = Navigator.Screen:extend()
@@ -29,17 +30,32 @@ function MainScreen:new(...)
   }
 end
 
+function MainScreen:mousepressed(x, y, button)
+  self.animation = Animation.Tween(2.0, self.positions.foxen, {x = x - self.sprites.foxen:getWidth() * 2})
+  self.sprites.foxen:setTag("walk")
+  self.animation:start()
+  self.animation.onComplete:listenOnce(
+    function()
+      self.sprites.foxen:setTag("idle")
+    end
+  )
+end
+
 function MainScreen:update(dt)
   for name, sprite in pairs(self.sprites) do
     sprite:update(dt)
+  end
+
+  if self.animation then
+    self.animation:update(dt)
   end
 end
 
 function MainScreen:draw()
   love.graphics.draw(self.background, 0, 0, 0, 4, 4)
 
-  for name, sprite in pairs(self.sprites) do
-    sprite:draw(self.positions[name].x, self.positions[name].y, 0, 4, 4)
+  for index, name in pairs({"antenna", "spacegun", "foxen"}) do
+    self.sprites[name]:draw(self.positions[name].x, self.positions[name].y, 0, 4, 4)
   end
 end
 
