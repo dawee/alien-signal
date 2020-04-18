@@ -39,7 +39,7 @@ function SignalScreen:getHeight()
 end
 
 function SignalScreen:computeSignalAtTime(time)
-  return 1
+  return 0
 end
 
 function SignalScreen:computeXForTime(time)
@@ -79,7 +79,7 @@ function SignalScreen:update(dt)
     target = 0
   }
 
-  for time = 0, SignalScreen.Wave.Duration, SignalScreen.Wave.Precision do
+  for time = 0, SignalScreen.Wave.Duration, self.precision do
     local signalAtTime = {
       main = self:computeSignalAtTime(time, "main"),
       target = self:computeSignalAtTime(time, "target")

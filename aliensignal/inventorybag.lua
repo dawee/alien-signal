@@ -6,6 +6,7 @@ local Event = require("event")
 local Object = require("classic")
 local Junk = require("aliensignal.junk")
 local Module = require("aliensignal.module")
+local SignalScreen = require("aliensignal.signalscreen")
 
 local AndGate = require("aliensignal.module.andgate")
 local OrGate = require("aliensignal.module.orgate")
@@ -56,6 +57,13 @@ InventoryBag.CraftIndexes = {
 }
 
 InventoryBag.Slot = Object:extend()
+
+InventoryBag.SignalScreen = SignalScreen:extend()
+
+function InventoryBag.SignalScreen:new(inventoryBag, ...)
+  SignalScreen.new(self, ...)
+  self.inventoryBag = inventoryBag
+end
 
 function InventoryBag.Slot:new(item, index, bag)
   self.bag = bag
@@ -245,6 +253,9 @@ function InventoryBag:new(navigator)
     build = Button("BUILD", InventoryBag.x2Font, {x = 782, y = 1248}, {width = 160, height = 66}, self.transform),
     signal = Button("SET", InventoryBag.Font, {x = 900, y = 768 * 1.5}, {width = 64, height = 34}, self.transform)
   }
+
+  self.signalScreen = InventoryBag.SignalScreen(self, {x = 384, y = 864}, 576)
+  self.signalScreen.precision = self.signalScreen.precision * 4
 end
 
 function InventoryBag:fill(inventory)
@@ -509,6 +520,10 @@ function InventoryBag:update(dt)
       craftable:update(dt)
     end
   end
+
+  if self.activeTab == "signal" then
+    self.signalScreen:update(dt)
+  end
 end
 
 function InventoryBag:drawInventoryPanel(slots)
@@ -588,6 +603,10 @@ function InventoryBag:drawCraftPanel()
   end
 
   self.buttons[self.activeTab]:draw()
+
+  if self.activeTab == "signal" then
+    self.signalScreen:draw()
+  end
 end
 
 function InventoryBag:draw()
