@@ -1,4 +1,5 @@
 local Color = require("aliensignal.color")
+local Junk = require("aliensignal.junk")
 local Module = require("aliensignal.module")
 
 local AndGate = Module:extend()
@@ -8,6 +9,11 @@ function AndGate:new(slot, modules)
 
   self.displayableName = "AND Gate"
   self.description = "This gate will only return 1 if both left input and right output equals 1"
+  self.requirements = {
+    {1, Junk.LightBulb()},
+    {3, Junk.Headset()},
+    {1, Junk.MappleSirupCan()}
+  }
 end
 
 function AndGate:computeRightOutput(time, increment)

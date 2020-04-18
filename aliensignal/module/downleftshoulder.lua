@@ -1,3 +1,4 @@
+local Junk = require("aliensignal.junk")
 local Module = require("aliensignal.module")
 
 local DownLeftShoulder = Module:extend()
@@ -8,6 +9,11 @@ function DownLeftShoulder:new(slot, modules)
   self.displayableName = "Down Left Shoulder"
   self.description =
     "Shoulders are wires that allows the current to take a turn in the circuit. This one can connect its downer module to its left one."
+  self.requirements = {
+    {3, Junk.Headset()},
+    {1, Junk.LightBulb()},
+    {1, Junk.MappleSirupCan()}
+  }
 end
 
 function DownLeftShoulder:computeDownOutput(time, increment)

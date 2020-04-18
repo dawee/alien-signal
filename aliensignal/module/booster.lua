@@ -1,3 +1,4 @@
+local Junk = require("aliensignal.junk")
 local Module = require("aliensignal.module")
 
 local Booster = Module:extend()
@@ -7,6 +8,11 @@ function Booster:new(slot, modules)
 
   self.displayableName = "Booster"
   self.description = "This module multiplies the frequency of the signal by 2."
+  self.requirements = {
+    {3, Junk.Headset()},
+    {1, Junk.LightBulb()},
+    {1, Junk.MappleSirupCan()}
+  }
 end
 
 function Booster:computeRightOutput(time, increment)

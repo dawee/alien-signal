@@ -1,3 +1,4 @@
+local Junk = require("aliensignal.junk")
 local Module = require("aliensignal.module")
 
 local Decreaser = Module:extend()
@@ -7,6 +8,11 @@ function Decreaser:new(slot, modules)
 
   self.displayableName = "Decreaser"
   self.description = "This module divides the frequency of the signal by 2."
+  self.requirements = {
+    {3, Junk.Headset()},
+    {1, Junk.LightBulb()},
+    {1, Junk.MappleSirupCan()}
+  }
 end
 
 function Decreaser:computeRightOutput(time, increment)

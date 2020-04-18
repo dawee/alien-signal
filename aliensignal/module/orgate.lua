@@ -1,3 +1,4 @@
+local Junk = require("aliensignal.junk")
 local Module = require("aliensignal.module")
 
 local OrGate = Module:extend()
@@ -7,6 +8,11 @@ function OrGate:new(slot, modules)
 
   self.displayableName = "OR Gate"
   self.description = "This gate will only return 1 if at least one of left input or right output equals 1"
+  self.requirements = {
+    {3, Junk.Headset()},
+    {1, Junk.LightBulb()},
+    {1, Junk.MappleSirupCan()}
+  }
 end
 
 function OrGate:computeRightOutput(time, increment)

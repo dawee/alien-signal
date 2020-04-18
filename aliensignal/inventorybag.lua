@@ -3,6 +3,7 @@ local peachy = require("peachy")
 local Color = require("aliensignal.color")
 local Event = require("event")
 local Object = require("classic")
+local Junk = require("aliensignal.junk")
 local Module = require("aliensignal.module")
 
 local AndGate = require("aliensignal.module.andgate")
@@ -237,6 +238,16 @@ function InventoryBag:prepareSlots()
   self:prepareCraftables("signal")
 end
 
+function InventoryBag:countItems(storage, name)
+  local count = 0
+
+  for index, item in ipairs(self.inventory[storage]) do
+    count = item.name == name and count + 1 or count
+  end
+
+  return count
+end
+
 function InventoryBag:prepareCraftables(tab)
   local fullWidth = 1024 - InventoryBag.Margin * 2
   local fullHeight = InventoryBag.Heights[tab]
@@ -281,6 +292,36 @@ function InventoryBag:prepareCraftables(tab)
         y = math.floor(self.craftables[tab][1].position.y + InventoryBag.ItemSize * 2 / 3)
       }
     )
+
+    if craftable.requirements then
+      for index, requirement in ipairs(craftable.requirements) do
+        local count = self:countItems("junk", requirement[2].name)
+        local required = requirement[1]
+
+        if not requirement[2].initialDisplayableName then
+          requirement[2].initialDisplayableName = requirement[2].displayableName
+        else
+          requirement[2].displayableName = requirement[2].initialDisplayableName
+        end
+
+        requirement[2].visible = false
+
+        requirement[2].displayableName =
+          Color.Text():concat(Color.Signal or Color.TargetSignal, count .. "/" .. tostring(requirement[1])):concat(
+          Color.White,
+          " " .. requirement[2].displayableName
+        ):dump()
+
+        requirement[2]:renderDisplayableName(
+          InventoryBag.Font,
+          Color.White,
+          {
+            x = math.floor(self.position.x + leftWidth + 64),
+            y = math.floor(self.craftables[tab][1].position.y + InventoryBag.ItemSize * 2 / 3) + 128 + (index + 1) * 32
+          }
+        )
+      end
+    end
   end
 end
 
@@ -508,6 +549,12 @@ function InventoryBag:drawCraftPanel()
       )
 
       craftable:drawDescription()
+
+      if craftable.requirements then
+        for index, requirement in ipairs(craftable.requirements) do
+          requirement[2]:draw()
+        end
+      end
     end
   end
 end
