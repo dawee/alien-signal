@@ -1,5 +1,6 @@
 local bank = require("aliensignal.bank")
 local peachy = require("peachy")
+local Button = require("aliensignal.button")
 local Color = require("aliensignal.color")
 local Event = require("event")
 local Object = require("classic")
@@ -171,6 +172,7 @@ function InventoryBag.Load()
   )
 
   InventoryBag.Font = love.graphics.newFont("assets/fonts/emulogic.ttf", 12)
+  InventoryBag.x2Font = love.graphics.newFont("assets/fonts/emulogic.ttf", 24)
 end
 
 function InventoryBag:new(navigator)
@@ -224,6 +226,11 @@ function InventoryBag:new(navigator)
   self.position = {
     x = InventoryBag.Margin,
     y = 768 - self.sprites.tabs.modules:getHeight() * 4 + InventoryBag.Border
+  }
+
+  self.buttons = {
+    build = Button("BUILD", InventoryBag.x2Font, {x = 782, y = 1248}, {width = 160, height = 66}, self.transform),
+    signal = Button("SET", InventoryBag.Font, {x = 900, y = 768 * 1.5}, {width = 64, height = 34}, self.transform)
   }
 end
 
@@ -422,7 +429,12 @@ function InventoryBag:checkCraftMousePressed(x, y)
 end
 
 function InventoryBag:mousepressed(x, y, button)
-  if self:tabPressed(x, y, button, "modules") then
+  if
+    self.opened and InventoryBag.CraftIndexes[self.activeTab] and
+      self.buttons[self.activeTab]:mousepressed(x, y, button)
+   then
+    return true
+  elseif self:tabPressed(x, y, button, "modules") then
     self.activeTab = "modules"
     self:open()
     return true
@@ -457,7 +469,9 @@ function InventoryBag:mousepressed(x, y, button)
 end
 
 function InventoryBag:mousereleased(x, y, button, istouch)
-  if self.opened then
+  if self.opened and InventoryBag.CraftIndexes[self.activeTab] then
+    self.buttons[self.activeTab]:mousereleased(x, y, button)
+  elseif self.opened and self.activeTab == "modules" then
     for index, slot in pairs(self.slots.modules) do
       slot:mousereleased(x, y, button, istouch)
     end
@@ -557,6 +571,8 @@ function InventoryBag:drawCraftPanel()
       end
     end
   end
+
+  self.buttons[self.activeTab]:draw()
 end
 
 function InventoryBag:draw()

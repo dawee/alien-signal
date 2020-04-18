@@ -30,6 +30,11 @@ function Color.Text:dump()
   return self.series
 end
 
+Color.ButtonBackground = Color(217, 97, 89)
+Color.ButtonShadow = Color(102, 57, 49)
+Color.ButtonBorder = Color(238, 195, 154)
+Color.ButtonTitle = Color(255, 255, 255)
+
 Color.DescriptionEnlight = Color(172, 50, 50)
 Color.Description = Color(0, 0, 0)
 
