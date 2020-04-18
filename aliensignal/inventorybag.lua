@@ -215,7 +215,20 @@ function InventoryBag:new(navigator)
       UpLeftShoulder(),
       UpRightShoulder()
     },
-    signal = {}
+    signal = {
+      Junk.MappleSirupCan(),
+      Junk.WateringCan(),
+      Junk.LightBulb(),
+      Junk.Headset(),
+      Junk.GameBoy(),
+      Junk.LlamaChampionshipMedal(),
+      Junk.BatteryCells(),
+      Junk.Fork(),
+      Junk.Coin(),
+      Junk.Hanger(),
+      Junk.Boombox(),
+      Junk.Keys()
+    }
   }
 
   self.inventory = {
@@ -291,14 +304,16 @@ function InventoryBag:prepareCraftables(tab)
       }
     )
 
-    craftable:renderDescription(
-      InventoryBag.Font,
-      Color.Description,
-      {
-        x = math.floor(self.position.x + leftWidth + 64),
-        y = math.floor(self.craftables[tab][1].position.y + InventoryBag.ItemSize * 2 / 3)
-      }
-    )
+    if craftable.description then
+      craftable:renderDescription(
+        InventoryBag.Font,
+        Color.Description,
+        {
+          x = math.floor(self.position.x + leftWidth + 64),
+          y = math.floor(self.craftables[tab][1].position.y + InventoryBag.ItemSize * 2 / 3)
+        }
+      )
+    end
 
     if craftable.requirements then
       for index, requirement in ipairs(craftable.requirements) do
@@ -553,7 +568,7 @@ function InventoryBag:drawCraftPanel()
     Color.White:use()
     craftable:draw()
 
-    if selected then
+    if selected and craftable.requirements and craftable.description then
       love.graphics.rectangle(
         "fill",
         self.position.x + leftWidth + 32,
