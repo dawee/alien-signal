@@ -21,6 +21,11 @@ function SignalScreen:new(position, width)
   }
 
   self.scale = 4
+  self.show = {
+    guides = true,
+    mainSignal = true
+  }
+
   self.middleScale =
     math.ceil(
     (width - self.sprites.left:getWidth() * self.scale - self.sprites.right:getWidth() * self.scale) /
@@ -85,7 +90,10 @@ function SignalScreen:update(dt)
       target = self:computeSignalAtTime(time, "target")
     }
 
-    self:insertPointsAtTime(time, "main", signalAtTime.main, lastSignalAtTime.main)
+    if self.show.mainSignal then
+      self:insertPointsAtTime(time, "main", signalAtTime.main, lastSignalAtTime.main)
+    end
+
     self:insertPointsAtTime(time, "target", signalAtTime.target, lastSignalAtTime.target)
 
     lastSignalAtTime = {
@@ -93,7 +101,7 @@ function SignalScreen:update(dt)
       target = signalAtTime.target
     }
 
-    if time % SignalScreen.Wave.GuidePeriod <= self.precision then
+    if self.show.guides and time % SignalScreen.Wave.GuidePeriod <= self.precision then
       local x = self:computeXForTime(time)
 
       table.insert(
@@ -148,7 +156,7 @@ function SignalScreen:draw()
 
   Color.Signal:use()
   love.graphics.setLineWidth(3)
-  if self.points and self.points.main then
+  if self.points and self.points.main and table.getn(self.points.main) > 0 then
     love.graphics.line(unpack(self.points.main))
   end
   love.graphics.setLineWidth(1)

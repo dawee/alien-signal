@@ -62,7 +62,13 @@ InventoryBag.SignalScreen = SignalScreen:extend()
 
 function InventoryBag.SignalScreen:new(inventoryBag, ...)
   SignalScreen.new(self, ...)
+
   self.inventoryBag = inventoryBag
+  self.precision = self.precision * 4
+  self.show = {
+    guides = false,
+    mainSignal = false
+  }
 end
 
 function InventoryBag.Slot:new(item, index, bag)
@@ -145,6 +151,7 @@ function InventoryBag.Slot:draw()
   if self.movingItem then
     self.movingItem:draw()
   end
+  self.signalScreen.precision = self.signalScreen.precision * 4
 
   love.graphics.push()
   love.graphics.applyTransform(self.countTransform)
@@ -251,11 +258,10 @@ function InventoryBag:new(navigator)
 
   self.buttons = {
     build = Button("BUILD", InventoryBag.x2Font, {x = 782, y = 1248}, {width = 160, height = 66}, self.transform),
-    signal = Button("SET", InventoryBag.Font, {x = 900, y = 768 * 1.5}, {width = 64, height = 34}, self.transform)
+    signal = Button("SET", InventoryBag.x2Font, {x = 782, y = 1120}, {width = 160, height = 66}, self.transform)
   }
 
-  self.signalScreen = InventoryBag.SignalScreen(self, {x = 384, y = 864}, 576)
-  self.signalScreen.precision = self.signalScreen.precision * 4
+  self.signalScreen = InventoryBag.SignalScreen(self, {x = 400, y = 928}, 544)
 end
 
 function InventoryBag:fill(inventory)
