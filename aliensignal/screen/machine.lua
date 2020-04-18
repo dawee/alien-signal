@@ -7,6 +7,7 @@ local Generator = require("aliensignal.module.generator")
 local Sampler = require("aliensignal.module.sampler")
 local Navigator = require("navigator")
 local Output = require("aliensignal.module.output")
+local SignalScreen = require("aliensignal.signalscreen")
 
 local waves = {
   sine = require("aliensignal.wave.sine"),
@@ -19,7 +20,7 @@ MachineScreen.Size = 20
 
 MachineScreen.Wave = {
   Top = 0,
-  Left = 32,
+  Left = 90,
   Length = 760,
   Height = 24,
   LeftPadding = 40,
@@ -32,6 +33,37 @@ MachineScreen.Wave = {
 
 function MachineScreen.Load()
   InventoryBag.Load()
+end
+
+MachineScreen.SignalScreen = SignalScreen:extend()
+
+function MachineScreen.SignalScreen:new(machine, ...)
+  SignalScreen.new(self, ...)
+  self.machine = machine
+end
+
+function MachineScreen.SignalScreen:computeSignalAtTime(time, signalName)
+  -- if input:down("save_hold") and input:pressed("save_trigger") then
+  --   self.saveWave = true
+  --   self.wave = "return {"
+  -- end
+
+  if signalName == "target" then
+    return 0
+  end
+
+  local output = nil
+
+  for x, module_col in pairs(self.machine.modules) do
+    for y, mod in pairs(module_col) do
+      if mod:is(Output) then
+        output = mod
+        break
+      end
+    end
+  end
+
+  return output:computeRightOutput(time, self.precision)
 end
 
 function MachineScreen:new(...)
@@ -91,11 +123,12 @@ function MachineScreen:new(...)
     end
   )
 
-  self.sprites = {
-    signalScreenLeft = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "left"),
-    signalScreenRight = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "right"),
-    signalScreenMiddle = peachy.new(bank.signalscreen.spritesheet, bank.signalscreen.image, "middle")
-  }
+  self.signalScreen =
+    MachineScreen.SignalScreen(
+    self,
+    {x = MachineScreen.Wave.Left, y = MachineScreen.Wave.Top},
+    MachineScreen.Wave.LeftPadding * 2 + MachineScreen.Wave.Length
+  )
 
   self.targetPoints = self:transformWavePoints(waves.width3gate)
 end
@@ -116,7 +149,7 @@ end
 function MachineScreen:computeWavePoint(i, y)
   return {
     x = MachineScreen.Wave.Left + i + MachineScreen.Wave.LeftPadding,
-    y = MachineScreen.Wave.Top + MachineScreen.Wave.TopPadding + self.sprites.signalScreenMiddle:getHeight() * 2 -
+    y = MachineScreen.Wave.Top + MachineScreen.Wave.TopPadding + self.signalScreen:getHeight() * 2 -
       y * MachineScreen.Wave.Height / 2
   }
 end
@@ -138,72 +171,6 @@ function MachineScreen:computeTime(i)
 end
 
 function MachineScreen:update(dt)
-  self.points = {}
-  self.guides = {}
-
-  local output = nil
-
-  if input:down("save_hold") and input:pressed("save_trigger") then
-    self.saveWave = true
-    self.wave = "return {"
-  end
-
-  for x, module_col in pairs(self.modules) do
-    for y, mod in pairs(module_col) do
-      if mod:is(Output) then
-        output = mod
-        break
-      end
-    end
-  end
-
-  if output then
-    local increment = self:computeTime(1) - self:computeTime(0)
-    local previous = {}
-
-    for i = 0, MachineScreen.Wave.Length + MachineScreen.Wave.LeftPadding, 1 do
-      local time = self:computeTime(i)
-      local y = output:computeRightOutput(time, increment)
-      local point = self:computeWavePoint(i, y)
-
-      if time % MachineScreen.Wave.GuidePeriod <= MachineScreen.Wave.Precision then
-        local centeredPoint = self:computeWavePoint(i, 0)
-
-        table.insert(
-          self.guides,
-          {
-            x1 = centeredPoint.x,
-            y1 = centeredPoint.y - MachineScreen.Wave.GuideHeight / 2,
-            x2 = centeredPoint.x,
-            y2 = centeredPoint.y + MachineScreen.Wave.GuideHeight / 2
-          }
-        )
-      end
-
-      if self.saveWave then
-        self.wave = self.wave .. "\n  { i = " .. i .. ", y = " .. y .. " },"
-      end
-
-      if previous.y == 0 and y == 1 then
-        local additionalPoint = self:computeWavePoint(i, 0)
-
-        table.insert(self.points, additionalPoint.x)
-        table.insert(self.points, additionalPoint.y)
-      elseif previous.y == 1 and y == 0 then
-        local additionalPoint = self:computeWavePoint(i, 1)
-
-        table.insert(self.points, additionalPoint.x)
-        table.insert(self.points, additionalPoint.y)
-      end
-
-      table.insert(self.points, point.x)
-      table.insert(self.points, point.y)
-
-      previous.y = y
-      previous.point = point
-    end
-  end
-
   for x, module_col in pairs(self.modules) do
     for y, mod in pairs(module_col) do
       mod:update(dt)
@@ -211,18 +178,7 @@ function MachineScreen:update(dt)
   end
 
   self.inventoryBag:update(dt)
-
-  for index, sprite in pairs(self.sprites) do
-    sprite:update(dt)
-  end
-
-  if self.saveWave then
-    self.wave = self.wave .. "\n}"
-    love.filesystem.write("wave.lua", self.wave)
-
-    print("wave saved in", love.filesystem.getSaveDirectory())
-    self.saveWave = false
-  end
+  self.signalScreen:update(dt)
 end
 
 function MachineScreen:mousemoved(x, y, dx, dy)
@@ -311,46 +267,7 @@ function MachineScreen:draw()
 
   love.graphics.pop()
 
-  self.sprites.signalScreenLeft:draw(MachineScreen.Wave.Left, MachineScreen.Wave.Top, 0, 4, 4)
-  self.sprites.signalScreenMiddle:draw(
-    MachineScreen.Wave.Left + self.sprites.signalScreenLeft:getWidth() * 4,
-    MachineScreen.Wave.Top,
-    0,
-    MachineScreen.Wave.Length / self.sprites.signalScreenMiddle:getWidth(),
-    4
-  )
-  self.sprites.signalScreenRight:draw(
-    MachineScreen.Wave.Left + self.sprites.signalScreenLeft:getWidth() * 4 + MachineScreen.Wave.Length,
-    MachineScreen.Wave.Top,
-    0,
-    4,
-    4
-  )
-
-  Color.Guide:use()
-
-  if self.guides then
-    for index, line in pairs(self.guides) do
-      love.graphics.line(line.x1, line.y1, line.x2, line.y2)
-    end
-  end
-
-  Color.TargetSignal:use()
-
-  if self.targetPoints and table.getn(self.targetPoints) > 1 then
-    love.graphics.line(unpack(self.targetPoints))
-  end
-
-  Color.Signal:use()
-
-  love.graphics.setLineWidth(5)
-  if self.points and table.getn(self.points) > 1 then
-    love.graphics.line(unpack(self.points))
-  end
-  love.graphics.setLineWidth(1)
-
-  Color.White:use()
-
+  self.signalScreen:draw()
   self.inventoryBag:draw()
 end
 
