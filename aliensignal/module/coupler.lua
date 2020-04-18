@@ -6,6 +6,7 @@ function Coupler:new(slot, modules)
   Module.new(self, "coupler", slot, modules)
 
   self.displayableName = "Coupler"
+  self.description = "Use this device when you want to diffuse your signal to 2 differents modules."
 end
 
 function Coupler:computeDownOutput(time, increment)

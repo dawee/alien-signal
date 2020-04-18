@@ -6,6 +6,8 @@ function UpLeftShoulder:new(slot, modules)
   Module.new(self, "upleftshoulder", slot, modules)
 
   self.displayableName = "Up Left Shoulder"
+  self.description =
+    "Shoulders are wires that allows the current to take a turn in the circuit. This one can connect its upper module to its left one."
 end
 
 function UpLeftShoulder:computeUpOutput(time, increment)

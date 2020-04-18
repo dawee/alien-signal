@@ -8,6 +8,7 @@ function Phaser:new(slot, modules)
   Module.new(self, "phaser", slot, modules)
 
   self.displayableName = "Phaser"
+  self.description = "Use this module if you want your signal to be delayed by one step back in time"
 end
 
 function Phaser:computeRightOutput(time, increment)

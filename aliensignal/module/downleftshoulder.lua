@@ -6,6 +6,8 @@ function DownLeftShoulder:new(slot, modules)
   Module.new(self, "downleftshoulder", slot, modules)
 
   self.displayableName = "Down Left Shoulder"
+  self.description =
+    "Shoulders are wires that allows the current to take a turn in the circuit. This one can connect its downer module to its left one."
 end
 
 function DownLeftShoulder:computeDownOutput(time, increment)

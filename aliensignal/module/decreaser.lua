@@ -6,6 +6,7 @@ function Decreaser:new(slot, modules)
   Module.new(self, "decreaser", slot, modules)
 
   self.displayableName = "Decreaser"
+  self.description = "This module divides the frequency of the signal by 2."
 end
 
 function Decreaser:computeRightOutput(time, increment)

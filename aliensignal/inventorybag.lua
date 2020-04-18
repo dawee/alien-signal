@@ -257,12 +257,28 @@ function InventoryBag:prepareCraftables(tab)
     }
     craftable.scale = 1
 
+    craftable.hitslop = {
+      x = craftable.position.x - 16,
+      y = craftable.position.y - verticalMargin,
+      width = leftWidth,
+      height = 2 * verticalMargin + InventoryBag.ItemSize / 4
+    }
+
     craftable:renderDisplayableName(
       InventoryBag.Font,
       Color.White,
       {
         x = math.floor(craftable.position.x + InventoryBag.ItemSize / 4 + horizontalMargin),
         y = math.floor(y + InventoryBag.ItemSize / 2) - 55
+      }
+    )
+
+    craftable:renderDescription(
+      InventoryBag.Font,
+      Color.Description,
+      {
+        x = math.floor(self.position.x + leftWidth + 64),
+        y = math.floor(self.craftables[tab][1].position.y + InventoryBag.ItemSize * 2 / 3)
       }
     )
   end
@@ -351,6 +367,19 @@ function InventoryBag:tabPressed(x, y, button, name)
     y <= self.position.y + yOffset + self.sprites.tabs.modules:getHeight() * 4
 end
 
+function InventoryBag:checkCraftMousePressed(x, y)
+  for index, craftable in ipairs(self.craftables[self.activeTab]) do
+    if
+      x >= craftable.hitslop.x and x <= craftable.hitslop.x + craftable.hitslop.width and
+        y >= craftable.hitslop.y - InventoryBag.Heights[self.activeTab] and
+        y <= craftable.hitslop.y - InventoryBag.Heights[self.activeTab] + craftable.hitslop.height
+     then
+      self.craftableSelected[self.activeTab] = index
+      break
+    end
+  end
+end
+
 function InventoryBag:mousepressed(x, y, button)
   if self:tabPressed(x, y, button, "modules") then
     self.activeTab = "modules"
@@ -381,6 +410,8 @@ function InventoryBag:mousepressed(x, y, button)
       end
     end
     return true
+  elseif self.opened and button == 1 and InventoryBag.CraftIndexes[self.activeTab] then
+    self:checkCraftMousePressed(x, y)
   end
 end
 
@@ -436,6 +467,8 @@ function InventoryBag:drawCraftPanel()
   local downHeight = fullHeight - topHeight
   local verticalMargin = math.ceil(((InventoryBag.Heights.build / 12) - InventoryBag.ItemSize / 4) / 2)
 
+  Color.InventoryBorder:use()
+
   love.graphics.rectangle(
     "fill",
     self.position.x,
@@ -444,23 +477,38 @@ function InventoryBag:drawCraftPanel()
     768
   )
 
+  Color.White:use()
+
   for index, craftable in ipairs(self.craftables[self.activeTab]) do
+    local selected = self.craftableSelected[self.activeTab] == index
     local color =
-      self.craftableSelected[self.activeTab] == index and Color.CraftListItemSelected or
+      selected and Color.CraftListItemSelected or
       ((index - 1) % 2 == 0 and Color.CraftListItemEven or Color.CraftListItemOdd)
 
     color:use()
 
     love.graphics.rectangle(
       "fill",
-      craftable.position.x - 16,
-      craftable.position.y - verticalMargin,
-      leftWidth,
-      2 * verticalMargin + InventoryBag.ItemSize / 4
+      craftable.hitslop.x,
+      craftable.hitslop.y,
+      craftable.hitslop.width,
+      craftable.hitslop.height
     )
 
     Color.White:use()
     craftable:draw()
+
+    if selected then
+      love.graphics.rectangle(
+        "fill",
+        self.position.x + leftWidth + 32,
+        self.craftables[self.activeTab][1].position.y + InventoryBag.ItemSize * 2 / 3 - 32,
+        565,
+        128
+      )
+
+      craftable:drawDescription()
+    end
   end
 end
 

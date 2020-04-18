@@ -6,6 +6,7 @@ function Booster:new(slot, modules)
   Module.new(self, "booster", slot, modules)
 
   self.displayableName = "Booster"
+  self.description = "This module multiplies the frequency of the signal by 2."
 end
 
 function Booster:computeRightOutput(time, increment)

@@ -13,6 +13,26 @@ function Color:use()
   love.graphics.setColor(self.r / 256, self.g / 256, self.b / 256, self.a)
 end
 
+Color.Text = Object:extend()
+
+function Color.Text:new()
+  self.series = {}
+end
+
+function Color.Text:concat(color, text)
+  table.insert(self.series, {color.r, color.g, color.b, color.a})
+  table.insert(self.series, text)
+
+  return self
+end
+
+function Color.Text:dump()
+  return self.series
+end
+
+Color.DescriptionEnlight = Color(172, 50, 50)
+Color.Description = Color(0, 0, 0)
+
 Color.CraftListItemSelected = Color(143, 86, 59)
 Color.CraftListItemEven = Color(238, 195, 154)
 Color.CraftListItemOdd = Color(217, 160, 102)

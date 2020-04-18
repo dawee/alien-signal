@@ -6,6 +6,7 @@ function Wire:new(slot, modules)
   Module.new(self, "wire", slot, modules)
 
   self.displayableName = "Wire"
+  self.description = "A simple wire that extends a connection by one case"
 end
 
 function Wire:computeRightOutput(time, increment)

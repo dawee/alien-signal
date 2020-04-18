@@ -6,6 +6,8 @@ function NotGate:new(slot, modules)
   Module.new(self, "notgate", slot, modules)
 
   self.displayableName = "NOT Gate"
+  self.description =
+    "This module reverts the input signal. If the input gives 0, it returns 1. If the input gives 1, it returns 0."
 end
 
 function NotGate:computeRightOutput(time, increment)

@@ -6,6 +6,7 @@ function OrGate:new(slot, modules)
   Module.new(self, "orgate", slot, modules)
 
   self.displayableName = "OR Gate"
+  self.description = "This gate will only return 1 if at least one of left input or right output equals 1"
 end
 
 function OrGate:computeRightOutput(time, increment)
