@@ -44,7 +44,7 @@ end
 
 function MachineScreen.SignalScreen:computeSignalAtTime(time, signalName)
   if signalName == "target" then
-    return 0
+    return self.machine.targetSignal and self.machine.targetSignal[math.floor(time * self.exportTimeCoef)] or nil
   end
 
   local output = nil
@@ -118,14 +118,18 @@ function MachineScreen:new(...)
     end
   )
 
+  self.inventoryBag.onSetSignal:subscribe(
+    function(signal)
+      self.targetSignal = signal
+    end
+  )
+
   self.signalScreen =
     MachineScreen.SignalScreen(
     self,
     {x = MachineScreen.Wave.Left, y = MachineScreen.Wave.Top},
     MachineScreen.Wave.LeftPadding * 2 + MachineScreen.Wave.Length
   )
-
-  self.targetPoints = self:transformWavePoints(waves.width3gate)
 end
 
 function MachineScreen:transformWavePoints(wave)

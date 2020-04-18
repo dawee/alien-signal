@@ -174,7 +174,7 @@ function SignalScreen:draw()
 
   Color.TargetSignal:use()
 
-  if self.points and self.points.target then
+  if self.points and self.points.target and table.getn(self.points.target) > 0 then
     love.graphics.line(unpack(self.points.target))
   end
 

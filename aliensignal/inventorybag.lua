@@ -214,6 +214,7 @@ function InventoryBag:new(navigator)
   self.transform = love.math.newTransform()
   self.opened = false
   self.onDrop = Event()
+  self.onSetSignal = Event()
   self.slots = {
     modules = {},
     junk = {}
@@ -522,6 +523,9 @@ function InventoryBag:build()
 end
 
 function InventoryBag:setSignal()
+  local junkItem = self.craftables.signal[self.craftableSelected.signal]
+
+  self.onSetSignal:trigger(junkItem.signal)
 end
 
 function InventoryBag:mousepressed(x, y, button)
