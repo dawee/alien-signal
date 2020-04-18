@@ -16,6 +16,10 @@ function Module:new(name, slot, modules)
   end
 end
 
+function Module:clone()
+  return Module(self.name, self.slot, self.module)
+end
+
 function Module:updatePosition()
   self.position = {
     x = (self.slot.x - 1) * 128,

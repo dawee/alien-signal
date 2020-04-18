@@ -90,6 +90,10 @@ function InventoryBag.Slot:new(item, index, bag)
   self.countTransform:translate(item.position.x + 127, item.position.y + 127)
 end
 
+function InventoryBag.Slot:first()
+  return self.items[1]
+end
+
 function InventoryBag.Slot:initItemPosition(item)
   local col = (self.index - 1) % InventoryBag.ColsCount + 1
   local row = math.floor((self.index - 1) / InventoryBag.ColsCount)
@@ -157,7 +161,6 @@ function InventoryBag.Slot:draw()
   if self.movingItem then
     self.movingItem:draw()
   end
-  self.signalScreen.precision = self.signalScreen.precision * 4
 
   love.graphics.push()
   love.graphics.applyTransform(self.countTransform)
@@ -410,8 +413,34 @@ function InventoryBag:pop(itemToPop)
   self.inventory[storage] = newInventory
 end
 
-function InventoryBag:store(item)
-  for index, slot in pairs(self.slots.modules) do
+function InventoryBag:popByName(storage, name)
+  local pickedSlot = nil
+
+  for index, slot in pairs(self.slots[storage]) do
+    if slot.name == name then
+      pickedSlot = slot
+      break
+    end
+  end
+
+  return self:pop(pickedSlot:first())
+end
+
+function InventoryBag:store(storage, item)
+  local existInInventory = false
+
+  for index, other in pairs(self.inventory[storage]) do
+    if other == item then
+      existInInventory = true
+      break
+    end
+  end
+
+  if not existInInventory then
+    table.insert(self.inventory[storage], item)
+  end
+
+  for index, slot in pairs(self.slots[storage]) do
     if slot:add(item) then
       break
     end
@@ -466,11 +495,45 @@ function InventoryBag:checkCraftMousePressed(x, y)
   end
 end
 
+function InventoryBag:build()
+  local mod = self.craftables.build[self.craftableSelected.build]
+  local hasRequirements = true
+
+  for index, requirement in ipairs(mod.requirements) do
+    local count = self:countItems("junk", requirement[2].name)
+    local required = requirement[1]
+
+    if count < required then
+      hasRequirements = false
+      break
+    end
+  end
+
+  if hasRequirements then
+    for index, requirement in ipairs(mod.requirements) do
+      for n = 1, requirement[1], 1 do
+        self:popByName("junk", requirement[2].name)
+      end
+    end
+
+    self:store("modules", mod:clone())
+    self:prepareSlots()
+  end
+end
+
+function InventoryBag:setSignal()
+end
+
 function InventoryBag:mousepressed(x, y, button)
   if
     self.opened and InventoryBag.CraftIndexes[self.activeTab] and
       self.buttons[self.activeTab]:mousepressed(x, y, button)
    then
+    if self.activeTab == "build" then
+      self:build()
+    else
+      self:setSignal()
+    end
     return true
   elseif self:tabPressed(x, y, button, "modules") then
     self.activeTab = "modules"

@@ -113,7 +113,7 @@ function MachineScreen:new(...)
         props.item:updatePosition()
         self.inventoryBag:pop(props.item)
       else
-        self.inventoryBag:store(props.item)
+        self.inventoryBag:store("modules", props.item)
       end
     end
   )

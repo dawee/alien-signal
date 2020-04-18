@@ -28,7 +28,20 @@ local state = {
     }
   ),
   inventory = {
-    junk = {Junk.Headset(), Junk.LightBulb(), Junk.Headset()},
+    junk = {
+      Junk.Headset(),
+      Junk.LightBulb(),
+      Junk.Headset(),
+      Junk.MappleSirupCan(),
+      Junk.Headset(),
+      Junk.LightBulb(),
+      Junk.Headset(),
+      Junk.MappleSirupCan(),
+      Junk.Headset(),
+      Junk.LightBulb(),
+      Junk.Headset(),
+      Junk.MappleSirupCan()
+    },
     modules = {}
   },
   ready = false
