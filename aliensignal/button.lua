@@ -13,6 +13,7 @@ function Button:new(title, font, position, size, transform)
   self.innerWidth = self.size.width - 2 * Button.Border
   self.innerHeight = self.size.height - 2 * Button.Border - Button.Shadow
   self.transform = transform
+  self.enabled = true
 end
 
 function Button:mousepressed(localX, localY, button)
@@ -33,10 +34,16 @@ end
 
 function Button:draw()
   local offset = self.pressed and Button.Shadow or 0
+  local colors = {
+    shadow = self.enabled and Color.ButtonShadow or Color.ButtonDisabledShadow,
+    border = self.enabled and Color.ButtonBorder or Color.ButtonDisabledBorder,
+    background = self.enabled and Color.ButtonBackground or Color.ButtonDisabledBackground,
+    title = self.enabled and Color.ButtonTitle or Color.ButtonDisabledTitle
+  }
 
-  Color.ButtonShadow:use()
+  colors.shadow:use()
   love.graphics.rectangle("fill", self.position.x, self.position.y + offset, self.size.width, self.size.height - offset)
-  Color.ButtonBorder:use()
+  colors.border:use()
   love.graphics.rectangle(
     "fill",
     self.position.x + Button.Border,
@@ -44,7 +51,7 @@ function Button:draw()
     self.size.width - Button.Border * 2,
     self.size.height - Button.Border * 2 - Button.Shadow
   )
-  Color.ButtonBackground:use()
+  colors.background:use()
   love.graphics.rectangle(
     "fill",
     self.position.x + Button.Border * 2,
@@ -52,7 +59,7 @@ function Button:draw()
     self.size.width - Button.Border * 4,
     self.size.height - Button.Border * 4 - Button.Shadow
   )
-  Color.ButtonTitle:use()
+  colors.title:use()
 
   love.graphics.draw(
     self.text,

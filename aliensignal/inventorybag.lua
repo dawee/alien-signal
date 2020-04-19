@@ -343,9 +343,14 @@ function InventoryBag:prepareCraftables(tab)
     end
 
     if craftable.requirements then
+      self.buttons.build.enabled = true
       for index, requirement in ipairs(craftable.requirements) do
         local count = self:countItems("junk", requirement[2].name)
         local required = requirement[1]
+
+        if count + 1 < required then -- WEIRD
+          self.buttons.build.enabled = false
+        end
 
         if not requirement[2].initialDisplayableName then
           requirement[2].initialDisplayableName = requirement[2].displayableName
@@ -679,7 +684,7 @@ function InventoryBag:drawCraftPanel()
         end
       end
     end
-  end
+  end 
 
   self.buttons[self.activeTab]:draw()
 

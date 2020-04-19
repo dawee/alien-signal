@@ -35,6 +35,11 @@ Color.ButtonShadow = Color(102, 57, 49)
 Color.ButtonBorder = Color(238, 195, 154)
 Color.ButtonTitle = Color(255, 255, 255)
 
+Color.ButtonDisabledBackground = Color(132, 126, 135)
+Color.ButtonDisabledShadow = Color(89, 86, 82)
+Color.ButtonDisabledBorder = Color(155, 173, 183)
+Color.ButtonDisabledTitle = Color(155, 173, 183)
+
 Color.DescriptionEnlight = Color(172, 50, 50)
 Color.Description = Color(0, 0, 0)
 
