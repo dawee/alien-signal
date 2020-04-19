@@ -66,6 +66,18 @@ function MainScreen:new(...)
       y = 674,
       width = 50,
       height = 28
+    },
+    antenna = {
+      x = 95,
+      y = 350,
+      width = 85,
+      height = 95
+    },
+    antennaButton = {
+      x = 95,
+      y = 542,
+      width = 50,
+      height = 28
     }
   }
 
@@ -311,6 +323,52 @@ function MainScreen:pushSpacegunButtonAndSignalAnimation()
   return animation
 end
 
+function MainScreen:pushAntennaButtonAnimation(opts)
+  local animation = Animation.Wait(0.3)
+  local backToIdle = (opts == nil or opts.backToIdle == nil) and true or opts.backToIdle
+
+  animation.onStart:listenOnce(
+    function()
+      self.sprites.antenna:setTag("button")
+    end
+  )
+
+  if backToIdle then
+    animation.onComplete:listenOnce(
+      function()
+        self.sprites.antenna:setTag("idle")
+      end
+    )
+  end
+
+  return animation
+end
+
+function MainScreen:antennaSignalAnimation()
+  local animation = Animation.Wait(1.5)
+
+  animation.onStart:listenOnce(
+    function()
+      self.sprites.antenna:setTag("signal")
+    end
+  )
+
+  animation.onComplete:listenOnce(
+    function()
+      self.sprites.antenna:setTag("idle")
+    end
+  )
+
+  return animation
+end
+
+function MainScreen:pushAntennaButtonAndSignalAnimation()
+  local animation =
+    Animation.Series({self:pushAntennaButtonAnimation({backToIdle = false}), self:antennaSignalAnimation()})
+
+  return animation
+end
+
 function MainScreen:postWalkAction(x, y, button)
   if self:isInsideHitbox(x, y, self.hitboxes.spacegun) then
     self.navigator:push("machine", {inventory = self.inventory, modules = self.modules, output = "spacegun"})
@@ -340,6 +398,11 @@ function MainScreen:postWalkAction(x, y, button)
     end
 
     self.spacegunAnimation:start()
+  elseif self:isInsideHitbox(x, y, self.hitboxes.antenna) then
+    self.navigator:push("machine", {inventory = self.inventory, modules = self.modules, output = "antenna"})
+  elseif self:isInsideHitbox(x, y, self.hitboxes.antennaButton) then
+    self.antennaAnimation = self:pushAntennaButtonAndSignalAnimation()
+    self.antennaAnimation:start()
   end
 end
 
@@ -401,6 +464,10 @@ function MainScreen:update(dt)
 
   if self.spacegunAnimation then
     self.spacegunAnimation:update(dt)
+  end
+
+  if self.antennaAnimation then
+    self.antennaAnimation:update(dt)
   end
 
   if self.itemAnimation then

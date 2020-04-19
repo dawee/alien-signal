@@ -59,11 +59,28 @@ end
 function MachineScreen:new(...)
   Navigator.Screen.new(self, ...)
 
-  self.shader =
+  self.spaceGunShader =
     love.graphics.newShader(
     [[
     #define COLOR1 vec4(153 / 256.0, 229 / 256.0, 80 / 256.0, 1)
     #define COLOR2 vec4(205 / 256.0, 244 / 256.0, 102 / 256.0, 1)
+
+    uniform vec2 drag;
+
+    vec4 effect(vec4 color, Image tex, vec2 texture_coords, vec2 screen_coords)
+    {
+      vec2 coords = drag + screen_coords;
+
+      return mix(COLOR1, COLOR2, 1 - abs(mod(floor(coords.x / 128), 2) - mod(floor(coords.y / 128), 2)));
+    }
+  ]]
+  )
+
+  self.antennaShader =
+    love.graphics.newShader(
+    [[
+    #define COLOR1 vec4(99 / 256.0, 155 / 256.0, 255 / 256.0, 1)
+    #define COLOR2 vec4(95 / 256.0, 205 / 256.0, 208 / 256.0, 1)
 
     uniform vec2 drag;
 
@@ -175,6 +192,9 @@ function MachineScreen:open(props)
   self.modules = props.modules[props.output]
   self.outputType = props.output
   self.inventoryBag:fill(props.inventory)
+
+  -- select the shader depending on output type
+  self.shader = self.outputType == "spacegun" and self.spaceGunShader or self.antennaShader
 end
 
 function MachineScreen:addModule(slot, ModuleType, ...)
