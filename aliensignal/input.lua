@@ -5,6 +5,7 @@ return baton.new {
     save_hold = {"key:s"},
     save_trigger = {"key:l"},
     compare_hold = {"key:d"},
-    compare_trigger = {"key:m"}
+    compare_trigger = {"key:m"},
+    quit = {"key:escape"}
   }
 }

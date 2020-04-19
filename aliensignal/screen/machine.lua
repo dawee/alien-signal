@@ -179,10 +179,7 @@ function MachineScreen:computeWavePoint(i, y)
 end
 
 function MachineScreen:open(props)
-  self:addModule({x = 1, y = 4}, Generator)
-  self:addModule({x = 2, y = 3}, Sampler)
-  self:addModule({x = 6, y = 4}, Output, props.output)
-
+  self.modules = props.modules[props.output]
   self.inventoryBag:fill(props.inventory)
 end
 
@@ -201,6 +198,10 @@ end
 function MachineScreen:update(dt)
   if input:down("compare_hold") and input:pressed("compare_trigger") then
     self:matchMainSignal()
+  end
+
+  if input:pressed("quit") then
+    self.navigator:pop()
   end
 
   for x, module_col in pairs(self.modules) do

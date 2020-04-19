@@ -67,6 +67,7 @@ end
 
 function MainScreen:open(props)
   self.inventory = props.inventory
+  self.modules = props.modules
 end
 
 function MainScreen:isInsideHitbox(x, y, hitbox)
@@ -142,7 +143,7 @@ function MainScreen:mousepressed(x, y, button)
   self.animation.onComplete:listenOnce(
     function()
       if self:isInsideHitbox(x, y, self.hitboxes.spacegun) then
-        self.navigator:navigate("machine", {inventory = self.inventory, output = "spacegun"})
+        self.navigator:push("machine", {inventory = self.inventory, modules = self.modules, output = "spacegun"})
       end
     end
   )
