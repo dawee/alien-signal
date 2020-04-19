@@ -64,7 +64,6 @@ function InventoryBag.SignalScreen:new(inventoryBag, ...)
   SignalScreen.new(self, ...)
 
   self.inventoryBag = inventoryBag
-  -- self.precision = self.precision * 4
   self.show = {
     guides = false,
     mainSignal = false

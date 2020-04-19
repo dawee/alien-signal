@@ -102,43 +102,49 @@ function SignalScreen:update(dt)
     target = 0
   }
 
+  local lastX = 0
+
   for time = 0, SignalScreen.Wave.Duration, self.precision do
-    local signalAtTime = {
-      main = self:computeSignalAtTime(time, "main"),
-      target = self:computeSignalAtTime(time, "target")
-    }
+    if not (self:computeXForTime(time) == lastX) then
+      local signalAtTime = {
+        main = self:computeSignalAtTime(time, "main"),
+        target = self:computeSignalAtTime(time, "target")
+      }
 
-    if self.show.mainSignal and not (signalAtTime.main == nil) then
-      self:insertPointsAtTime(time, "main", signalAtTime.main, lastSignalAtTime.main)
+      if self.show.mainSignal and not (signalAtTime.main == nil) then
+        self:insertPointsAtTime(time, "main", signalAtTime.main, lastSignalAtTime.main)
 
-      if self.saveWave then
-        self.wave =
-          self.wave ..
-          "\n  [" ..
-            tostring(math.floor(time * SignalScreen.Wave.ExportTimeCoef)) ..
-              "] = " .. tostring(signalAtTime.main) .. ","
+        if self.saveWave then
+          self.wave =
+            self.wave ..
+            "\n  [" ..
+              tostring(math.floor(time * SignalScreen.Wave.ExportTimeCoef)) ..
+                "] = " .. tostring(signalAtTime.main) .. ","
+        end
+
+        lastSignalAtTime.main = signalAtTime.main
       end
 
-      lastSignalAtTime.main = signalAtTime.main
-    end
+      if not (signalAtTime.target == nil) then
+        self:insertPointsAtTime(time, "target", signalAtTime.target, lastSignalAtTime.target)
+        lastSignalAtTime.target = signalAtTime.target
+      end
 
-    if not (signalAtTime.target == nil) then
-      self:insertPointsAtTime(time, "target", signalAtTime.target, lastSignalAtTime.target)
-      lastSignalAtTime.target = signalAtTime.target
-    end
+      if self.show.guides and time % SignalScreen.Wave.GuidePeriod <= self.precision then
+        local x = self:computeXForTime(time)
 
-    if self.show.guides and time % SignalScreen.Wave.GuidePeriod <= self.precision then
-      local x = self:computeXForTime(time)
+        table.insert(
+          self.guides,
+          {
+            x,
+            self.waveZeroY - math.floor(SignalScreen.Wave.GuideHeight * self.scale / 2),
+            x,
+            self.waveZeroY + math.floor(SignalScreen.Wave.GuideHeight * self.scale / 2)
+          }
+        )
+      end
 
-      table.insert(
-        self.guides,
-        {
-          x,
-          self.waveZeroY - math.floor(SignalScreen.Wave.GuideHeight * self.scale / 2),
-          x,
-          self.waveZeroY + math.floor(SignalScreen.Wave.GuideHeight * self.scale / 2)
-        }
-      )
+      lastX = self:computeXForTime(time)
     end
   end
 
