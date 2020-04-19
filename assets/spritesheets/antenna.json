@@ -6,7 +6,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
     "sourceSize": { "w": 112, "h": 141 },
-    "duration": 100
+    "duration": 10000
    },
    {
     "filename": "antenna 1.aseprite",
@@ -24,38 +24,38 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
     "sourceSize": { "w": 112, "h": 141 },
-    "duration": 150
+    "duration": 200
    },
    {
     "filename": "antenna 3.aseprite",
+    "frame": { "x": 112, "y": 0, "w": 112, "h": 141 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
+    "sourceSize": { "w": 112, "h": 141 },
+    "duration": 200
+   },
+   {
+    "filename": "antenna 4.aseprite",
+    "frame": { "x": 224, "y": 0, "w": 112, "h": 141 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
+    "sourceSize": { "w": 112, "h": 141 },
+    "duration": 200
+   },
+   {
+    "filename": "antenna 5.aseprite",
     "frame": { "x": 0, "y": 141, "w": 112, "h": 141 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
     "sourceSize": { "w": 112, "h": 141 },
-    "duration": 150
-   },
-   {
-    "filename": "antenna 4.aseprite",
-    "frame": { "x": 112, "y": 141, "w": 112, "h": 141 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
-    "sourceSize": { "w": 112, "h": 141 },
-    "duration": 150
-   },
-   {
-    "filename": "antenna 5.aseprite",
-    "frame": { "x": 224, "y": 141, "w": 112, "h": 141 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
-    "sourceSize": { "w": 112, "h": 141 },
-    "duration": 150
+    "duration": 200
    },
    {
     "filename": "antenna 6.aseprite",
-    "frame": { "x": 0, "y": 282, "w": 112, "h": 141 },
+    "frame": { "x": 112, "y": 141, "w": 112, "h": 141 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
@@ -64,33 +64,6 @@
    },
    {
     "filename": "antenna 7.aseprite",
-    "frame": { "x": 224, "y": 0, "w": 112, "h": 141 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
-    "sourceSize": { "w": 112, "h": 141 },
-    "duration": 150
-   },
-   {
-    "filename": "antenna 8.aseprite",
-    "frame": { "x": 0, "y": 141, "w": 112, "h": 141 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
-    "sourceSize": { "w": 112, "h": 141 },
-    "duration": 150
-   },
-   {
-    "filename": "antenna 9.aseprite",
-    "frame": { "x": 112, "y": 141, "w": 112, "h": 141 },
-    "rotated": false,
-    "trimmed": false,
-    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
-    "sourceSize": { "w": 112, "h": 141 },
-    "duration": 150
-   },
-   {
-    "filename": "antenna 10.aseprite",
     "frame": { "x": 224, "y": 141, "w": 112, "h": 141 },
     "rotated": false,
     "trimmed": false,
@@ -99,8 +72,71 @@
     "duration": 150
    },
    {
-    "filename": "antenna 11.aseprite",
+    "filename": "antenna 8.aseprite",
     "frame": { "x": 0, "y": 282, "w": 112, "h": 141 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
+    "sourceSize": { "w": 112, "h": 141 },
+    "duration": 150
+   },
+   {
+    "filename": "antenna 9.aseprite",
+    "frame": { "x": 112, "y": 282, "w": 112, "h": 141 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
+    "sourceSize": { "w": 112, "h": 141 },
+    "duration": 150
+   },
+   {
+    "filename": "antenna 10.aseprite",
+    "frame": { "x": 224, "y": 282, "w": 112, "h": 141 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
+    "sourceSize": { "w": 112, "h": 141 },
+    "duration": 150
+   },
+   {
+    "filename": "antenna 11.aseprite",
+    "frame": { "x": 112, "y": 141, "w": 112, "h": 141 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
+    "sourceSize": { "w": 112, "h": 141 },
+    "duration": 150
+   },
+   {
+    "filename": "antenna 12.aseprite",
+    "frame": { "x": 224, "y": 141, "w": 112, "h": 141 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
+    "sourceSize": { "w": 112, "h": 141 },
+    "duration": 150
+   },
+   {
+    "filename": "antenna 13.aseprite",
+    "frame": { "x": 0, "y": 282, "w": 112, "h": 141 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
+    "sourceSize": { "w": 112, "h": 141 },
+    "duration": 150
+   },
+   {
+    "filename": "antenna 14.aseprite",
+    "frame": { "x": 112, "y": 282, "w": 112, "h": 141 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
+    "sourceSize": { "w": 112, "h": 141 },
+    "duration": 150
+   },
+   {
+    "filename": "antenna 15.aseprite",
+    "frame": { "x": 224, "y": 282, "w": 112, "h": 141 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 112, "h": 141 },
@@ -110,19 +146,20 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.16.3-x64",
+  "version": "1.2.16.3",
   "image": "antenna.png",
   "format": "RGBA8888",
   "size": { "w": 336, "h": 423 },
   "scale": "1",
   "frameTags": [
-   { "name": "idle", "from": 0, "to": 0, "direction": "forward" },
-   { "name": "button", "from": 1, "to": 1, "direction": "forward" },
-   { "name": "signal", "from": 2, "to": 10, "direction": "forward" }
+   { "name": "idle", "from": 0, "to": 4, "direction": "forward" },
+   { "name": "button", "from": 5, "to": 5, "direction": "forward" },
+   { "name": "signal", "from": 6, "to": 14, "direction": "forward" }
   ],
   "layers": [
    { "name": "antenna", "opacity": 255, "blendMode": "normal" },
-   { "name": "rings", "opacity": 255, "blendMode": "normal" }
+   { "name": "rings", "opacity": 255, "blendMode": "normal" },
+   { "name": "clickable_hint", "opacity": 131, "blendMode": "normal" }
   ],
   "slices": [
   ]

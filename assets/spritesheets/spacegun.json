@@ -6,7 +6,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 96, "h": 55 },
     "sourceSize": { "w": 96, "h": 55 },
-    "duration": 100
+    "duration": 10000
    },
    {
     "filename": "spacegun 1.aseprite",
@@ -15,7 +15,7 @@
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 96, "h": 55 },
     "sourceSize": { "w": 96, "h": 55 },
-    "duration": 100
+    "duration": 200
    },
    {
     "filename": "spacegun 2.aseprite",
@@ -28,7 +28,7 @@
    },
    {
     "filename": "spacegun 3.aseprite",
-    "frame": { "x": 0, "y": 55, "w": 96, "h": 55 },
+    "frame": { "x": 96, "y": 0, "w": 96, "h": 55 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 96, "h": 55 },
@@ -37,7 +37,43 @@
    },
    {
     "filename": "spacegun 4.aseprite",
+    "frame": { "x": 192, "y": 0, "w": 96, "h": 55 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 96, "h": 55 },
+    "sourceSize": { "w": 96, "h": 55 },
+    "duration": 200
+   },
+   {
+    "filename": "spacegun 5.aseprite",
+    "frame": { "x": 0, "y": 55, "w": 96, "h": 55 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 96, "h": 55 },
+    "sourceSize": { "w": 96, "h": 55 },
+    "duration": 100
+   },
+   {
+    "filename": "spacegun 6.aseprite",
     "frame": { "x": 96, "y": 55, "w": 96, "h": 55 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 96, "h": 55 },
+    "sourceSize": { "w": 96, "h": 55 },
+    "duration": 200
+   },
+   {
+    "filename": "spacegun 7.aseprite",
+    "frame": { "x": 192, "y": 55, "w": 96, "h": 55 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 96, "h": 55 },
+    "sourceSize": { "w": 96, "h": 55 },
+    "duration": 200
+   },
+   {
+    "filename": "spacegun 8.aseprite",
+    "frame": { "x": 0, "y": 110, "w": 96, "h": 55 },
     "rotated": false,
     "trimmed": false,
     "spriteSourceSize": { "x": 0, "y": 0, "w": 96, "h": 55 },
@@ -47,19 +83,20 @@
  ],
  "meta": {
   "app": "http://www.aseprite.org/",
-  "version": "1.2.16.3-x64",
+  "version": "1.2.16.3",
   "image": "spacegun.png",
   "format": "RGBA8888",
-  "size": { "w": 288, "h": 110 },
+  "size": { "w": 288, "h": 165 },
   "scale": "1",
   "frameTags": [
-   { "name": "idle", "from": 0, "to": 0, "direction": "forward" },
-   { "name": "button", "from": 1, "to": 1, "direction": "forward" },
-   { "name": "signal", "from": 2, "to": 4, "direction": "forward" }
+   { "name": "idle", "from": 0, "to": 4, "direction": "forward" },
+   { "name": "button", "from": 5, "to": 5, "direction": "forward" },
+   { "name": "signal", "from": 6, "to": 8, "direction": "forward" }
   ],
   "layers": [
    { "name": "spacegun", "opacity": 255, "blendMode": "normal" },
-   { "name": "laser", "opacity": 255, "blendMode": "normal" }
+   { "name": "laser", "opacity": 255, "blendMode": "normal" },
+   { "name": "clickable_hint", "opacity": 131, "blendMode": "normal" }
   ],
   "slices": [
   ]
