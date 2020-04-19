@@ -39,14 +39,17 @@ function MainScreen:new(...)
       x = 64,
       y = 48
     },
-    foxen = self.walkPoints[2],
+    foxen = {
+      x = -150,
+      y = 496
+    },
     spacegun = {
       x = 480,
       y = 540
     },
     title = {
       x = 130,
-      y = 65
+      y = -100
     }
   }
 
@@ -65,7 +68,8 @@ function MainScreen:new(...)
     }
   }
 
-  self.titleAlpha = {alpha = 1}
+  self.titleAlpha = {alpha = 0}
+  self.sceneAlpha = {alpha = 0}
 
   self.sprites = {
     antenna = peachy.new(bank.antenna.spritesheet, bank.antenna.image, "idle"),
@@ -76,7 +80,35 @@ function MainScreen:new(...)
   self.direction = 1
   self.font = love.graphics.newFont("assets/fonts/emulogic.ttf", 20)
   self.creditsText = love.graphics.newText(self.font, "@le_dawee and @RikkuShimizu present")
+  self.introCinematic = true
   self.showTitle = true
+
+  self.introFoxenAnimation = Animation.Tween(2, self.positions.foxen, self.walkPoints[2])
+  self.introFoxenAnimation.onStart:listenOnce(
+    function()
+      self.sprites.foxen:setTag("walk")
+    end
+  )
+  self.introFoxenAnimation.onComplete:listenOnce(
+    function()
+      self.sprites.foxen:setTag("idle")
+    end
+  )
+
+  self.introSceneAnimation = Animation.Series({
+    Animation.Parallel({
+      Animation.Tween(1, self.positions.title, {x = 130, y = 65}),
+      Animation.Tween(1, self.titleAlpha, {alpha = 1})
+    }),
+    Animation.Tween(1, self.sceneAlpha, {alpha = 1}),
+    self.introFoxenAnimation
+  })
+  self.introSceneAnimation.onComplete:listenOnce(
+    function()
+      self.introCinematic = false
+    end
+  )
+  self.introSceneAnimation:start()
 end
 
 function MainScreen:open(props)
@@ -207,7 +239,21 @@ function MainScreen:postWalkAction(x, y, button)
   end
 end
 
+function MainScreen:updateIntroCinematic(dt)
+  if not (self.introCinematic) then
+    return
+  end
+
+  if self.introSceneAnimation then
+    self.introSceneAnimation:update(dt)
+  end
+end
+
 function MainScreen:mousepressed(x, y, button)
+  if self.introCinematic then
+    return
+  end
+
   if self.showTitle then
     self.showTitle = false
     self.titleAnimation =
@@ -235,6 +281,8 @@ function MainScreen:resume(props)
 end
 
 function MainScreen:update(dt)
+  self:updateIntroCinematic(dt)
+
   for name, sprite in pairs(self.sprites) do
     sprite:update(dt)
   end
@@ -257,7 +305,11 @@ function MainScreen:update(dt)
 end
 
 function MainScreen:draw()
+  if self.introSceneAnimation then
+    color.White:use(self.sceneAlpha.alpha)
+  end
   love.graphics.draw(self.background, 0, 0, 0, 4, 4)
+  color.White:use()
 
   color.White:use(self.titleAlpha.alpha)
   love.graphics.draw(self.title, self.positions.title.x, self.positions.title.y, 0, 4, 4)
@@ -267,6 +319,10 @@ function MainScreen:draw()
   love.graphics.draw(self.creditsText, self.positions.title.x + 30, self.positions.title.y)
   color.White:use()
 
+  if self.introSceneAnimation then
+    color.White:use(self.sceneAlpha.alpha)
+  end
+
   for index, name in pairs({"antenna", "spacegun"}) do
     self.sprites[name]:draw(self.positions[name].x, self.positions[name].y, 0, 4, 4)
   end
@@ -274,6 +330,8 @@ function MainScreen:draw()
   local offset = self.direction == -1 and self.sprites.foxen:getWidth() * 4 or 0
 
   self.sprites.foxen:draw(self.positions.foxen.x + offset, self.positions.foxen.y, 0, self.direction * 4, 4)
+
+  color.White:use()
 
   if self.attractedJunk then
     self.attractedJunk:draw()
