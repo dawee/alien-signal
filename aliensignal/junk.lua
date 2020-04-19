@@ -33,7 +33,16 @@ function Junk:draw()
 
   if not (self.visible == false) then
     love.graphics.setColor(1, 1, 1, self.alpha)
-    self.sprite:draw(self.position.x, self.position.y, self.rotation, self.scale, self.scale)
+    self.sprite:draw(
+      self.position.x - self.sprite:getWidth() / 2,
+      self.position.y - self.sprite:getHeight() / 2,
+      self.rotation,
+      self.scale,
+      self.scale,
+      self.sprite:getWidth() / 2,
+      self.sprite:getHeight() / 2
+    )
+
     love.graphics.setColor(1, 1, 1, 1)
   end
 end

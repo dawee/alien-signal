@@ -15,8 +15,8 @@ function MainScreen:new(...)
   self.title = bank.title
 
   self.attractedItemPositions = {
-    {x = 870, y = 580},
-    {x = 650, y = 700}
+    {x = 870, y = 620},
+    {x = 665, y = 715}
   }
 
   self.walkPoints = {
@@ -191,7 +191,14 @@ function MainScreen:pushSpacegunButtonAnimation(opts)
 end
 
 function MainScreen:spacegunSignalAnimation()
-  local animation = Animation.Wait(0.8)
+  local signalAnimation = Animation.Wait(0.8)
+  local animation =
+    Animation.Parallel(
+    {
+      signalAnimation,
+      self:junkAttractionAnimation()
+    }
+  )
 
   animation.onStart:listenOnce(
     function()
@@ -199,7 +206,7 @@ function MainScreen:spacegunSignalAnimation()
     end
   )
 
-  animation.onComplete:listenOnce(
+  signalAnimation.onComplete:listenOnce(
     function()
       self.sprites.spacegun:setTag("idle")
     end
@@ -209,15 +216,52 @@ function MainScreen:spacegunSignalAnimation()
 end
 
 function MainScreen:junkAttractionAnimation()
-  local animation =
+  local shake =
     Animation.Loop(
     Animation.Series(
       {
-        Animation.Tween(0.1, self.attractedJunk, {rotation = math.pi / 4}),
-        Animation.Tween(0.1, self.attractedJunk, {rotation = -math.pi / 4})
+        Animation.Tween(0.05, self.attractedJunk, {rotation = math.pi / 4}),
+        Animation.Tween(0.05, self.attractedJunk, {rotation = -math.pi / 4})
       }
     ),
-    10
+    150
+  )
+
+  local shakeAndGrow =
+    Animation.Parallel(
+    {
+      shake,
+      Animation.Tween(2, self.attractedJunk, {scale = 1})
+    }
+  )
+
+  local fall =
+    Animation.Parallel(
+    {
+      Animation.Tween(
+        0.3,
+        self.attractedJunk.position,
+        {
+          x = self.attractedItemPositions[2].x
+        },
+        "linear"
+      ),
+      Animation.Tween(
+        0.3,
+        self.attractedJunk.position,
+        {
+          y = self.attractedItemPositions[2].y
+        },
+        "inBack"
+      )
+    }
+  )
+
+  return Animation.Series(
+    {
+      shakeAndGrow,
+      fall
+    }
   )
 end
 
@@ -232,6 +276,15 @@ function MainScreen:postWalkAction(x, y, button)
   if self:isInsideHitbox(x, y, self.hitboxes.spacegun) then
     self.navigator:push("machine", {inventory = self.inventory, modules = self.modules, output = "spacegun"})
   elseif self:isInsideHitbox(x, y, self.hitboxes.spacegunButton) then
+    if self.junkToAttract then
+      self.attractedJunk = self.junkToAttract:clone()
+      self.attractedJunk.scale = 0.1
+      self.attractedJunk.position = {
+        x = self.attractedItemPositions[1].x,
+        y = self.attractedItemPositions[1].y
+      }
+    end
+
     self.spacegunAnimation =
       self.junkToAttract and self:pushSpacegunButtonAndSignalAnimation() or self:pushSpacegunButtonAnimation()
 
@@ -297,6 +350,10 @@ function MainScreen:update(dt)
 
   if self.spacegunAnimation then
     self.spacegunAnimation:update(dt)
+  end
+
+  if self.itemAnimation then
+    self.itemAnimation:update(dt)
   end
 
   if self.attractedJunk then

@@ -178,7 +178,7 @@ function Animation.Loop:new(child, stepsCount)
   Animation.new(self)
 
   self.stepsCount = stepsCount
-  self.step = 0
+  self.stepIndex = 0
   self.child = child
   self.unsubscribeToChild =
     self.child.onComplete:subscribe(
@@ -208,9 +208,9 @@ function Animation.Loop:reset()
 end
 
 function Animation.Loop:step(dt)
-  self.step = self.step + 1
+  self.stepIndex = self.stepIndex + 1
   self.child:update(dt)
-  return self.stepsCount == nil and false or self.step >= self.stepsCount
+  return self.stepsCount == nil and false or self.stepIndex >= self.stepsCount
 end
 
 Animation.Wait = Animation:extend()
