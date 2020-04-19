@@ -11,7 +11,7 @@ local Output = require("aliensignal.module.output")
 
 local Junk = require("aliensignal.junk")
 
-local DEBUG = false
+local DEBUG = true
 
 local state = {
   navigator = Navigator(

@@ -242,18 +242,18 @@ function InventoryBag:new(navigator)
       UpRightShoulder()
     },
     signal = {
-      Junk.MapleSyrupCan(),
-      Junk.SonicScrewdriver(),
-      Junk.LightBulb(),
-      Junk.Shield(),
-      Junk.GameBoy(),
-      Junk.Trophy(),
-      Junk.Battery(),
       Junk.Fork(),
       Junk.Coin(),
-      Junk.Microphone(),
+      Junk.Battery(),
+      Junk.LightBulb(),
+      Junk.Trophy(),
       Junk.Boombox(),
-      Junk.FloppyDisk()
+      Junk.Microphone(),
+      Junk.GameBoy(),
+      Junk.FloppyDisk(),
+      Junk.MapleSyrupCan(),
+      Junk.Shield(),
+      Junk.SonicScrewdriver()
     }
   }
 
@@ -546,10 +546,13 @@ function InventoryBag:build()
       y = self.buttons.build.position.y - 20,
       alpha = 1
     }
-    self.builtTextAnimation = Animation.Series({
-      Animation.Tween(0.3, self.builtTextProperties, { y = self.buttons.build.position.y - 50 }),
-      Animation.Tween(0.3, self.builtTextProperties, { alpha = 0 })
-    })
+    self.builtTextAnimation =
+      Animation.Series(
+      {
+        Animation.Tween(0.3, self.builtTextProperties, {y = self.buttons.build.position.y - 50}),
+        Animation.Tween(0.3, self.builtTextProperties, {alpha = 0})
+      }
+    )
     self.builtTextAnimation.onComplete:listenOnce(
       function()
         self.builtTextProperties.alpha = 0

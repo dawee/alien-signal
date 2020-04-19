@@ -12,7 +12,10 @@ local waves = {
   d4square = require("aliensignal.wave.d4square"),
   length3gate = require("aliensignal.wave.length3gate"),
   length6gate = require("aliensignal.wave.length6gate"),
-  s4_1_2_2 = require("aliensignal.wave.s4_1_2_2")
+  s4_1_2_2 = require("aliensignal.wave.s4_1_2_2"),
+  firsthalfx2 = require("aliensignal.wave.firsthalfx2"),
+  delayedfirsthalfx2 = require("aliensignal.wave.delayedfirsthalfx2"),
+  downbeforeend = require("aliensignal.wave.downbeforeend")
 }
 
 local Junk = Craftable:extend()
@@ -67,7 +70,7 @@ Junk.MapleSyrupCan = Junk:extend()
 function Junk.MapleSyrupCan:new(...)
   Junk.new(self, "maple_can", ...)
   self.displayableName = "Maple Syrup Can"
-  self.signal = waves.empty
+  self.signal = waves.firsthalfx2
 end
 
 Junk.SonicScrewdriver = Junk:extend()
@@ -75,7 +78,7 @@ Junk.SonicScrewdriver = Junk:extend()
 function Junk.SonicScrewdriver:new(...)
   Junk.new(self, "sonic_screwdriver", ...)
   self.displayableName = "Sonic Screwdriver"
-  self.signal = waves.empty
+  self.signal = waves.downbeforeend
 end
 
 Junk.LightBulb = Junk:extend()
@@ -91,7 +94,7 @@ Junk.Shield = Junk:extend()
 function Junk.Shield:new(...)
   Junk.new(self, "shield", ...)
   self.displayableName = "Shield"
-  self.signal = waves.empty
+  self.signal = waves.delayedfirsthalfx2
 end
 
 Junk.GameBoy = Junk:extend()
