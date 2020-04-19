@@ -9,9 +9,9 @@ function Coupler:new(slot, modules)
   self.displayableName = "Coupler"
   self.description = "Use this device when you want to diffuse your signal to 2 differents modules."
   self.requirements = {
-    {3, Junk.Shield()},
-    {1, Junk.LightBulb()},
-    {1, Junk.MapleSyrupCan()}
+    {2, Junk.Fork()},
+    {1, Junk.Coin()},
+    {1, Junk.Battery()}
   }
 end
 

@@ -9,7 +9,7 @@ function Booster:new(slot, modules)
   self.displayableName = "Booster"
   self.description = "This module multiplies the frequency of the signal by 2."
   self.requirements = {
-    {4, Junk.Coin()}
+    {2, Junk.Coin()}
   }
 end
 

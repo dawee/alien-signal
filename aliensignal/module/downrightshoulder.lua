@@ -10,7 +10,7 @@ function DownRightShoulder:new(slot, modules)
   self.description =
     "Shoulders are wires that allows the current to take a turn in the circuit. This one can connect its downer module to its right one."
   self.requirements = {
-    {4, Junk.Fork()}
+    {2, Junk.Fork()}
   }
 end
 

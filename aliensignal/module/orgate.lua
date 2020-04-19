@@ -9,9 +9,9 @@ function OrGate:new(slot, modules)
   self.displayableName = "OR Gate"
   self.description = "This gate will only return 1 if at least one of left input or right output equals 1"
   self.requirements = {
-    {3, Junk.Shield()},
-    {1, Junk.LightBulb()},
-    {1, Junk.MapleSyrupCan()}
+    {1, Junk.Coin()},
+    {1, Junk.Battery()},
+    {1, Junk.Trophy()}
   }
 end
 

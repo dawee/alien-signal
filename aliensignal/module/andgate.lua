@@ -10,9 +10,9 @@ function AndGate:new(slot, modules)
   self.displayableName = "AND Gate"
   self.description = "This gate will only return 1 if both left input and right output equals 1"
   self.requirements = {
+    {1, Junk.Coin()},
     {1, Junk.LightBulb()},
-    {3, Junk.Shield()},
-    {1, Junk.MapleSyrupCan()}
+    {1, Junk.Boombox()}
   }
 end
 

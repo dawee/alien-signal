@@ -5,7 +5,13 @@ local Craftable = require("aliensignal.craftable")
 local waves = {
   empty = {},
   sine = require("aliensignal.wave.sine"),
-  square = require("aliensignal.wave.square")
+  square = require("aliensignal.wave.square"),
+  x2square = require("aliensignal.wave.x2square"),
+  x4square = require("aliensignal.wave.x4square"),
+  d2square = require("aliensignal.wave.d2square"),
+  d4square = require("aliensignal.wave.d4square"),
+  length3gate = require("aliensignal.wave.length3gate"),
+  length6gate = require("aliensignal.wave.length6gate")
 }
 
 local Junk = Craftable:extend()
@@ -75,7 +81,7 @@ Junk.LightBulb = Junk:extend()
 function Junk.LightBulb:new(...)
   Junk.new(self, "light_bulb", ...)
   self.displayableName = "Light Bulb"
-  self.signal = waves.empty
+  self.signal = waves.x4square
 end
 
 Junk.Shield = Junk:extend()
@@ -91,7 +97,7 @@ Junk.GameBoy = Junk:extend()
 function Junk.GameBoy:new(...)
   Junk.new(self, "game_boy", ...)
   self.displayableName = "GameBoy"
-  self.signal = waves.empty
+  self.signal = waves.length6gate
 end
 
 Junk.Trophy = Junk:extend()
@@ -99,7 +105,7 @@ Junk.Trophy = Junk:extend()
 function Junk.Trophy:new(...)
   Junk.new(self, "trophy", ...)
   self.displayableName = "Trophy"
-  self.signal = waves.empty
+  self.signal = waves.d2square
 end
 
 Junk.Battery = Junk:extend()
@@ -107,7 +113,7 @@ Junk.Battery = Junk:extend()
 function Junk.Battery:new(...)
   Junk.new(self, "battery", ...)
   self.displayableName = "Battery"
-  self.signal = waves.empty
+  self.signal = waves.x2square
 end
 
 Junk.Fork = Junk:extend()
@@ -131,7 +137,7 @@ Junk.Microphone = Junk:extend()
 function Junk.Microphone:new(...)
   Junk.new(self, "microphone", ...)
   self.displayableName = "Microphone"
-  self.signal = waves.empty
+  self.signal = waves.length3gate
 end
 
 Junk.Boombox = Junk:extend()
@@ -139,7 +145,7 @@ Junk.Boombox = Junk:extend()
 function Junk.Boombox:new(...)
   Junk.new(self, "boombox", ...)
   self.displayableName = "Boombox"
-  self.signal = waves.empty
+  self.signal = waves.d4square
 end
 
 Junk.FloppyDisk = Junk:extend()
