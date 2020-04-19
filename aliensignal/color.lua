@@ -9,8 +9,8 @@ function Color:new(r, g, b, a)
   self.a = a or 1
 end
 
-function Color:use()
-  love.graphics.setColor(self.r / 256, self.g / 256, self.b / 256, self.a)
+function Color:use(alpha)
+  love.graphics.setColor(self.r / 256, self.g / 256, self.b / 256, alpha == nil and self.a or alpha)
 end
 
 Color.Text = Object:extend()
@@ -52,5 +52,7 @@ Color.Guide = Color(255, 255, 255, 0.2)
 Color.TargetSignal = Color(255, 64, 64, 0.8)
 Color.Signal = Color(106, 190, 48)
 Color.InventoryBorder = Color(143, 86, 59)
+
+Color.CreditsText = Color(118, 66, 138)
 
 return Color

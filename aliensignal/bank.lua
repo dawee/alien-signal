@@ -12,7 +12,8 @@ local spritesheets = {
 }
 
 local spec = {
-  background = Bank.Asset.Image("assets/images/background.png")
+  background = Bank.Asset.Image("assets/images/background.png"),
+  title = Bank.Asset.Image("assets/images/title.png")
 }
 
 for index, name in ipairs(spritesheets) do
