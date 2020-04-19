@@ -16,6 +16,8 @@ function MainScreen:new(...)
   self.background = bank.background
   self.title = bank.title
 
+  self.antennaSignal = {}
+
   self.attractedItemPositions = {
     {x = 870, y = 620},
     {x = 665, y = 730},
@@ -483,6 +485,12 @@ end
 
 function MainScreen:resume(props)
   self.junkToAttract = props.junk
+
+  if props.output == "antenna" then
+    self.antennaSignal = props.signal
+
+    print("antenna has any signal to send:", self.antennaSignal.flat == false)
+  end
 end
 
 function MainScreen:update(dt)

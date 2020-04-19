@@ -10,6 +10,10 @@ local Navigator = require("navigator")
 local Output = require("aliensignal.module.output")
 local SignalScreen = require("aliensignal.signalscreen")
 
+local waves = {
+  flat = require("aliensignal.wave.flat")
+}
+
 local MachineScreen = Navigator.Screen:extend()
 
 MachineScreen.Size = 20
@@ -140,14 +144,18 @@ function MachineScreen:new(...)
     MachineScreen.Wave.LeftPadding * 2 + MachineScreen.Wave.Length
   )
 
-  self.doneButton = Button("DONE", InventoryBag.Font, {x = 1024 - 90 - 15, y = 12}, {width = 90, height = 60}, love.math.newTransform())
+  self.doneButton =
+    Button("DONE", InventoryBag.Font, {x = 1024 - 90 - 15, y = 12}, {width = 90, height = 60}, love.math.newTransform())
 end
 
 function MachineScreen:compareSignals(signal1, signal2)
   local result = true
 
   for time, value in pairs(signal1) do
-    if not (type(signal2) == "table") or signal2[time] == nil or math.abs(signal2[time] - value) > self.signalScreen.precision then
+    if
+      not (type(signal2) == "table") or signal2[time] == nil or
+        math.abs(signal2[time] - value) > self.signalScreen.precision
+     then
       result = false
       break
     end
@@ -212,10 +220,19 @@ function MachineScreen:computeTime(i)
   return i * MachineScreen.Wave.Duration / (MachineScreen.Wave.Length + MachineScreen.Wave.LeftPadding)
 end
 
-function MachineScreen:quit() 
+function MachineScreen:quit()
   local junk = self.outputType == "spacegun" and self:matchMainSignal() or nil
+  local currentSignal = self.signalScreen:exportMainSignal()
 
-  self.navigator:pop({junk = junk and junk:clone()})
+  self.navigator:pop(
+    {
+      output = self.outputType,
+      junk = junk and junk:clone(),
+      signal = {
+        flat = self:compareSignals(currentSignal, waves.flat)
+      }
+    }
+  )
 end
 
 function MachineScreen:update(dt)
