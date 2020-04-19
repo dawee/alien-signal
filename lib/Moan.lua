@@ -364,10 +364,10 @@ function Moan.draw()
     love.graphics.setFont(Moan.font)
 
     -- Message title
-    love.graphics.setColor(boxColour)
-    love.graphics.rectangle("fill", titleBoxX, titleBoxY, titleBoxW, titleBoxH)
-    love.graphics.setColor(titleColor)
-    love.graphics.print(Moan.currentTitle, titleX, titleY)
+    -- love.graphics.setColor(boxColour)
+    -- love.graphics.rectangle("fill", titleBoxX, titleBoxY, titleBoxW, titleBoxH)
+    -- love.graphics.setColor(titleColor)
+    -- love.graphics.print(Moan.currentTitle, titleX, titleY)
 
     -- Main message box
     love.graphics.setColor(boxColour)

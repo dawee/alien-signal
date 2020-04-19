@@ -73,7 +73,7 @@ function MainScreen:new(...)
       x = 95,
       y = 350,
       width = 85,
-      height = 95
+      height = 187
     },
     antennaButton = {
       x = 95,
@@ -400,17 +400,19 @@ function MainScreen:postWalkAction(x, y, button)
     self.spacegunAnimation =
       self.junkToAttract and self:pushSpacegunButtonAndSignalAnimation() or self:pushSpacegunButtonAnimation()
 
-    if self.junkToAttract then
-      self.spacegunAnimation.onComplete:listenOnce(
-        function()
+    self.spacegunAnimation.onComplete:listenOnce(
+      function()
+        if self.junkToAttract then
           table.insert(self.inventory.junk, self.attractedJunk)
           self.attractedJunk.scale = 4
           self.attractedJunk.alpha = 1
           self.attractedJunk.blockRotation = true
           self.attractedJunk = nil
+        else
+          self:startDialog(dialogs.spacegunFail)
         end
-      )
-    end
+      end
+    )
 
     self.spacegunAnimation:start()
   elseif self:isInsideHitbox(x, y, self.hitboxes.antenna) then
@@ -436,6 +438,7 @@ function MainScreen:setDialogTag()
     local isAlien = string.sub(moan.currentMessage, 1, 1) == "?"
     self.sprites.foxen:setTag(isAlien and "idle_signal" or "talk")
   else
+    moan.clearMessages()
     self.sprites.foxen:setTag("idle")
   end
 end

@@ -1,5 +1,6 @@
 local bank = require("aliensignal.bank")
 local input = require("aliensignal.input")
+local Button = require("aliensignal.button")
 local peachy = require("peachy")
 local Color = require("aliensignal.color")
 local InventoryBag = require("aliensignal.inventorybag")
@@ -15,7 +16,7 @@ MachineScreen.Size = 20
 
 MachineScreen.Wave = {
   Top = 0,
-  Left = 90,
+  Left = 40,
   Length = 760,
   Height = 24,
   LeftPadding = 40,
@@ -138,13 +139,15 @@ function MachineScreen:new(...)
     {x = MachineScreen.Wave.Left, y = MachineScreen.Wave.Top},
     MachineScreen.Wave.LeftPadding * 2 + MachineScreen.Wave.Length
   )
+
+  self.doneButton = Button("DONE", InventoryBag.Font, {x = 1024 - 90 - 15, y = 12}, {width = 90, height = 60}, self.transform)
 end
 
 function MachineScreen:compareSignals(signal1, signal2)
   local result = true
 
   for time, value in pairs(signal1) do
-    if signal2[time] == nil or math.abs(signal2[time] - value) > self.signalScreen.precision then
+    if not (type(signal2) == "table") or signal2[time] == nil or math.abs(signal2[time] - value) > self.signalScreen.precision then
       result = false
       break
     end
@@ -209,11 +212,15 @@ function MachineScreen:computeTime(i)
   return i * MachineScreen.Wave.Duration / (MachineScreen.Wave.Length + MachineScreen.Wave.LeftPadding)
 end
 
+function MachineScreen:quit() 
+  local junk = self.outputType == "spacegun" and self:matchMainSignal() or nil
+
+  self.navigator:pop({junk = junk and junk:clone()})
+end
+
 function MachineScreen:update(dt)
   if input:pressed("quit") then
-    local junk = self.outputType == "spacegun" and self:matchMainSignal() or nil
-
-    self.navigator:pop({junk = junk and junk:clone()})
+    self:quit()
   end
 
   for x, module_col in pairs(self.modules) do
@@ -247,6 +254,8 @@ function MachineScreen:mousemoved(x, y, dx, dy)
 end
 
 function MachineScreen:mousepressed(x, y, button, istouch)
+  self.doneButton:mousepressed(x, y, button)
+
   if self.inventoryBag:mousepressed(x, y, button, istouch) then
     return
   end
@@ -266,6 +275,10 @@ end
 function MachineScreen:mousereleased(x, y, button, istouch)
   if self.inventoryBag:mousereleased(x, y, button, istouch) then
     return
+  end
+
+  if self.doneButton.pressed and self.doneButton:mousepressed(x, y, button) then
+    self:quit()
   end
 
   if button == 2 then
@@ -314,6 +327,7 @@ function MachineScreen:draw()
 
   self.signalScreen:draw()
   self.inventoryBag:draw()
+  self.doneButton:draw()
 end
 
 return MachineScreen
