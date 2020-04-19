@@ -17,7 +17,9 @@ function Module:new(name, slot, modules)
 end
 
 function Module:clone()
-  return Module(self.name, self.slot, self.module)
+  local cls = getmetatable(self)
+
+  return cls(self.name, self.slot, self.module)
 end
 
 function Module:updatePosition()
