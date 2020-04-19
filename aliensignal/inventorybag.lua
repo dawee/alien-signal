@@ -281,7 +281,8 @@ function InventoryBag:new(navigator)
     alpha = 0
   }
 
-  self.signalText = "This is the signal you must use to attract this item from the pile of junk.\nClick the 'SET' button to add it as a target on your signal screen."
+  self.signalText =
+    "This is the signal you must use to attract this item from the pile of junk.\nClick the 'SET' button to add it as a target on your signal screen."
   self.signalTextPosition = {
     x = self.position.x + 370,
     y = self.position.y + 120,
@@ -363,9 +364,9 @@ function InventoryBag:prepareCraftables(tab)
         local count = self:countItems("junk", requirement[2].name)
         local required = requirement[1]
 
-        if count + 1 < required then -- WEIRD
-          self.buttons.build.enabled = false
-        end
+        -- if count + 1 < required then -- WEIRD
+        --   self.buttons.build.enabled = false
+        -- end
 
         if not requirement[2].initialDisplayableName then
           requirement[2].initialDisplayableName = requirement[2].displayableName
@@ -733,7 +734,13 @@ function InventoryBag:drawCraftPanel()
 
   if self.activeTab == "signal" then
     self.signalScreen:draw()
-    love.graphics.printf(self.signalText, InventoryBag.Font, self.signalTextPosition.x, self.signalTextPosition.y, self.signalTextPosition.limit)
+    love.graphics.printf(
+      self.signalText,
+      InventoryBag.Font,
+      self.signalTextPosition.x,
+      self.signalTextPosition.y,
+      self.signalTextPosition.limit
+    )
   end
 end
 

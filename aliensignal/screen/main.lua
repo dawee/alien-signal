@@ -444,40 +444,33 @@ function MainScreen:postWalkAction(x, y, button)
     elseif self.antennaTargetSignal == waves.galaxy and self.antennaSignal.target == true then
       self.antennaAnimation = self:pushAntennaButtonAndSignalAnimation()
 
-      print("sent galaxy")
-
       self.antennaAnimation.onComplete:listenOnce(
         function()
           self.antennaTargetSignal = waves.earth
           self.antennaSignal.target = false
-          -- DIALOG: Ask for earth signal coordinates
-          self:startDialog(dialogs.firstAntennaSignal)
+          self:startDialog(dialogs.secondAntennaSignal)
         end
       )
     elseif self.antennaTargetSignal == waves.earth and self.antennaSignal.target == true then
       self.antennaAnimation = self:pushAntennaButtonAndSignalAnimation()
-
-      print("sent earth")
 
       self.antennaAnimation.onComplete:listenOnce(
         function()
           self.antennaTargetSignal = waves.gps
           self.antennaSignal.target = false
           -- DIALOG: Ask for last coordinates
-          self:startDialog(dialogs.firstAntennaSignal)
+          self:startDialog(dialogs.thirdAntennaSignal)
         end
       )
     elseif self.antennaTargetSignal == waves.gps and self.antennaSignal.target == true then
       self.antennaAnimation = self:pushAntennaButtonAndSignalAnimation()
-
-      print("sent gps")
 
       self.antennaAnimation.onComplete:listenOnce(
         function()
           self.antennaTargetSignal = nil
           self.antennaSignal.target = false
           -- DIALOG: End of game
-          self:startDialog(dialogs.firstAntennaSignal)
+          self:startDialog(dialogs.lastAntennaSignal)
         end
       )
     else
