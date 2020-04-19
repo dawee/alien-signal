@@ -420,7 +420,19 @@ function MainScreen:postWalkAction(x, y, button)
   elseif self:isInsideHitbox(x, y, self.hitboxes.antenna) then
     self.navigator:push("machine", {inventory = self.inventory, modules = self.modules, output = "antenna"})
   elseif self:isInsideHitbox(x, y, self.hitboxes.antennaButton) then
-    self.antennaAnimation = self:pushAntennaButtonAndSignalAnimation()
+    if not self.firstSignalSent and self.antennaSignal.flat == false then
+      self.antennaAnimation = self:pushAntennaButtonAndSignalAnimation()
+
+      self.antennaAnimation.onComplete:listenOnce(
+        function()
+          self.firstSignalSent = true
+          self:startDialog(dialogs.firstAntennaSignal)
+        end
+      )
+    else
+      self.antennaAnimation = self:pushAntennaButtonAnimation()
+    end
+
     self.antennaAnimation:start()
   end
 end
@@ -488,8 +500,6 @@ function MainScreen:resume(props)
 
   if props.output == "antenna" then
     self.antennaSignal = props.signal
-
-    print("antenna has any signal to send:", self.antennaSignal.flat == false)
   end
 end
 
