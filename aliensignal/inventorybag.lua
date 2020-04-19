@@ -7,6 +7,7 @@ local Object = require("classic")
 local Junk = require("aliensignal.junk")
 local Module = require("aliensignal.module")
 local SignalScreen = require("aliensignal.signalscreen")
+local Animation = require("animation")
 
 local AndGate = require("aliensignal.module.andgate")
 local OrGate = require("aliensignal.module.orgate")
@@ -272,6 +273,13 @@ function InventoryBag:new(navigator)
   }
 
   self.signalScreen = InventoryBag.SignalScreen(self, {x = 400, y = 928}, 544)
+
+  self.builtText = love.graphics.newText(InventoryBag.Font, "BUILT!")
+  self.builtTextProperties = {
+    x = self.buttons.build.position.x + 50,
+    y = self.buttons.build.position.y - 20,
+    alpha = 0
+  }
 end
 
 function InventoryBag:fill(inventory)
@@ -524,6 +532,23 @@ function InventoryBag:build()
 
     self:store("modules", mod:clone())
     self:prepareSlots()
+
+    -- play built animation
+    self.builtTextProperties = {
+      x = self.buttons.build.position.x + 50,
+      y = self.buttons.build.position.y - 20,
+      alpha = 1
+    }
+    self.builtTextAnimation = Animation.Series({
+      Animation.Tween(0.3, self.builtTextProperties, { y = self.buttons.build.position.y - 50 }),
+      Animation.Tween(0.3, self.builtTextProperties, { alpha = 0 })
+    })
+    self.builtTextAnimation.onComplete:listenOnce(
+      function()
+        self.builtTextProperties.alpha = 0
+      end
+    )
+    self.builtTextAnimation:start()
   end
 end
 
@@ -608,6 +633,10 @@ function InventoryBag:update(dt)
   if self.activeTab == "signal" then
     self.signalScreen:update(dt)
   end
+
+  if self.builtTextAnimation then
+    self.builtTextAnimation:update(dt)
+  end
 end
 
 function InventoryBag:drawInventoryPanel(slots)
@@ -687,6 +716,10 @@ function InventoryBag:drawCraftPanel()
   end
 
   self.buttons[self.activeTab]:draw()
+
+  Color.White:use(self.builtTextProperties.alpha)
+  love.graphics.draw(self.builtText, self.builtTextProperties.x, self.builtTextProperties.y)
+  Color.White:use()
 
   if self.activeTab == "signal" then
     self.signalScreen:draw()
