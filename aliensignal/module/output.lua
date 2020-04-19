@@ -3,8 +3,8 @@ local Module = require("aliensignal.module")
 
 local Output = Module:extend()
 
-function Output:new(slot, modules)
-  Module.new(self, "emitter", slot, modules)
+function Output:new(slot, modules, outputType)
+  Module.new(self, outputType or "spacegun", slot, modules)
 
   self.displayableName = "Output"
 end

@@ -169,6 +169,15 @@
     "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
     "sourceSize": { "w": 32, "h": 32 },
     "duration": 100
+   },
+   {
+    "filename": "modules 19.aseprite",
+    "frame": { "x": 128, "y": 96, "w": 32, "h": 32 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 32, "h": 32 },
+    "sourceSize": { "w": 32, "h": 32 },
+    "duration": 100
    }
  ],
  "meta": {
@@ -179,25 +188,26 @@
   "size": { "w": 160, "h": 128 },
   "scale": "1",
   "frameTags": [
-   { "name": "generator", "from": 0, "to": 0, "direction": "forward" },
-   { "name": "emitter", "from": 1, "to": 1, "direction": "forward" },
-   { "name": "coupler", "from": 2, "to": 2, "direction": "forward" },
-   { "name": "downrightshoulder", "from": 3, "to": 3, "direction": "forward" },
-   { "name": "downleftshoulder", "from": 4, "to": 4, "direction": "forward" },
-   { "name": "upleftshoulder", "from": 5, "to": 5, "direction": "forward" },
-   { "name": "uprightshoulder", "from": 6, "to": 6, "direction": "forward" },
-   { "name": "sampler", "from": 7, "to": 7, "direction": "forward" },
-   { "name": "booster", "from": 8, "to": 8, "direction": "forward" },
-   { "name": "andgate", "from": 9, "to": 9, "direction": "forward" },
-   { "name": "orgate", "from": 10, "to": 10, "direction": "forward" },
-   { "name": "decreaser", "from": 11, "to": 11, "direction": "forward" },
-   { "name": "rightplug", "from": 12, "to": 12, "direction": "forward" },
-   { "name": "downplug", "from": 13, "to": 13, "direction": "forward" },
-   { "name": "leftplug", "from": 14, "to": 14, "direction": "forward" },
-   { "name": "upplug", "from": 15, "to": 15, "direction": "forward" },
-   { "name": "wire", "from": 16, "to": 16, "direction": "forward" },
-   { "name": "notgate", "from": 17, "to": 17, "direction": "forward" },
-   { "name": "phaser", "from": 18, "to": 18, "direction": "forward" }
+   { "name": "spacegun", "from": 0, "to": 0, "direction": "forward" },
+   { "name": "generator", "from": 1, "to": 1, "direction": "forward" },
+   { "name": "antenna", "from": 2, "to": 2, "direction": "forward" },
+   { "name": "coupler", "from": 3, "to": 3, "direction": "forward" },
+   { "name": "downrightshoulder", "from": 4, "to": 4, "direction": "forward" },
+   { "name": "downleftshoulder", "from": 5, "to": 5, "direction": "forward" },
+   { "name": "upleftshoulder", "from": 6, "to": 6, "direction": "forward" },
+   { "name": "uprightshoulder", "from": 7, "to": 7, "direction": "forward" },
+   { "name": "sampler", "from": 8, "to": 8, "direction": "forward" },
+   { "name": "booster", "from": 9, "to": 9, "direction": "forward" },
+   { "name": "andgate", "from": 10, "to": 10, "direction": "forward" },
+   { "name": "orgate", "from": 11, "to": 11, "direction": "forward" },
+   { "name": "decreaser", "from": 12, "to": 12, "direction": "forward" },
+   { "name": "rightplug", "from": 13, "to": 13, "direction": "forward" },
+   { "name": "downplug", "from": 14, "to": 14, "direction": "forward" },
+   { "name": "leftplug", "from": 15, "to": 15, "direction": "forward" },
+   { "name": "upplug", "from": 16, "to": 16, "direction": "forward" },
+   { "name": "wire", "from": 17, "to": 17, "direction": "forward" },
+   { "name": "notgate", "from": 18, "to": 18, "direction": "forward" },
+   { "name": "phaser", "from": 19, "to": 19, "direction": "forward" }
   ],
   "layers": [
    { "name": "Layer 1", "opacity": 255, "blendMode": "normal" }

@@ -86,10 +86,6 @@ function MachineScreen:new(...)
   self.transform = love.math.newTransform()
   self.modules = {}
 
-  self:addModule({x = 1, y = 4}, Generator)
-  self:addModule({x = 2, y = 3}, Sampler)
-  self:addModule({x = 6, y = 4}, Output)
-
   self.inventoryBag = InventoryBag(self.navigator)
 
   self.inventoryBag.onDrop:subscribe(
@@ -183,15 +179,19 @@ function MachineScreen:computeWavePoint(i, y)
 end
 
 function MachineScreen:open(props)
+  self:addModule({x = 1, y = 4}, Generator)
+  self:addModule({x = 2, y = 3}, Sampler)
+  self:addModule({x = 6, y = 4}, Output, props.output)
+
   self.inventoryBag:fill(props.inventory)
 end
 
-function MachineScreen:addModule(slot, ModuleType)
+function MachineScreen:addModule(slot, ModuleType, ...)
   if not self.modules[slot.x] then
     self.modules[slot.x] = {}
   end
 
-  self.modules[slot.x][slot.y] = ModuleType(slot, self.modules)
+  self.modules[slot.x][slot.y] = ModuleType(slot, self.modules, ...)
 end
 
 function MachineScreen:computeTime(i)
