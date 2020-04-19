@@ -1,9 +1,11 @@
 local bank = require("aliensignal.bank")
 local color = require("aliensignal.color")
+local dialogs = require("aliensignal.dialogs")
 local peachy = require("peachy")
 local Animation = require("animation")
 local Navigator = require("navigator")
 local Junk = require("aliensignal.junk")
+local moan = require("Moan")
 
 local MainScreen = Navigator.Screen:extend()
 
@@ -118,15 +120,27 @@ function MainScreen:new(...)
         }
       ),
       Animation.Tween(1, self.sceneAlpha, {alpha = 1}),
-      self.introFoxenAnimation
+      self.introFoxenAnimation,
+      Animation.Wait(1.5),
+      Animation.Parallel(
+        {
+          Animation.Tween(1, self.positions.title, {x = 130, y = -100}),
+          Animation.Tween(1, self.titleAlpha, {alpha = 0})
+        }
+      ),
     }
   )
   self.introSceneAnimation.onComplete:listenOnce(
     function()
       self.introCinematic = false
+      self:startDialog(dialogs.intro)
     end
   )
   self.introSceneAnimation:start()
+
+  -- moan initialization
+  moan.UI.messageboxPos = "top"
+  moan.font = self.font
 end
 
 function MainScreen:open(props)
@@ -416,8 +430,28 @@ function MainScreen:updateIntroCinematic(dt)
   end
 end
 
+function MainScreen:setDialogTag()
+  if moan.showingMessage then
+    local isAlien = string.sub(moan.currentMessage, 1, 1) == "?"
+    self.sprites.foxen:setTag(isAlien and "idle_signal" or "talk")
+  else
+    self.sprites.foxen:setTag("idle")
+  end
+end
+
+function MainScreen:startDialog(messages)
+  moan.speak("", messages)
+  self:setDialogTag()
+end
+
 function MainScreen:mousepressed(x, y, button)
   if self.introCinematic then
+    return
+  end
+
+  if moan.showingMessage then
+    moan.advanceMsg()
+    self:setDialogTag()
     return
   end
 
@@ -477,6 +511,8 @@ function MainScreen:update(dt)
   if self.attractedJunk then
     self.attractedJunk:update(dt)
   end
+
+  moan.update(dt)
 end
 
 function MainScreen:draw()
@@ -525,6 +561,8 @@ function MainScreen:draw()
 
     love.graphics.setColor(1, 1, 1, 1)
   end
+
+  moan.draw()
 end
 
 return MainScreen
