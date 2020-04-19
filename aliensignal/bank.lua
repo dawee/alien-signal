@@ -13,6 +13,7 @@ local spritesheets = {
 
 local spec = {
   background = Bank.Asset.Image("assets/images/background.png"),
+  endscreen = Bank.Asset.Image("assets/images/endscreen.png"),
   title = Bank.Asset.Image("assets/images/title.png")
 }
 

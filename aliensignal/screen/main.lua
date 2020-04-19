@@ -21,6 +21,7 @@ local DEBUG = false
 function MainScreen:new(...)
   Navigator.Screen.new(self, ...)
   self.background = bank.background
+  self.endscreen = bank.endscreen
   self.title = bank.title
 
   self.antennaSignal = {}
@@ -458,6 +459,7 @@ function MainScreen:postWalkAction(x, y, button)
         function()
           self.antennaTargetSignal = waves.gps
           self.antennaSignal.target = false
+          self.lastSignalSent = true
           -- DIALOG: Ask for last coordinates
           self:startDialog(dialogs.thirdAntennaSignal)
         end
@@ -511,8 +513,15 @@ function MainScreen:mousepressed(x, y, button)
     return
   end
 
+  self.dialogEnded = false
+
   if moan.showingMessage then
     moan.advanceMsg()
+
+    if not moan.showingMessage then
+      self.dialogEnded = true
+    end
+
     self:setDialogTag()
     return
   end
@@ -585,50 +594,55 @@ function MainScreen:draw()
   if self.introSceneAnimation then
     color.White:use(self.sceneAlpha.alpha)
   end
-  love.graphics.draw(self.background, 0, 0, 0, 4, 4)
-  color.White:use()
 
-  color.White:use(self.titleAlpha.alpha)
-  love.graphics.draw(self.title, self.positions.title.x, self.positions.title.y, 0, 4, 4)
-  color.White:use()
+  if self.lastSignalSent and self.dialogEnded then
+    love.graphics.draw(self.endscreen, 0, 0, 0, 4, 4)
+  else
+    love.graphics.draw(self.background, 0, 0, 0, 4, 4)
+    color.White:use()
 
-  color.CreditsText:use(self.titleAlpha.alpha)
-  love.graphics.draw(self.creditsText, self.positions.title.x + 30, self.positions.title.y)
-  color.White:use()
+    color.White:use(self.titleAlpha.alpha)
+    love.graphics.draw(self.title, self.positions.title.x, self.positions.title.y, 0, 4, 4)
+    color.White:use()
 
-  if self.introSceneAnimation then
-    color.White:use(self.sceneAlpha.alpha)
-  end
+    color.CreditsText:use(self.titleAlpha.alpha)
+    love.graphics.draw(self.creditsText, self.positions.title.x + 30, self.positions.title.y)
+    color.White:use()
 
-  for index, name in pairs({"antenna", "spacegun"}) do
-    self.sprites[name]:draw(self.positions[name].x, self.positions[name].y, 0, 4, 4)
-  end
-
-  local offset = self.direction == -1 and self.sprites.foxen:getWidth() * 4 or 0
-
-  self.sprites.foxen:draw(self.positions.foxen.x + offset, self.positions.foxen.y, 0, self.direction * 4, 4)
-
-  color.White:use()
-
-  if self.attractedJunk then
-    self.attractedJunk:draw()
-  end
-
-  if DEBUG then
-    love.graphics.setColor(1, 1, 1, 0.6)
-
-    for name, hitbox in pairs(self.hitboxes) do
-      love.graphics.rectangle("fill", hitbox.x, hitbox.y, hitbox.width, hitbox.height)
+    if self.introSceneAnimation then
+      color.White:use(self.sceneAlpha.alpha)
     end
 
-    for index, position in ipairs(self.attractedItemPositions) do
-      love.graphics.rectangle("fill", position.x, position.y, 32, 32)
+    for index, name in pairs({"antenna", "spacegun"}) do
+      self.sprites[name]:draw(self.positions[name].x, self.positions[name].y, 0, 4, 4)
     end
 
-    love.graphics.setColor(1, 1, 1, 1)
-  end
+    local offset = self.direction == -1 and self.sprites.foxen:getWidth() * 4 or 0
 
-  moan.draw()
+    self.sprites.foxen:draw(self.positions.foxen.x + offset, self.positions.foxen.y, 0, self.direction * 4, 4)
+
+    color.White:use()
+
+    if self.attractedJunk then
+      self.attractedJunk:draw()
+    end
+
+    if DEBUG then
+      love.graphics.setColor(1, 1, 1, 0.6)
+
+      for name, hitbox in pairs(self.hitboxes) do
+        love.graphics.rectangle("fill", hitbox.x, hitbox.y, hitbox.width, hitbox.height)
+      end
+
+      for index, position in ipairs(self.attractedItemPositions) do
+        love.graphics.rectangle("fill", position.x, position.y, 32, 32)
+      end
+
+      love.graphics.setColor(1, 1, 1, 1)
+    end
+
+    moan.draw()
+  end
 end
 
 return MainScreen
