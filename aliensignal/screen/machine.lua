@@ -140,7 +140,7 @@ function MachineScreen:new(...)
     MachineScreen.Wave.LeftPadding * 2 + MachineScreen.Wave.Length
   )
 
-  self.doneButton = Button("DONE", InventoryBag.Font, {x = 1024 - 90 - 15, y = 12}, {width = 90, height = 60}, self.transform)
+  self.doneButton = Button("DONE", InventoryBag.Font, {x = 1024 - 90 - 15, y = 12}, {width = 90, height = 60}, love.math.newTransform())
 end
 
 function MachineScreen:compareSignals(signal1, signal2)
@@ -280,6 +280,8 @@ function MachineScreen:mousereleased(x, y, button, istouch)
   if self.doneButton.pressed and self.doneButton:mousepressed(x, y, button) then
     self:quit()
   end
+
+  self.doneButton:mousereleased(x, y, button)
 
   if button == 2 then
     self.sliding = false
