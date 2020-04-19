@@ -327,6 +327,18 @@ function MainScreen:postWalkAction(x, y, button)
     self.spacegunAnimation =
       self.junkToAttract and self:pushSpacegunButtonAndSignalAnimation() or self:pushSpacegunButtonAnimation()
 
+    if self.junkToAttract then
+      self.spacegunAnimation.onComplete:listenOnce(
+        function()
+          table.insert(self.inventory.junk, self.attractedJunk)
+          self.attractedJunk.scale = 4
+          self.attractedJunk.alpha = 1
+          self.attractedJunk.blockRotation = true
+          self.attractedJunk = nil
+        end
+      )
+    end
+
     self.spacegunAnimation:start()
   end
 end
