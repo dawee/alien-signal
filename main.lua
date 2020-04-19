@@ -43,7 +43,7 @@ function love.update(dt)
   input:update(dt)
 
   if not bank:isLoaded() and bank:update() then
-    state.navigator:navigate("machine", {inventory = state.inventory})
+    state.navigator:navigate("main", {inventory = state.inventory})
     state.ready = true
   elseif state.ready then
     state.navigator:update(dt)
