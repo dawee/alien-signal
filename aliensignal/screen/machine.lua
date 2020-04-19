@@ -202,6 +202,8 @@ end
 function MachineScreen:open(props)
   self.modules = props.modules[props.output]
   self.outputType = props.output
+  self.targetSignal = props.targetSignal
+  self.inventoryBag.showSignal = self.outputType == "spacegun"
   self.inventoryBag:fill(props.inventory)
 
   -- select the shader depending on output type
@@ -229,7 +231,8 @@ function MachineScreen:quit()
       output = self.outputType,
       junk = junk and junk:clone(),
       signal = {
-        flat = self:compareSignals(currentSignal, waves.flat)
+        flat = self:compareSignals(currentSignal, waves.flat),
+        target = self.targetSignal and self:compareSignals(currentSignal, self.targetSignal)
       }
     }
   )

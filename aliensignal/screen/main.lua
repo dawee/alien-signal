@@ -7,6 +7,10 @@ local Navigator = require("navigator")
 local Junk = require("aliensignal.junk")
 local moan = require("Moan")
 
+local waves = {
+  galaxy = require("aliensignal.wave.d4square")
+}
+
 local MainScreen = Navigator.Screen:extend()
 
 local DEBUG = false
@@ -418,7 +422,10 @@ function MainScreen:postWalkAction(x, y, button)
 
     self.spacegunAnimation:start()
   elseif self:isInsideHitbox(x, y, self.hitboxes.antenna) then
-    self.navigator:push("machine", {inventory = self.inventory, modules = self.modules, output = "antenna"})
+    self.navigator:push(
+      "machine",
+      {inventory = self.inventory, modules = self.modules, output = "antenna", targetSignal = self.antennaTargetSignal}
+    )
   elseif self:isInsideHitbox(x, y, self.hitboxes.antennaButton) then
     if not self.firstSignalSent and self.antennaSignal.flat == false then
       self.antennaAnimation = self:pushAntennaButtonAndSignalAnimation()
@@ -426,6 +433,7 @@ function MainScreen:postWalkAction(x, y, button)
       self.antennaAnimation.onComplete:listenOnce(
         function()
           self.firstSignalSent = true
+          self.antennaTargetSignal = waves.galaxy
           self:startDialog(dialogs.firstAntennaSignal)
         end
       )

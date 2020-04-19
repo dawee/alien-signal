@@ -208,6 +208,7 @@ function InventoryBag:new(navigator)
     }
   }
 
+  self.showSignal = true
   self.activeTab = "modules"
   self.navigator = navigator
   self.transform = love.math.newTransform()
@@ -555,7 +556,7 @@ function InventoryBag:mousepressed(x, y, button)
     self.activeTab = "build"
     self:open()
     return true
-  elseif self:tabPressed(x, y, button, "signal") then
+  elseif self:tabPressed(x, y, button, "signal") and self.showSignal then
     self.activeTab = "signal"
     self:open()
     return true
@@ -683,7 +684,7 @@ function InventoryBag:drawCraftPanel()
         end
       end
     end
-  end 
+  end
 
   self.buttons[self.activeTab]:draw()
 
@@ -697,7 +698,7 @@ function InventoryBag:draw()
   love.graphics.applyTransform(self.transform)
 
   for name, sprite in pairs(self.sprites.tabs) do
-    if not (self.activeTab == name) then
+    if not (self.activeTab == name) and (self.showSignal or not (name == "signal")) then
       sprite:draw(
         self.position.x + (InventoryBag.TabsIndexes[name] - 1) * (sprite:getWidth() + 1) * 4,
         self.position.y,
