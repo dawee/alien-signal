@@ -22,7 +22,7 @@ end
 function Decreaser:computeRightOutput(time, increment)
   local input = self:leftInput()
 
-  return input and input:computeRightOutput(time, increment)
+  return input and input:computeRightOutput(time / 2, increment)
 end
 
 return Decreaser

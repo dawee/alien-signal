@@ -11,7 +11,8 @@ local waves = {
   d2square = require("aliensignal.wave.d2square"),
   d4square = require("aliensignal.wave.d4square"),
   length3gate = require("aliensignal.wave.length3gate"),
-  length6gate = require("aliensignal.wave.length6gate")
+  length6gate = require("aliensignal.wave.length6gate"),
+  s4_1_2_2 = require("aliensignal.wave.s4_1_2_2")
 }
 
 local Junk = Craftable:extend()
@@ -154,7 +155,7 @@ Junk.FloppyDisk = Junk:extend()
 function Junk.FloppyDisk:new(...)
   Junk.new(self, "floppy_disk", ...)
   self.displayableName = "Floppy Disk"
-  self.signal = waves.empty
+  self.signal = waves.s4_1_2_2
 end
 
 return Junk
