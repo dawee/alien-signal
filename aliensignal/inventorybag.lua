@@ -280,6 +280,13 @@ function InventoryBag:new(navigator)
     y = self.buttons.build.position.y - 20,
     alpha = 0
   }
+
+  self.signalText = "This is the signal you must use to attract this item from the pile of junk.\nClick the \"SET\" button to add it as a target on your signal screen."
+  self.signalTextPosition = {
+    x = self.position.x + 370,
+    y = self.position.y + 120,
+    limit = 500
+  }
 end
 
 function InventoryBag:fill(inventory)
@@ -723,6 +730,7 @@ function InventoryBag:drawCraftPanel()
 
   if self.activeTab == "signal" then
     self.signalScreen:draw()
+    love.graphics.printf(self.signalText, InventoryBag.Font, self.signalTextPosition.x, self.signalTextPosition.y, self.signalTextPosition.limit)
   end
 end
 
