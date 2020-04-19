@@ -8,7 +8,10 @@ local Junk = require("aliensignal.junk")
 local moan = require("Moan")
 
 local waves = {
-  galaxy = require("aliensignal.wave.d4square")
+  galaxy = require("aliensignal.wave.d4square"),
+  solarSystem = require("aliensignal.wave.length3gate"),
+  earth = require("aliensignal.wave.s4_1_2_2"),
+  gps = require("aliensignal.wave.gps")
 }
 
 local MainScreen = Navigator.Screen:extend()

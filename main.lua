@@ -11,7 +11,7 @@ local Output = require("aliensignal.module.output")
 
 local Junk = require("aliensignal.junk")
 
-local DEBUG = true
+local DEBUG = false
 
 local state = {
   navigator = Navigator(
@@ -73,7 +73,7 @@ function love.update(dt)
       }
 
       for index, junkType in ipairs(types) do
-        for n = 1, 100, 1 do
+        for n = 1, 500, 1 do
           table.insert(state.inventory.junk, junkType())
         end
       end
