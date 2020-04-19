@@ -241,18 +241,18 @@ function InventoryBag:new(navigator)
       UpRightShoulder()
     },
     signal = {
-      Junk.MappleSirupCan(),
-      Junk.WateringCan(),
+      Junk.MapleSyrupCan(),
+      Junk.SonicScrewdriver(),
       Junk.LightBulb(),
-      Junk.Headset(),
+      Junk.Shield(),
       Junk.GameBoy(),
-      Junk.LlamaChampionshipMedal(),
-      Junk.BatteryCells(),
+      Junk.Trophy(),
+      Junk.Battery(),
       Junk.Fork(),
       Junk.Coin(),
-      Junk.Hanger(),
+      Junk.Microphone(),
       Junk.Boombox(),
-      Junk.Keys()
+      Junk.FloppyDisk()
     }
   }
 

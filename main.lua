@@ -28,20 +28,7 @@ local state = {
     }
   ),
   inventory = {
-    junk = {
-      Junk.Headset(),
-      Junk.LightBulb(),
-      Junk.Headset(),
-      Junk.MappleSirupCan(),
-      Junk.Headset(),
-      Junk.LightBulb(),
-      Junk.Headset(),
-      Junk.MappleSirupCan(),
-      Junk.Headset(),
-      Junk.LightBulb(),
-      Junk.Headset(),
-      Junk.MappleSirupCan()
-    },
+    junk = {},
     modules = {}
   },
   ready = false
@@ -76,6 +63,21 @@ function love.update(dt)
         table.insert(state.inventory.modules, moduleType())
       end
     end
+
+    state.inventory.junk = {
+      Junk.MapleSyrupCan(),
+      Junk.SonicScrewdriver(),
+      Junk.LightBulb(),
+      Junk.Shield(),
+      Junk.GameBoy(),
+      Junk.Trophy(),
+      Junk.Battery(),
+      Junk.Fork(),
+      Junk.Coin(),
+      Junk.Microphone(),
+      Junk.Boombox(),
+      Junk.FloppyDisk()
+    }
 
     state.navigator:navigate("main", {inventory = state.inventory})
     state.ready = true

@@ -10,9 +10,9 @@ function NotGate:new(slot, modules)
   self.description =
     "This module reverts the input signal. If the input gives 0, it returns 1. If the input gives 1, it returns 0."
   self.requirements = {
-    {3, Junk.Headset()},
+    {3, Junk.Shield()},
     {1, Junk.LightBulb()},
-    {1, Junk.MappleSirupCan()}
+    {1, Junk.MapleSyrupCan()}
   }
 end
 

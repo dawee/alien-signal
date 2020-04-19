@@ -9,9 +9,9 @@ function Wire:new(slot, modules)
   self.displayableName = "Wire"
   self.description = "A simple wire that extends a connection by one case"
   self.requirements = {
-    {3, Junk.Headset()},
+    {3, Junk.Shield()},
     {1, Junk.LightBulb()},
-    {1, Junk.MappleSirupCan()}
+    {1, Junk.MapleSyrupCan()}
   }
 end
 

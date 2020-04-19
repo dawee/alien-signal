@@ -4,6 +4,7 @@ local spritesheets = {
   "antenna",
   "build",
   "foxen",
+  "items",
   "modules",
   "signalscreen",
   "spacegun",

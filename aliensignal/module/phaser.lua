@@ -11,9 +11,9 @@ function Phaser:new(slot, modules)
   self.displayableName = "Phaser"
   self.description = "Use this module if you want your signal to be delayed by one step back in time"
   self.requirements = {
-    {3, Junk.Headset()},
+    {3, Junk.Shield()},
     {1, Junk.LightBulb()},
-    {1, Junk.MappleSirupCan()}
+    {1, Junk.MapleSyrupCan()}
   }
 end
 

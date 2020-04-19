@@ -9,9 +9,9 @@ function Decreaser:new(slot, modules)
   self.displayableName = "Decreaser"
   self.description = "This module divides the frequency of the signal by 2."
   self.requirements = {
-    {3, Junk.Headset()},
+    {3, Junk.Shield()},
     {1, Junk.LightBulb()},
-    {1, Junk.MappleSirupCan()}
+    {1, Junk.MapleSyrupCan()}
   }
 end
 

@@ -10,9 +10,9 @@ function UpLeftShoulder:new(slot, modules)
   self.description =
     "Shoulders are wires that allows the current to take a turn in the circuit. This one can connect its upper module to its left one."
   self.requirements = {
-    {3, Junk.Headset()},
+    {3, Junk.Shield()},
     {1, Junk.LightBulb()},
-    {1, Junk.MappleSirupCan()}
+    {1, Junk.MapleSyrupCan()}
   }
 end
 
