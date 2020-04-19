@@ -16,7 +16,8 @@ function MainScreen:new(...)
 
   self.attractedItemPositions = {
     {x = 870, y = 620},
-    {x = 665, y = 715}
+    {x = 665, y = 730},
+    {x = 510, y = 660}
   }
 
   self.walkPoints = {
@@ -95,14 +96,19 @@ function MainScreen:new(...)
     end
   )
 
-  self.introSceneAnimation = Animation.Series({
-    Animation.Parallel({
-      Animation.Tween(1, self.positions.title, {x = 130, y = 65}),
-      Animation.Tween(1, self.titleAlpha, {alpha = 1})
-    }),
-    Animation.Tween(1, self.sceneAlpha, {alpha = 1}),
-    self.introFoxenAnimation
-  })
+  self.introSceneAnimation =
+    Animation.Series(
+    {
+      Animation.Parallel(
+        {
+          Animation.Tween(1, self.positions.title, {x = 130, y = 65}),
+          Animation.Tween(1, self.titleAlpha, {alpha = 1})
+        }
+      ),
+      Animation.Tween(1, self.sceneAlpha, {alpha = 1}),
+      self.introFoxenAnimation
+    }
+  )
   self.introSceneAnimation.onComplete:listenOnce(
     function()
       self.introCinematic = false
@@ -231,7 +237,7 @@ function MainScreen:junkAttractionAnimation()
     Animation.Parallel(
     {
       shake,
-      Animation.Tween(2, self.attractedJunk, {scale = 1})
+      Animation.Tween(2, self.attractedJunk, {scale = 2})
     }
   )
 
@@ -257,10 +263,43 @@ function MainScreen:junkAttractionAnimation()
     }
   )
 
+  local climbToPocket =
+    Animation.Parallel(
+    {
+      Animation.Tween(
+        0.3,
+        self.attractedJunk.position,
+        {
+          x = self.attractedItemPositions[3].x
+        },
+        "linear"
+      ),
+      Animation.Tween(
+        0.3,
+        self.attractedJunk.position,
+        {
+          y = self.attractedItemPositions[3].y
+        },
+        "outBack"
+      ),
+      Animation.Tween(
+        0.3,
+        self.attractedJunk,
+        {
+          alpha = 0,
+          scale = 0
+        },
+        "linear"
+      )
+    }
+  )
+
   return Animation.Series(
     {
       shakeAndGrow,
-      fall
+      fall,
+      Animation.Wait(0.8),
+      climbToPocket
     }
   )
 end
