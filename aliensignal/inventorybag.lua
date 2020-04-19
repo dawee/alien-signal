@@ -368,7 +368,7 @@ function InventoryBag:prepareCraftables(tab)
 
         requirement[2]:renderDisplayableName(
           InventoryBag.Font,
-          Color.White,
+          count >= required and Color.Signal or Color.TargetSignal,
           {
             x = math.floor(self.position.x + leftWidth + 64),
             y = math.floor(self.craftables[tab][1].position.y + InventoryBag.ItemSize * 2 / 3) + 128 + (index + 1) * 32
