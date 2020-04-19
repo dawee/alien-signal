@@ -94,7 +94,6 @@ function Animation.Tween:reset()
   self.tween = tween.new(self.duration, self.obj, hash.deepcopy(self.target), self.algo)
 end
 
-
 function Animation.Tween:step(dt)
   return self.tween:update(dt)
 end
@@ -133,7 +132,7 @@ end
 
 function Animation.Series:start()
   Animation.start(self)
-  self.children:get(self.index):start()  
+  self.children:get(self.index):start()
 end
 
 function Animation.Series:step(dt)
@@ -157,7 +156,7 @@ end
 
 function Animation.Parallel:start()
   Animation.start(self)
-  
+
   for child in self.children:values() do
     child:start()
   end
@@ -175,12 +174,15 @@ end
 
 Animation.Loop = Animation:extend()
 
-function Animation.Loop:new(child)
+function Animation.Loop:new(child, stepsCount)
   Animation.new(self)
 
+  self.stepsCount = stepsCount
+  self.step = 0
   self.child = child
-  self.unsubscribeToChild = self.child.onComplete:subscribe(
-    function ()
+  self.unsubscribeToChild =
+    self.child.onComplete:subscribe(
+    function()
       self.child:reset()
       self.child:start()
     end
@@ -206,8 +208,9 @@ function Animation.Loop:reset()
 end
 
 function Animation.Loop:step(dt)
+  self.step = self.step + 1
   self.child:update(dt)
-  return false
+  return self.stepsCount == nil and false or self.step >= self.stepsCount
 end
 
 Animation.Wait = Animation:extend()

@@ -3,6 +3,7 @@ local color = require("aliensignal.color")
 local peachy = require("peachy")
 local Animation = require("animation")
 local Navigator = require("navigator")
+local Junk = require("aliensignal.junk")
 
 local MainScreen = Navigator.Screen:extend()
 
@@ -12,6 +13,11 @@ function MainScreen:new(...)
   Navigator.Screen.new(self, ...)
   self.background = bank.background
   self.title = bank.title
+
+  self.attractedItemPositions = {
+    {x = 870, y = 580},
+    {x = 650, y = 700}
+  }
 
   self.walkPoints = {
     {
@@ -170,8 +176,24 @@ function MainScreen:spacegunSignalAnimation()
   return animation
 end
 
+function MainScreen:junkAttractionAnimation()
+  local animation =
+    Animation.Loop(
+    Animation.Series(
+      {
+        Animation.Tween(0.1, self.attractedJunk, {rotation = math.pi / 4}),
+        Animation.Tween(0.1, self.attractedJunk, {rotation = -math.pi / 4})
+      }
+    ),
+    10
+  )
+end
+
 function MainScreen:pushSpacegunButtonAndSignalAnimation()
-  return Animation.Series({self:pushSpacegunButtonAnimation({backToIdle = false}), self:spacegunSignalAnimation()})
+  local animation =
+    Animation.Series({self:pushSpacegunButtonAnimation({backToIdle = false}), self:spacegunSignalAnimation()})
+
+  return animation
 end
 
 function MainScreen:postWalkAction(x, y, button)
@@ -228,6 +250,10 @@ function MainScreen:update(dt)
   if self.spacegunAnimation then
     self.spacegunAnimation:update(dt)
   end
+
+  if self.attractedJunk then
+    self.attractedJunk:update(dt)
+  end
 end
 
 function MainScreen:draw()
@@ -249,11 +275,19 @@ function MainScreen:draw()
 
   self.sprites.foxen:draw(self.positions.foxen.x + offset, self.positions.foxen.y, 0, self.direction * 4, 4)
 
+  if self.attractedJunk then
+    self.attractedJunk:draw()
+  end
+
   if DEBUG then
     love.graphics.setColor(1, 1, 1, 0.6)
 
     for name, hitbox in pairs(self.hitboxes) do
       love.graphics.rectangle("fill", hitbox.x, hitbox.y, hitbox.width, hitbox.height)
+    end
+
+    for index, position in ipairs(self.attractedItemPositions) do
+      love.graphics.rectangle("fill", position.x, position.y, 32, 32)
     end
 
     love.graphics.setColor(1, 1, 1, 1)

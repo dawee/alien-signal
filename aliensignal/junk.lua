@@ -12,6 +12,8 @@ function Junk:new(name, position)
   self.name = name
   self.position = position or {x = 0, y = 0}
   self.scale = 4
+  self.alpha = 1
+  self.rotation = 0
 
   self.sprite = peachy.new(bank.items.spritesheet, bank.items.image, name)
 end
@@ -28,8 +30,11 @@ end
 
 function Junk:draw()
   Craftable.draw(self)
+
   if not (self.visible == false) then
-    self.sprite:draw(self.position.x, self.position.y, 0, self.scale, self.scale)
+    love.graphics.setColor(1, 1, 1, self.alpha)
+    self.sprite:draw(self.position.x, self.position.y, self.rotation, self.scale, self.scale)
+    love.graphics.setColor(1, 1, 1, 1)
   end
 end
 
