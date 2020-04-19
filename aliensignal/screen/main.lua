@@ -6,6 +6,8 @@ local Navigator = require("navigator")
 
 local MainScreen = Navigator.Screen:extend()
 
+local DEBUG = false
+
 function MainScreen:new(...)
   Navigator.Screen.new(self, ...)
   self.background = bank.background
@@ -48,6 +50,12 @@ function MainScreen:new(...)
       y = 580,
       width = 80,
       height = 90
+    },
+    spacegunButton = {
+      x = 535,
+      y = 674,
+      width = 50,
+      height = 28
     }
   }
 
@@ -108,6 +116,12 @@ function MainScreen:walkAnimation(x)
   local walkAnimation =
     duration > 0 and Animation.Tween(duration, self.positions.foxen, normalizedWalkPoint) or Animation.Nop()
 
+  walkAnimation.onStart:listenOnce(
+    function()
+      self.sprites.foxen:setTag("walk")
+    end
+  )
+
   walkAnimation.onComplete:listenOnce(
     function()
       self.sprites.foxen:setTag("idle")
@@ -115,6 +129,60 @@ function MainScreen:walkAnimation(x)
   )
 
   return walkAnimation
+end
+
+function MainScreen:pushSpacegunButtonAnimation(opts)
+  local animation = Animation.Wait(0.3)
+  local backToIdle = (opts == nil or opts.backToIdle == nil) and true or opts.backToIdle
+
+  animation.onStart:listenOnce(
+    function()
+      self.sprites.spacegun:setTag("button")
+    end
+  )
+
+  if backToIdle then
+    animation.onComplete:listenOnce(
+      function()
+        self.sprites.spacegun:setTag("idle")
+      end
+    )
+  end
+
+  return animation
+end
+
+function MainScreen:spacegunSignalAnimation()
+  local animation = Animation.Wait(0.8)
+
+  animation.onStart:listenOnce(
+    function()
+      self.sprites.spacegun:setTag("signal")
+    end
+  )
+
+  animation.onComplete:listenOnce(
+    function()
+      self.sprites.spacegun:setTag("idle")
+    end
+  )
+
+  return animation
+end
+
+function MainScreen:pushSpacegunButtonAndSignalAnimation()
+  return Animation.Series({self:pushSpacegunButtonAnimation({backToIdle = false}), self:spacegunSignalAnimation()})
+end
+
+function MainScreen:postWalkAction(x, y, button)
+  if self:isInsideHitbox(x, y, self.hitboxes.spacegun) then
+    self.navigator:push("machine", {inventory = self.inventory, modules = self.modules, output = "spacegun"})
+  elseif self:isInsideHitbox(x, y, self.hitboxes.spacegunButton) then
+    self.spacegunAnimation =
+      self.junkToAttract and self:pushSpacegunButtonAndSignalAnimation() or self:pushSpacegunButtonAnimation()
+
+    self.spacegunAnimation:start()
+  end
 end
 
 function MainScreen:mousepressed(x, y, button)
@@ -130,23 +198,18 @@ function MainScreen:mousepressed(x, y, button)
     self.titleAnimation:start()
   end
 
-  self.animation =
-    Animation.Series(
-    {
-      self:walkAnimation(x, y),
-      Animation.Wait(0.3)
-    }
-  )
+  self.foxenAnimation = self:walkAnimation(x, y)
 
-  self.sprites.foxen:setTag("walk")
-  self.animation:start()
-  self.animation.onComplete:listenOnce(
+  self.foxenAnimation:start()
+  self.foxenAnimation.onComplete:listenOnce(
     function()
-      if self:isInsideHitbox(x, y, self.hitboxes.spacegun) then
-        self.navigator:push("machine", {inventory = self.inventory, modules = self.modules, output = "spacegun"})
-      end
+      self:postWalkAction(x, y, button)
     end
   )
+end
+
+function MainScreen:resume(props)
+  self.junkToAttract = props.junk
 end
 
 function MainScreen:update(dt)
@@ -154,12 +217,16 @@ function MainScreen:update(dt)
     sprite:update(dt)
   end
 
-  if self.animation then
-    self.animation:update(dt)
+  if self.foxenAnimation then
+    self.foxenAnimation:update(dt)
   end
 
   if self.titleAnimation then
     self.titleAnimation:update(dt)
+  end
+
+  if self.spacegunAnimation then
+    self.spacegunAnimation:update(dt)
   end
 end
 
@@ -181,6 +248,16 @@ function MainScreen:draw()
   local offset = self.direction == -1 and self.sprites.foxen:getWidth() * 4 or 0
 
   self.sprites.foxen:draw(self.positions.foxen.x + offset, self.positions.foxen.y, 0, self.direction * 4, 4)
+
+  if DEBUG then
+    love.graphics.setColor(1, 1, 1, 0.6)
+
+    for name, hitbox in pairs(self.hitboxes) do
+      love.graphics.rectangle("fill", hitbox.x, hitbox.y, hitbox.width, hitbox.height)
+    end
+
+    love.graphics.setColor(1, 1, 1, 1)
+  end
 end
 
 return MainScreen

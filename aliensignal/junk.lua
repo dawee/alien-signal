@@ -16,6 +16,12 @@ function Junk:new(name, position)
   self.sprite = peachy.new(bank.items.spritesheet, bank.items.image, name)
 end
 
+function Junk:clone()
+  local cls = getmetatable(self)
+
+  return cls(self.name, self.position)
+end
+
 function Junk:update(dt)
   self.sprite:update(dt)
 end

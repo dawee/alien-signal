@@ -36,8 +36,9 @@ function Navigator:push(name, props)
   pushedScreen:open(props)
 end
 
-function Navigator:pop()
+function Navigator:pop(props)
   table.remove(self.stack, table.getn(self.stack))
+  self.stack[#self.stack]:resume(props)
 end
 
 function Navigator:draw()
@@ -72,8 +73,13 @@ end
 
 function Navigator.Screen:open(props)
 end
+
+function Navigator.Screen:resume(props)
+end
+
 function Navigator.Screen:update(dt)
 end
+
 function Navigator.Screen:draw()
 end
 

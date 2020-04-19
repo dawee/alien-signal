@@ -152,8 +152,6 @@ function MachineScreen:matchMainSignal()
     end
   end
 
-  print(matched and matched.name)
-
   return matched
 end
 
@@ -180,6 +178,7 @@ end
 
 function MachineScreen:open(props)
   self.modules = props.modules[props.output]
+  self.outputType = props.output
   self.inventoryBag:fill(props.inventory)
 end
 
@@ -196,12 +195,10 @@ function MachineScreen:computeTime(i)
 end
 
 function MachineScreen:update(dt)
-  if input:down("compare_hold") and input:pressed("compare_trigger") then
-    self:matchMainSignal()
-  end
-
   if input:pressed("quit") then
-    self.navigator:pop()
+    local junk = self.outputType == "spacegun" and self:matchMainSignal() or nil
+
+    self.navigator:pop({junk = junk and junk:clone()})
   end
 
   for x, module_col in pairs(self.modules) do
