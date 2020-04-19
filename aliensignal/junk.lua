@@ -4,7 +4,8 @@ local Craftable = require("aliensignal.craftable")
 
 local waves = {
   empty = {},
-  sine = require("aliensignal.wave.sine")
+  sine = require("aliensignal.wave.sine"),
+  square = require("aliensignal.wave.square")
 }
 
 local Junk = Craftable:extend()
@@ -122,7 +123,7 @@ Junk.Coin = Junk:extend()
 function Junk.Coin:new(...)
   Junk.new(self, "coin", ...)
   self.displayableName = "Coin"
-  self.signal = waves.empty
+  self.signal = waves.square
 end
 
 Junk.Microphone = Junk:extend()

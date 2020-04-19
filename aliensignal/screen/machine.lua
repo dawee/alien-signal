@@ -9,11 +9,6 @@ local Navigator = require("navigator")
 local Output = require("aliensignal.module.output")
 local SignalScreen = require("aliensignal.signalscreen")
 
-local waves = {
-  sine = require("aliensignal.wave.sine"),
-  width3gate = require("aliensignal.wave.width3gate")
-}
-
 local MachineScreen = Navigator.Screen:extend()
 
 MachineScreen.Size = 20
