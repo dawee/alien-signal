@@ -43,43 +43,7 @@ function love.update(dt)
   input:update(dt)
 
   if not bank:isLoaded() and bank:update() then
-    local moduleTypes = {
-      AndGate,
-      OrGate,
-      Booster,
-      Decreaser,
-      Coupler,
-      Wire,
-      DownLeftShoulder,
-      DownRightShoulder,
-      UpLeftShoulder,
-      UpRightShoulder,
-      NotGate,
-      Phaser
-    }
-
-    for index, moduleType in pairs(moduleTypes) do
-      for i = 1, 100, 1 do
-        table.insert(state.inventory.modules, moduleType())
-      end
-    end
-
-    state.inventory.junk = {
-      Junk.MapleSyrupCan(),
-      Junk.SonicScrewdriver(),
-      Junk.LightBulb(),
-      Junk.Shield(),
-      Junk.GameBoy(),
-      Junk.Trophy(),
-      Junk.Battery(),
-      Junk.Fork(),
-      Junk.Coin(),
-      Junk.Microphone(),
-      Junk.Boombox(),
-      Junk.FloppyDisk()
-    }
-
-    state.navigator:navigate("main", {inventory = state.inventory})
+    state.navigator:navigate("machine", {inventory = state.inventory})
     state.ready = true
   elseif state.ready then
     state.navigator:update(dt)

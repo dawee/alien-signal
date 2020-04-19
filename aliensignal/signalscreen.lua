@@ -42,6 +42,16 @@ function SignalScreen:new(position, width)
   self.waveZeroY = math.ceil(self.position.y + (self.sprites.left:getHeight() / 2 + 1) * self.scale)
 end
 
+function SignalScreen:exportMainSignal()
+  local signal = {}
+
+  for time = 0, SignalScreen.Wave.Duration, self.precision do
+    signal[math.floor(time * self.exportTimeCoef)] = self:computeSignalAtTime(time, "main")
+  end
+
+  return signal
+end
+
 function SignalScreen:getHeight()
   return self.sprites.left:getHeight() * self.scale
 end

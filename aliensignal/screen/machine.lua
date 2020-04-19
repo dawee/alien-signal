@@ -132,6 +132,35 @@ function MachineScreen:new(...)
   )
 end
 
+function MachineScreen:compareSignals(signal1, signal2)
+  local result = true
+
+  for time, value in pairs(signal1) do
+    if math.abs(signal2[time] - value) > self.signalScreen.precision then
+      result = false
+      break
+    end
+  end
+
+  return result
+end
+
+function MachineScreen:matchMainSignal()
+  local currentSignal = self.signalScreen:exportMainSignal()
+  local matched = nil
+
+  for index, junk in pairs(self.inventoryBag.craftables.signal) do
+    if self:compareSignals(currentSignal, junk.signal) then
+      matched = junk
+      break
+    end
+  end
+
+  print(matched and matched.name)
+
+  return matched
+end
+
 function MachineScreen:transformWavePoints(wave)
   local points = {}
 
@@ -170,6 +199,10 @@ function MachineScreen:computeTime(i)
 end
 
 function MachineScreen:update(dt)
+  if input:down("compare_hold") and input:pressed("compare_trigger") then
+    self:matchMainSignal()
+  end
+
   for x, module_col in pairs(self.modules) do
     for y, mod in pairs(module_col) do
       mod:update(dt)
