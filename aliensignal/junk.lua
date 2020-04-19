@@ -22,6 +22,7 @@ function Junk:new(name, position)
   self.scale = 4
   self.alpha = 1
   self.rotation = 0
+  self.blockRotation = true
 
   self.sprite = peachy.new(bank.items.spritesheet, bank.items.image, name)
 end

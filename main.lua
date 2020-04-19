@@ -11,6 +11,8 @@ local Output = require("aliensignal.module.output")
 
 local Junk = require("aliensignal.junk")
 
+local DEBUG = false
+
 local state = {
   navigator = Navigator(
     {
@@ -53,6 +55,29 @@ function love.update(dt)
     addModule("antenna", {x = 1, y = 4}, Generator)
     addModule("antenna", {x = 2, y = 3}, Sampler)
     addModule("antenna", {x = 6, y = 4}, Output, "antenna")
+
+    if DEBUG then
+      local types = {
+        Junk.MapleSyrupCan,
+        Junk.SonicScrewdriver,
+        Junk.LightBulb,
+        Junk.Shield,
+        Junk.GameBoy,
+        Junk.Trophy,
+        Junk.Battery,
+        Junk.Fork,
+        Junk.Coin,
+        Junk.Microphone,
+        Junk.Boombox,
+        Junk.FloppyDisk
+      }
+
+      for index, junkType in ipairs(types) do
+        for n = 1, 100, 1 do
+          table.insert(state.inventory.junk, junkType())
+        end
+      end
+    end
 
     state.navigator:navigate("main", {inventory = state.inventory, modules = state.modules})
     state.ready = true

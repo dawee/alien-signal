@@ -127,7 +127,7 @@ function MainScreen:new(...)
           Animation.Tween(1, self.positions.title, {x = 130, y = -100}),
           Animation.Tween(1, self.titleAlpha, {alpha = 0})
         }
-      ),
+      )
     }
   )
   self.introSceneAnimation.onComplete:listenOnce(
@@ -389,6 +389,7 @@ function MainScreen:postWalkAction(x, y, button)
   elseif self:isInsideHitbox(x, y, self.hitboxes.spacegunButton) then
     if self.junkToAttract then
       self.attractedJunk = self.junkToAttract:clone()
+      self.attractedJunk.blockRotation = false
       self.attractedJunk.scale = 0.1
       self.attractedJunk.position = {
         x = self.attractedItemPositions[1].x,
