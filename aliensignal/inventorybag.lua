@@ -281,7 +281,7 @@ function InventoryBag:new(navigator)
     alpha = 0
   }
 
-  self.signalText = "This is the signal you must use to attract this item from the pile of junk.\nClick the \"SET\" button to add it as a target on your signal screen."
+  self.signalText = "This is the signal you must use to attract this item from the pile of junk.\nClick the 'SET' button to add it as a target on your signal screen."
   self.signalTextPosition = {
     x = self.position.x + 370,
     y = self.position.y + 120,
