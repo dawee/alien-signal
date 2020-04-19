@@ -3,6 +3,7 @@ local peachy = require("peachy")
 local Craftable = require("aliensignal.craftable")
 
 local waves = {
+  empty = {},
   sine = require("aliensignal.wave.sine")
 }
 
@@ -57,7 +58,7 @@ Junk.MapleSyrupCan = Junk:extend()
 function Junk.MapleSyrupCan:new(...)
   Junk.new(self, "maple_can", ...)
   self.displayableName = "Maple Syrup Can"
-  self.signal = waves.sine
+  self.signal = waves.empty
 end
 
 Junk.SonicScrewdriver = Junk:extend()
@@ -65,7 +66,7 @@ Junk.SonicScrewdriver = Junk:extend()
 function Junk.SonicScrewdriver:new(...)
   Junk.new(self, "sonic_screwdriver", ...)
   self.displayableName = "Sonic Screwdriver"
-  self.signal = waves.sine
+  self.signal = waves.empty
 end
 
 Junk.LightBulb = Junk:extend()
@@ -73,7 +74,7 @@ Junk.LightBulb = Junk:extend()
 function Junk.LightBulb:new(...)
   Junk.new(self, "light_bulb", ...)
   self.displayableName = "Light Bulb"
-  self.signal = waves.sine
+  self.signal = waves.empty
 end
 
 Junk.Shield = Junk:extend()
@@ -81,7 +82,7 @@ Junk.Shield = Junk:extend()
 function Junk.Shield:new(...)
   Junk.new(self, "shield", ...)
   self.displayableName = "Shield"
-  self.signal = waves.sine
+  self.signal = waves.empty
 end
 
 Junk.GameBoy = Junk:extend()
@@ -89,7 +90,7 @@ Junk.GameBoy = Junk:extend()
 function Junk.GameBoy:new(...)
   Junk.new(self, "game_boy", ...)
   self.displayableName = "GameBoy"
-  self.signal = waves.sine
+  self.signal = waves.empty
 end
 
 Junk.Trophy = Junk:extend()
@@ -97,7 +98,7 @@ Junk.Trophy = Junk:extend()
 function Junk.Trophy:new(...)
   Junk.new(self, "trophy", ...)
   self.displayableName = "Trophy"
-  self.signal = waves.sine
+  self.signal = waves.empty
 end
 
 Junk.Battery = Junk:extend()
@@ -105,7 +106,7 @@ Junk.Battery = Junk:extend()
 function Junk.Battery:new(...)
   Junk.new(self, "battery", ...)
   self.displayableName = "Battery"
-  self.signal = waves.sine
+  self.signal = waves.empty
 end
 
 Junk.Fork = Junk:extend()
@@ -121,7 +122,7 @@ Junk.Coin = Junk:extend()
 function Junk.Coin:new(...)
   Junk.new(self, "coin", ...)
   self.displayableName = "Coin"
-  self.signal = waves.sine
+  self.signal = waves.empty
 end
 
 Junk.Microphone = Junk:extend()
@@ -129,7 +130,7 @@ Junk.Microphone = Junk:extend()
 function Junk.Microphone:new(...)
   Junk.new(self, "microphone", ...)
   self.displayableName = "Microphone"
-  self.signal = waves.sine
+  self.signal = waves.empty
 end
 
 Junk.Boombox = Junk:extend()
@@ -137,7 +138,7 @@ Junk.Boombox = Junk:extend()
 function Junk.Boombox:new(...)
   Junk.new(self, "boombox", ...)
   self.displayableName = "Boombox"
-  self.signal = waves.sine
+  self.signal = waves.empty
 end
 
 Junk.FloppyDisk = Junk:extend()
@@ -145,7 +146,7 @@ Junk.FloppyDisk = Junk:extend()
 function Junk.FloppyDisk:new(...)
   Junk.new(self, "floppy_disk", ...)
   self.displayableName = "Floppy Disk"
-  self.signal = waves.sine
+  self.signal = waves.empty
 end
 
 return Junk

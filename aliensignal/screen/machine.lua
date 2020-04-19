@@ -132,7 +132,7 @@ function MachineScreen:compareSignals(signal1, signal2)
   local result = true
 
   for time, value in pairs(signal1) do
-    if math.abs(signal2[time] - value) > self.signalScreen.precision then
+    if signal2[time] == nil or math.abs(signal2[time] - value) > self.signalScreen.precision then
       result = false
       break
     end
