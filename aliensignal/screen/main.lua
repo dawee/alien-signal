@@ -9,7 +9,7 @@ local moan = require("Moan")
 
 local waves = {
   galaxy = require("aliensignal.wave.d4square"),
-  solarSystem = require("aliensignal.wave.length3gate"),
+  -- solarSystem = require("aliensignal.wave.length3gate"),
   earth = require("aliensignal.wave.s4_1_2_2"),
   gps = require("aliensignal.wave.gps")
 }
@@ -437,6 +437,46 @@ function MainScreen:postWalkAction(x, y, button)
         function()
           self.firstSignalSent = true
           self.antennaTargetSignal = waves.galaxy
+          self.antennaSignal.target = false
+          self:startDialog(dialogs.firstAntennaSignal)
+        end
+      )
+    elseif self.antennaTargetSignal == waves.galaxy and self.antennaSignal.target == true then
+      self.antennaAnimation = self:pushAntennaButtonAndSignalAnimation()
+
+      print("sent galaxy")
+
+      self.antennaAnimation.onComplete:listenOnce(
+        function()
+          self.antennaTargetSignal = waves.earth
+          self.antennaSignal.target = false
+          -- DIALOG: Ask for earth signal coordinates
+          self:startDialog(dialogs.firstAntennaSignal)
+        end
+      )
+    elseif self.antennaTargetSignal == waves.earth and self.antennaSignal.target == true then
+      self.antennaAnimation = self:pushAntennaButtonAndSignalAnimation()
+
+      print("sent earth")
+
+      self.antennaAnimation.onComplete:listenOnce(
+        function()
+          self.antennaTargetSignal = waves.gps
+          self.antennaSignal.target = false
+          -- DIALOG: Ask for last coordinates
+          self:startDialog(dialogs.firstAntennaSignal)
+        end
+      )
+    elseif self.antennaTargetSignal == waves.gps and self.antennaSignal.target == true then
+      self.antennaAnimation = self:pushAntennaButtonAndSignalAnimation()
+
+      print("sent gps")
+
+      self.antennaAnimation.onComplete:listenOnce(
+        function()
+          self.antennaTargetSignal = nil
+          self.antennaSignal.target = false
+          -- DIALOG: End of game
           self:startDialog(dialogs.firstAntennaSignal)
         end
       )
