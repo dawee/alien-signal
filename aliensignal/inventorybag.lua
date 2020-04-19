@@ -90,8 +90,8 @@ function InventoryBag.Slot:new(item, index, bag)
   self.countTransform:translate(item.position.x + 127, item.position.y + 127)
 end
 
-function InventoryBag.Slot:first()
-  return self.items[1]
+function InventoryBag.Slot:pop()
+  return table.remove(self.items, #self.items)
 end
 
 function InventoryBag.Slot:initItemPosition(item)
@@ -424,7 +424,7 @@ function InventoryBag:popByName(storage, name)
     end
   end
 
-  return self:pop(pickedSlot:first())
+  return self:pop(pickedSlot:pop())
 end
 
 function InventoryBag:store(storage, item)
